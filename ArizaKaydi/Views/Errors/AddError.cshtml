@@ -1,0 +1,77 @@
+﻿@model EntityLayer.Concrete.error
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card-header border-0">
+    <h3 class="mb-0">Hizmet Ekleme    </h3>
+</div>
+<br />
+@using (Html.BeginForm("AddError", "Errors", FormMethod.Post))
+{
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Arıza Ekleme</h4>
+                <p class="card-description"></p>
+                <form class="forms-sample">
+
+                    @Html.Label("Makine ID")
+                    @Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control", id = "machineDropdown" })
+                    <br />
+                    @Html.Label("Makine Parçası")
+                    <select id="partDropdown" name="machinePartId" class="form-control">
+                        <option value="">Parça Seçiniz</option>
+                    </select>
+                    <br />
+                    @Html.Label("Arıza tipi")
+                    @Html.TextBoxFor(x => x.errorType, new { @class = "form-control" })
+                    <br />
+                    @Html.Label("Arıza tarihi")
+                    @Html.TextBoxFor(x => x.errorDate, new { @class = "form-control", @type = "datetime-local", @id = "datetimepicker" })
+                    <br />
+                    @Html.Label("Arıza açıklaması")
+                    @Html.TextBoxFor(x => x.errorDesc, new { @class = "form-control" })
+                    <br />
+                    <br />
+                    <button class="btn btn-success">Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var now = new Date();
+            var localDatetime = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM formatına getirir
+            document.getElementById("datetimepicker").value = localDatetime;
+
+            // AJAX ile parça verisi alma
+            $('#machineDropdown').on('change', function () { // machineDropdown ile bağla
+                var machineId = $(this).val();
+                $('#partDropdown').empty().append('<option value="">Yükleniyor...</option>');
+
+                if (machineId) {
+                    $.ajax({
+                        url: '/Errors/GetMachineParts',
+                        type: 'GET',
+                        data: { machineId: machineId },
+                        success: function (data) {
+                            $('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+                            $.each(data, function (i, item) {
+                                $('#partDropdown').append('<option value="' + item.value + '">' + item.text + '</option>');
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX Hatası: " + error);
+                            $('#partDropdown').empty().append('<option value="">Parça listesi yüklenemedi.</option>');
+                        }
+                    });
+                } else {
+                    $('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+                }
+            });
+        });
+    </script>
+}

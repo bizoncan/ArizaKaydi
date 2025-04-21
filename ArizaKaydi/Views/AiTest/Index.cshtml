@@ -1,0 +1,304 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_LayoutTestAi.cshtml";
+}
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Dashboard</h1>
+        <p class="dashboard-subtitle">Welcome back, John! Here's what's happening with your application today.</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row stats-cards">
+        <div class="col-md-6 col-lg-3">
+            <div class="stats-card gradient-blue">
+                <div class="stats-card-content">
+                    <h3 class="stats-card-title">Total Users</h3>
+                    <h2 class="stats-card-value">2,543</h2>
+                    <p class="stats-card-change positive">
+                        <i class="fas fa-arrow-up"></i> 12.5%
+                    </p>
+                </div>
+                <div class="stats-card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="stats-card gradient-green">
+                <div class="stats-card-content">
+                    <h3 class="stats-card-title">Revenue</h3>
+                    <h2 class="stats-card-value">$42,580</h2>
+                    <p class="stats-card-change positive">
+                        <i class="fas fa-arrow-up"></i> 8.2%
+                    </p>
+                </div>
+                <div class="stats-card-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="stats-card gradient-purple">
+                <div class="stats-card-content">
+                    <h3 class="stats-card-title">Active Sessions</h3>
+                    <h2 class="stats-card-value">1,482</h2>
+                    <p class="stats-card-change positive">
+                        <i class="fas fa-arrow-up"></i> 5.7%
+                    </p>
+                </div>
+                <div class="stats-card-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="stats-card gradient-orange">
+                <div class="stats-card-content">
+                    <h3 class="stats-card-title">Storage</h3>
+                    <h2 class="stats-card-value">85.2 GB</h2>
+                    <p class="stats-card-change negative">
+                        <i class="fas fa-arrow-down"></i> 2.3%
+                    </p>
+                </div>
+                <div class="stats-card-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart and Quick Actions -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card chart-card">
+                <div class="card-header">
+                    <h5 class="card-title">Monthly Traffic</h5>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="chartOptions" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="chartOptions">
+                                <li><a class="dropdown-item" href="#">Last 7 Days</a></li>
+                                <li><a class="dropdown-item" href="#">Last 30 Days</a></li>
+                                <li><a class="dropdown-item" href="#">Last 90 Days</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="trafficChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="quick-actions">
+                        <a href="#" class="btn btn-primary btn-action">
+                            <i class="fas fa-user-plus"></i> Add User
+                        </a>
+                        <a href="#" class="btn btn-success btn-action">
+                            <i class="fas fa-file-alt"></i> Generate Report
+                        </a>
+                        <a href="#" class="btn btn-info btn-action">
+                            <i class="fas fa-cloud-download-alt"></i> Export Data
+                        </a>
+                        <a href="#" class="btn btn-warning btn-action">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Recent Activity</h5>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover activity-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                    <th>Status</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Apr 15, 2023</td>
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="~/img/user1.jpg" alt="User Avatar" class="user-avatar-sm">
+                                            <span>John Smith</span>
+                                        </div>
+                                    </td>
+                                    <td>Login</td>
+                                    <td>
+                                        <span class="badge bg-success">Completed</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-link">View</button>
+                                    </td>
+                                </tr>
+                                <tr class="table-light">
+                                    <td>Apr 14, 2023</td>
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="~/img/user2.jpg" alt="User Avatar" class="user-avatar-sm">
+                                            <span>Sarah Johnson</span>
+                                        </div>
+                                    </td>
+                                    <td>Updated Profile</td>
+                                    <td>
+                                        <span class="badge bg-info">In Progress</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-link">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Apr 14, 2023</td>
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="~/img/user3.jpg" alt="User Avatar" class="user-avatar-sm">
+                                            <span>Michael Brown</span>
+                                        </div>
+                                    </td>
+                                    <td>Created Document</td>
+                                    <td>
+                                        <span class="badge bg-warning">Pending</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-link">View</button>
+                                    </td>
+                                </tr>
+                                <tr class="table-light">
+                                    <td>Apr 13, 2023</td>
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="~/img/user4.jpg" alt="User Avatar" class="user-avatar-sm">
+                                            <span>Emily Davis</span>
+                                        </div>
+                                    </td>
+                                    <td>Login</td>
+                                    <td>
+                                        <span class="badge bg-success">Completed</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-link">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Apr 13, 2023</td>
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="~/img/user5.jpg" alt="User Avatar" class="user-avatar-sm">
+                                            <span>David Wilson</span>
+                                        </div>
+                                    </td>
+                                    <td>Updated Document</td>
+                                    <td>
+                                        <span class="badge bg-info">In Progress</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-link">View</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <nav aria-label="Activity pagination">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Chart.js initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('trafficChart').getContext('2d');
+            var trafficChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Visitors',
+                        data: [4500, 5000, 4700, 5500, 6000, 5800, 6500, 7000, 6800, 7500, 8000, 8500],
+                        backgroundColor: 'rgba(75, 121, 161, 0.1)',
+                        borderColor: 'rgba(75, 121, 161, 1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointBackgroundColor: 'rgba(75, 121, 161, 1)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

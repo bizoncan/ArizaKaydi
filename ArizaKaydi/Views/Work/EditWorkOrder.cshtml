@@ -1,0 +1,132 @@
+﻿@model EntityLayer.Concrete.workOrder
+@using System.Text.Json
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card-header border-0">
+	<h3 class="mb-0">İş Emri Düzenleme</h3>
+</div>
+<br />
+@using (Html.BeginForm("EditWorkOrder", "Work", FormMethod.Post))
+{
+	<div class="col-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">İş Emri Düzenleme</h4>
+				<p class="card-description"></p>
+				<div class="form-group">
+					<label>ID</label>
+					<p class="form-control-static">@Model.id</p>
+					@Html.HiddenFor(x => x.id)
+				</div>
+
+				@Html.Label("Makina ID")
+				@Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control", id = "machineDropdown" })
+				<br />
+				@Html.Label("Makine Parçası")
+				<select id="partDropdown" name="machinePartId" class="form-control">
+					<option value="">Parça Seçiniz</option>
+				</select>
+				<br />
+				@Html.Label("Atanacak Kullanıcı Seç")
+				@Html.DropDownListFor(x => x.userId, ViewBag.UserList as List<SelectListItem>, "Seçiniz", new { @class = "form-control", id = "userDropdown" })
+				<br />
+				@Html.Label("İş emri başlığı")
+				@Html.TextBoxFor(x => x.title, new { @class = "form-control" })
+				<br />
+
+				@Html.Label("İş emri açıklama")
+				@Html.TextBoxFor(x => x.desc, new { @class = "form-control" })
+				<br />
+				<div class="form-check" style="width: 200px;">
+					<label class="form-check-label d-flex justify-content-between align-items-center w-100">
+						İş tamamlandı mı?
+						@Html.CheckBoxFor(x => x.isClosed, new { @class = "form-check-input ms-2", id = "isClosedCheckbox" })
+					</label>
+				</div>
+				<br />
+				<div class="form-check" style="width: 200px;">
+					<label class="form-check-label d-flex justify-content-between align-items-center w-100">
+						İş birisi tarafından alındı mı?
+						@Html.CheckBoxFor(x => x.isOpened, new { @class = "form-check-input ms-2", id = "isOpenedCheckbox" })
+					</label>
+				</div>
+				<br />
+				<br />
+				<button class="btn btn-outline-success">Güncelle</button>
+			</div>
+		</div>
+	</div>
+}
+@section Scripts {
+	<script>
+
+		$(document).ready(function () {
+			// AJAX ile parça verisi alma
+			$('#machineDropdown').on('change', function () {
+				var machineId = $(this).val();
+				$('#partDropdown').empty().append('<option value="">Yükleniyor...</option>');
+
+				if (machineId) {
+					$.ajax({
+						url: '/Work/GetMachineParts',
+						type: 'GET',
+						data: { machineId: machineId },
+						success: function (data) {
+							$('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+							$.each(data, function (i, item) {
+								$('#partDropdown').append('<option value="' + item.value + '">' + item.text + '</option>');
+							});
+						},
+						error: function () {
+							$('#partDropdown').empty().append('<option value="">Parça listesi yüklenemedi.</option>');
+						}
+					});
+				} else {
+					$('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+				}
+			});
+
+			// Mevcut makine ve parça bilgilerini yükle
+			var selectedMachineId = $('#machineDropdown').val();
+			var selectedPartId = @Json.Serialize(Model.machinePartId);
+
+			if (selectedMachineId) {
+				$.ajax({
+					url: '/Work/GetMachineParts',
+					type: 'GET',
+					data: { machineId: selectedMachineId },
+					success: function (data) {
+						$('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+						$.each(data, function (i, item) {
+							var selected = (item.value == selectedPartId) ? 'selected' : '';
+							$('#partDropdown').append('<option value="' + item.value + '" ' + selected + '>' + item.text + '</option>');
+						});
+					},
+					error: function () {
+						$('#partDropdown').empty().append('<option value="">Parça listesi yüklenemedi.</option>');
+					}
+				});
+			} else {
+				$('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+			}
+
+			// İş tamamlandı mı checkbox'ı kapatıldığında diğer checkbox'ı kapatma
+					  $('#isClosedCheckbox').on('change', function () {
+						  if (!$(this).is(':checked') && $('#isOpenedCheckbox').is(':checked')) {
+							  $('#isOpenedCheckbox').prop('checked', false);
+						  }
+						  if ($(this).is(':checked') && !$('#isOpenedCheckbox').is(':checked')) {
+							  alert('İş biri tarafından alınmadan iş tamamlandı olarak işaretlenemez.');
+							  $(this).prop('checked', false);
+						  }
+					  });
+					  $('#isOpenedCheckbox').on('change',function(){
+						  if(!$(this).is(':checked')){
+							  $('#userDropdown').val('');
+						  }
+					  });
+				  });
+	</script>
+}

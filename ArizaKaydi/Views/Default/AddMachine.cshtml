@@ -1,0 +1,39 @@
+﻿@model EntityLayer.Concrete.machine
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card-header border-0">
+    <h3 class="mb-0">Makine Ekleme    </h3>
+</div>
+<br />
+@using (Html.BeginForm("AddMachine", "Default", FormMethod.Post))
+{
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Makine Ekleme</h4>
+                <p class="card-description">  </p>
+                <form class="forms-sample">
+
+
+                    @Html.Label("Makine Adı")
+                    @Html.TextBoxFor(x => x.name, new { @class = "form-control" })
+                    <br />
+                    @Html.Label("Makine açıklaması")
+                    @Html.TextBoxFor(x => x.desc, new { @class = "form-control" })
+                    <br />
+                    @Html.Label("Makine sayısı")
+                    @Html.TextBoxFor(x => x.number, new { @class = "form-control" })
+
+                    <br />
+                    @Html.Label("Resim Adresi")
+                    @Html.TextBoxFor(x => x.imgURL, new { @class = "form-control" })
+                    <br />
+                    <br />
+                    <button class="btn btn-success">Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+}

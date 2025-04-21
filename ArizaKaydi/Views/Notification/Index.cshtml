@@ -1,0 +1,51 @@
+﻿@using EntityLayer.Concrete
+@model List<machineNotifications>
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+	<div class="col">
+		<div class="card bg-default shadow">
+			<div class="card-header bg-transparent border-0">
+				<h3 class="text-white mb-0">Bildirimler</h3>
+			</div>
+			<div class="table-responsive">
+				<table class="table align-items-center table-dark table-flush">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col" class="sort">#</th>
+							<th scope="col" class="sort" data-sort="name">Bildirim Başlığı</th>
+							<th scope="col">Düzenle</th>
+							<th scope="col">Sil</th>
+
+						</tr>
+					</thead>
+					<tbody class="list">
+						@foreach (var item in Model)
+						{
+							<tr>
+								<th>@item.id</th>
+								<th scope="row">
+									<div class="media align-items-center">
+										<div class="media-body">
+											<span class="name mb-0 text-sm">@item.title</span>
+										</div>
+									</div>
+								</th>
+
+								<td><a href="/Notification/EditNotification/@item.id" class="btn btn-outline-success">Düzenle</a></td>
+								<td><a href="/Notification/RemoveNotification/@item.id" class="btn btn-outline-warning">Sil</a></td>
+							</tr>
+						}
+
+
+
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+<br />
+<a href="/Notification/AddNotification/" class="btn btn-info"> Yeni Bildirim Ekle</a>

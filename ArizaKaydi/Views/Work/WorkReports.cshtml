@@ -1,0 +1,92 @@
+﻿@using EntityLayer.Concrete
+@model List<work>
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+	<div class="col">
+		<div class="card bg-default shadow">
+			<div class="card-header bg-transparent border-0">
+				<h3 class="text-white mb-0">İş Emri Raporları </h3>
+			</div>
+			<div class="table-responsive">
+				<table class="table align-items-center table-dark table-flush">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col" class="sort">#</th>
+							<th scope="col" class="sort" data-sort="name">Rapor Başlığı</th>
+							<th scope="col" class="sort" data-sort="name">İşin alınma tarihi</th>
+							<th scope="col" class="sort" data-sort="name">İşin tamamlanma tarihi</th>
+							<th scope="col" class="sort" data-sort="name">Geçmiş Rapor mu</th>
+							<th scope="col">İş Emri Raporu</th>
+							<th scope="col">Sil</th>
+
+						</tr>
+					</thead>
+					<tbody class="list">
+						@foreach (var item in Model)
+						{
+							<tr>
+								<th>@item.id</th>
+								<th scope="row">
+									<div class="media align-items-center">
+										<div class="media-body">
+											<span class="name mb-0 text-sm">@item.title</span>
+										</div>
+									</div>
+								</th>
+								<th scope="row">
+									<div class="media align-items-center">
+										<div class="media-body">
+											<span class="name mb-0 text-sm">@item.workOrderStartDate</span>
+										</div>
+									</div>
+								</th>
+								<th scope="row">
+									<div class="media align-items-center">
+										<div class="media-body">
+											<span class="name mb-0 text-sm">@item.workOrderEndDate</span>
+										</div>
+									</div>
+								</th>
+								<td>
+									<span class="badge @((item.isPastWork) ? "bg-success" : "bg-danger")">
+										@((item.isPastWork) ? "Evet" : "Hayır")
+									</span>
+								</td>
+								<td><a href="/Work/SeeWorkReport/@item.id" class="btn btn-outline-primary">Raporu Gör</a></td>
+								<td><a href="/Work/DeleteWork/@item.id" class="btn btn-outline-warning">Sil</a></td>
+							</tr>
+						}
+
+
+
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+<br />
+<a href="/Work/AddWorkOrder/" class="btn btn-info"> Yeni Makine Ekle</a>
+@{
+	var swalMessage = TempData["SwalMessage"] as string;
+	var swalType = TempData["SwalType"] as string;
+}
+
+@section Scripts {
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	@if (!string.IsNullOrEmpty(swalMessage) && !string.IsNullOrEmpty(swalType))
+	{
+		<script>
+			Swal.fire({
+				icon: '@swalType',
+				title: 'Uyarı',
+				text: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(swalMessage))',
+				showConfirmButton: false,
+				timer: 2500
+			});
+		</script>
+	}
+}

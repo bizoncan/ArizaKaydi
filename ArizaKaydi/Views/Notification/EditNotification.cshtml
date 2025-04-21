@@ -1,0 +1,99 @@
+﻿@model EntityLayer.Concrete.machineNotifications
+@using System.Text.Json
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card-header border-0">
+    <h3 class="mb-0">Bildirim Düzenleme</h3>
+</div>
+<br />
+@using (Html.BeginForm("EditNotification", "Notification", FormMethod.Post))
+{
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Bildirim Düzenleme</h4>
+                <p class="card-description"></p>
+                <div class="form-group">
+                    <label>ID</label>
+                    <p class="form-control-static">@Model.id</p>
+                    @Html.HiddenFor(x => x.id)
+                </div>
+
+                @Html.Label("Makina ID")
+                @Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control", id = "machineDropdown" })
+                <br />
+                @Html.Label("Makine Parçası")
+                <select id="partDropdown" name="machinePartId" class="form-control">
+                    <option value="">Parça Seçiniz</option>
+                </select>
+                <br />
+                @Html.Label("Bildirim başlığı")
+                @Html.TextBoxFor(x => x.title, new { @class = "form-control" })
+                <br />
+
+                @Html.Label("Bildirim açıklama")
+                @Html.TextBoxFor(x => x.description, new { @class = "form-control" })
+                <br />
+                <br />
+
+                <button class="btn btn-outline-success">Güncelle</button>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // AJAX ile parça verisi alma
+            $('#machineDropdown').on('change', function () {
+                var machineId = $(this).val();
+                $('#partDropdown').empty().append('<option value="">Yükleniyor...</option>');
+
+                if (machineId) {
+                    $.ajax({
+                        url: '/Notification/GetMachineParts',
+                        type: 'GET',
+                        data: { machineId: machineId },
+                        success: function (data) {
+                            $('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+                            $.each(data, function (i, item) {
+                                $('#partDropdown').append('<option value="' + item.value + '">' + item.text + '</option>');
+                            });
+                        },
+                        error: function () {
+                            $('#partDropdown').empty().append('<option value="">Parça listesi yüklenemedi.</option>');
+                        }
+                    });
+                } else {
+                    $('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+                }
+            });
+
+            // Mevcut makine ve parça bilgilerini yükle
+            var selectedMachineId = $('#machineDropdown').val();
+            var selectedPartId = @Json.Serialize(Model.machinePartId); // Düzeltme burada
+
+            if (selectedMachineId) {
+                $.ajax({
+                    url: '/Notification/GetMachineParts',
+                    type: 'GET',
+                    data: { machineId: selectedMachineId },
+                    success: function (data) {
+                        $('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+                        $.each(data, function (i, item) {
+                            var selected = (item.value == selectedPartId) ? 'selected' : '';
+                            $('#partDropdown').append('<option value="' + item.value + '" ' + selected + '>' + item.text + '</option>');
+                        });
+                    },
+                    error: function () {
+                        $('#partDropdown').empty().append('<option value="">Parça listesi yüklenemedi.</option>');
+                    }
+                });
+            } else {
+                $('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+            }
+        });
+    </script>
+}

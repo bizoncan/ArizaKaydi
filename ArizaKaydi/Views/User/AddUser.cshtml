@@ -1,0 +1,44 @@
+﻿@model EntityLayer.Concrete.user
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card-header border-0">
+    <h3 class="mb-0">Kullanıcı Ekle</h3>
+</div>
+<br />
+@using (Html.BeginForm("AddUser", "User", FormMethod.Post))
+{
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Kullanıcı Ekleme</h4>
+                <p class="card-description"></p>
+
+
+                @Html.Label("Email")
+                @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+                <br />
+                @Html.Label("Kullanıcı Adı")
+                @Html.TextBoxFor(x => x.UserName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.UserName, "", new { @class = "text-danger" })
+                <br />
+                @Html.Label("Şifre")
+                @Html.PasswordFor(x => x.PasswordHash, new { @class = "form-control" })
+                <br />
+                <br />
+
+                <button class="btn btn-success">Kaydet</button>
+
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+
+
+

@@ -1,0 +1,82 @@
+﻿@model EntityLayer.Concrete.machineNotifications
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card-header border-0">
+    <h3 class="mb-0">İş Emri Ekle</h3>
+</div>
+<br />
+@using (Html.BeginForm("AddNotification", "Notification", FormMethod.Post))
+{
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">İş Emri Ekleme</h4>
+                <p class="card-description"></p>
+
+
+                @Html.Label("Makine ID")
+                @Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control", id = "machineDropdown" })
+                @Html.ValidationMessageFor(x => x.machineId, "", new { @class = "text-danger" })
+                <br />
+                @Html.Label("Makine Parçası")
+                <select id="partDropdown" name="machinePartId" class="form-control">
+                    <option value="">Parça Seçiniz</option>
+                </select>
+                <br />
+                @Html.Label("Bildirim başlığı")
+                @Html.TextBoxFor(x => x.title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.title, "", new { @class = "text-danger" })
+                <br />
+                @Html.Label("Bildirim açıklama")
+                @Html.TextBoxFor(x => x.description, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.description, "", new { @class = "text-danger" })
+                <br />
+                <br />
+
+                <button class="btn btn-success">Kaydet</button>
+
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            console.log("aaaaaaaaaaaaa");
+
+            $('#machineDropdown').on('change', function () {
+                console.log("Dropdown changed to: " + $(this).val());
+                var machineId = $(this).val();
+                $('#partDropdown').empty().append('<option value="">Yükleniyor...</option>');
+
+                if (machineId) {
+                    $.ajax({
+                        url: '@Url.Action("GetMachineParts", "Notification")',
+                        type: 'GET',
+                        data: { machineId: machineId },
+                        success: function (data) {
+                            $('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+                            $.each(data, function (i, item) {
+                                $('#partDropdown').append('<option value="' + item.value + '">' + item.text + '</option>');
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX Hatası: " + error);
+                            $('#partDropdown').empty().append('<option value="">Parça listesi yüklenemedi.</option>');
+                        }
+                    });
+                } else {
+                    $('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+                }
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
