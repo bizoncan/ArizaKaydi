@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/css/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/favicon.png" />
+
 </head>
 <body>
     <div class="container-scroller">
@@ -79,7 +80,7 @@
                 <li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Calculation", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
                     <a class="nav-link" asp-controller="Calculation" asp-action="Index">
                         <span class="menu-icon">
-                            <i class="mdi mdi-account"></i>
+                            <i class="mdi mdi-calculator"></i>
                         </span>
                         <span class="menu-title">MTTR/MTBF Hesapla</span>
                     </a>

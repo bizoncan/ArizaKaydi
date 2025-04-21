@@ -5,6 +5,7 @@ using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArizaKaydi.Controllers
@@ -23,7 +24,7 @@ namespace ArizaKaydi.Controllers
 			this.workOrderManager = new WorkOrderManager(new EFWorkOrderDal(_context));
 			imageCollectionManager = new ImageCollectionManager(new EFImageCollectionDal(_context));
 		}
-
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Index()
 		{
 			var values = workOrderManager.TGetList();
@@ -157,10 +158,11 @@ namespace ArizaKaydi.Controllers
 			workOrderManager.TUpdate(existing);
 			return RedirectToAction("Index");
 		}
+		
 		public IActionResult WorkReports(int id)
 		{
-			var workOrder = workOrderManager.TGetById(id);
-			if (workOrder.isClosed == true)
+			var workReports = _context.Works.Where(x => x.workOrderId == id).ToList();
+			if (workReports.Count != 0)
 			{
 				var works = workManager.TGetWorkByWorkOrderList(id);
 				return View(works);
