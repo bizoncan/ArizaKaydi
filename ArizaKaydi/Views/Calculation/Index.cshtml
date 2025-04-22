@@ -1,195 +1,229 @@
 ﻿@{
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
-	.main-panel {
-		margin-top: 0;
-		padding-top: 0;
-	}
+    /* Calculation sayfası için özel stiller */
+    .main-panel {
+        margin-top: 0;
+        padding-top: 0;
+    }
 
-	.modern-btn {
-		min-width: 220px;
-		min-height: 80px;
-		font-size: 1.5rem;
-		font-weight: bold;
-		border-radius: 1.5rem;
-		box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-		transition: transform 0.15s, box-shadow 0.15s;
-		margin: 1.5rem;
-	}
+    /* Calculation kartı */
+    .calculation-card {
+        background: #fff !important;
+        border-radius: 1.5rem;
+        box-shadow: 0 8px 32px 0 rgba(220, 53, 69, 0.15);
+        padding: 2rem;
+        margin-top: 1.5rem;
+        margin-left: 1rem;
+        min-width: 370px;
+        max-width: 650px;
+        width: 100%;
+        border: 1px solid rgba(220, 53, 69, 0.1);
+    }
 
-		.modern-btn:hover {
-			transform: translateY(-4px) scale(1.04);
-			box-shadow: 0 16px 40px 0 rgba(31, 38, 135, 0.25);
-		}
+    /* Başlık */
+    .calculation-title {
+        color: #dc3545;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        width: 100%;
+    }
 
-		.modern-btn i {
-			margin-right: 0.7rem;
-		}
+    /* Form elemanları */
+    .calculation-card label {
+        color: #c82333;
+        font-weight: 500;
+    }
 
-		.modern-btn.mttr {
-			background: linear-gradient(90deg, #ff758c 0%, #ff7eb3 100%);
-			color: #fff;
-			border: none;
-		}
+    .calculation-card .form-control {
+        border-radius: 0.75rem;
+        border: 1px solid #dc3545;
+        color: #333;
+        background-color: #fff;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
 
-		.modern-btn.mtbf {
-			background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
-			color: #fff;
-			border: none;
-		}
+        .calculation-card .form-control:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
 
-	@@media (max-width: 600px) {
-		.modern-btn {
-			min-width: 140px;
-			min-height: 60px;
-			font-size: 1.1rem;
-		}
-	}
+    /* Modern butonlar */
+    .modern-btn {
+        min-width: 180px;
+        min-height: 64px;
+        font-size: 1.3rem;
+        font-weight: bold;
+        border-radius: 1.25rem;
+        box-shadow: 0 8px 20px 0 rgba(220, 53, 69, 0.15);
+        transition: transform 0.15s, box-shadow 0.15s;
+        margin: 0 0.5rem;
+        padding: 0.7rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .modern-btn:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 12px 32px 0 rgba(220, 53, 69, 0.25);
+        }
+
+        .modern-btn i {
+            margin-right: 0.7rem;
+            font-size: 1.6rem;
+        }
+
+        /* MTTR butonu - kırmızı degrade */
+        .modern-btn.mttr {
+            background: linear-gradient(90deg, #dc3545 0%, #ff7eb3 100%);
+            color: #fff;
+            border: none;
+        }
+
+            .modern-btn.mttr:hover {
+                background: linear-gradient(90deg, #c82333 0%, #ff758c 100%);
+            }
+
+        /* MTBF butonu - kırmızı ve beyaz degrade */
+        .modern-btn.mtbf {
+            background: linear-gradient(135deg, #fff 0%, #dc3545 60%, #c82333 100%);
+            color: #fff;
+            border: 1px solid #dc3545;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .modern-btn.mtbf::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(120deg, rgba(255,255,255,0.8) 0%, rgba(255,126,179,0.2) 100%);
+                opacity: 0.3;
+                z-index: 0;
+            }
+
+            .modern-btn.mtbf:hover {
+                background: linear-gradient(120deg, #ff7eb3 0%, #dc3545 80%, #c82333 100%);
+                color: #fff;
+            }
+
+    /* Responsive */
+    @@media (max-width: 600px) {
+        .modern-btn
+
+    {
+        min-width: 120px;
+        min-height: 48px;
+        font-size: 1rem;
+        border-radius: 0.8rem;
+        padding: 0.5rem 0.6rem;
+    }
+
+    .calculation-card {
+        padding: 1.2rem;
+        min-width: unset;
+        max-width: 98vw;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+    }
 </style>
 <div class="main-panel">
-	<div class="content-wrapper d-flex flex-column align-items-start justify-content-start" style="min-height: 80vh;">
-		<div class="card shadow-lg p-5 mt-4 ml-3 d-flex flex-column align-items-center" style="background: rgba(30,32,43,0.98); border-radius: 2rem; min-width: 370px; max-width: 650px; width: 100%;">
-			<h4 class="mb-4 w-100 text-center" style="color: #fff; font-weight: 700;">MTTR & MTBF Hesaplama</h4>
-			<form id="date-range-form" asp-action="Index" asp-controller="Calculation" method="post" class="w-100">
-				<div class="row w-100 mb-4 g-3">
-					<div class="col-12 col-md-6">
-						<label for="start-date" style="color:#fff;font-weight:500;">Başlangıç Tarihi</label>
-						<input type="date" class="form-control mb-2" id="start-date" name="StartDate" required>
-						<input type="time" class="form-control" id="start-time" name="StartTime" required>
-					</div>
-					<div class="col-12 col-md-6">
-						<label for="end-date" style="color:#fff;font-weight:500;">Bitiş Tarihi</label>
-						<input type="date" class="form-control mb-2" id="end-date" name="EndDate" required disabled>
-						<input type="time" class="form-control" id="end-time" name="EndTime" required disabled>
-					</div>
-				</div>
-				<div class="row w-100 mt-2">
-					<div class="col-12 d-flex flex-column flex-md-row justify-content-between align-items-stretch">
-						<button type="submit" name="calculationType" value="MTTR" class="modern-btn mttr flex-fill mr-md-3 mb-3 mb-md-0">
-							<i class="mdi mdi-timer-sand"></i> MTTR Hesapla
-						</button>
-						<button type="submit" name="calculationType" value="MTBF" class="modern-btn mtbf flex-fill ml-md-3">
-							<i class="mdi mdi-timer"></i> MTBF Hesapla
-						</button>
-					</div>
-				</div>
-			</form>
+    <div class="content-wrapper d-flex flex-column align-items-start justify-content-start" style="min-height: 80vh;">
+        <div class="calculation-card d-flex flex-column align-items-center">
+            <h4 class="calculation-title">MTTR & MTBF Hesaplama</h4>
+            <form id="date-range-form" asp-action="Index" asp-controller="Calculation" method="post" class="w-100">
+                <div class="row w-100 mb-4 g-3">
+                    <div class="col-12 col-md-6">
+                        <label for="start-date">Başlangıç Tarihi</label>
+                        <input type="date" class="form-control mb-2" id="start-date" name="StartDate" required>
+                        <input type="time" class="form-control" id="start-time" name="StartTime" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="end-date">Bitiş Tarihi</label>
+                        <input type="date" class="form-control mb-2" id="end-date" name="EndDate" required disabled>
+                        <input type="time" class="form-control" id="end-time" name="EndTime" required disabled>
+                    </div>
+                </div>
+                <div class="row w-100 mt-2">
+                    <div class="col-12 d-flex flex-column flex-md-row justify-content-between align-items-stretch">
+                        <button type="submit" name="calculationType" value="MTTR" class="modern-btn mttr flex-fill mr-md-3 mb-3 mb-md-0">
+                            <i class="mdi mdi-timer-sand"></i> MTTR Hesapla
+                        </button>
+                        <button type="submit" name="calculationType" value="MTBF" class="modern-btn mtbf flex-fill ml-md-3">
+                            <i class="mdi mdi-timer"></i> MTBF Hesapla
+                        </button>
+                    </div>
+                </div>
+            </form>
 
-		</div>
+        </div>
 
-		<style>
-			.modern-btn {
-				min-width: 180px;
-				min-height: 64px;
-				font-size: 1.3rem;
-				font-weight: bold;
-				border-radius: 1.25rem;
-				box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-				transition: transform 0.15s, box-shadow 0.15s;
-				margin: 0 0.5rem;
-				padding: 0.7rem 1rem;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
 
-				.modern-btn.mttr {
-					background: linear-gradient(90deg, #ff758c 0%, #ff7eb3 100%);
-					color: #fff;
-					border: none;
-				}
+    </div>
 
-				.modern-btn.mtbf {
-					background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
-					color: #fff;
-					border: none;
-				}
+    <script>
+        // Başlangıç tarihi seçilmeden bitiş tarihi ve saat aktif olmasın
+        const startInput = document.getElementById('start-date');
+        const endInput = document.getElementById('end-date');
+        const startTimeInput = document.getElementById('start-time');
+        const endTimeInput = document.getElementById('end-time');
 
-				.modern-btn i {
-					margin-right: 0.7rem;
-					font-size: 1.6rem;
-				}
+        function resetEndFields() {
+          endInput.disabled = true;
+          endInput.value = '';
+          endTimeInput.disabled = true;
+          endTimeInput.value = '';
+        }
 
-				.modern-btn:hover {
-					transform: translateY(-2px) scale(1.03);
-					box-shadow: 0 12px 32px 0 rgba(31, 38, 135, 0.25);
-				}
+        startInput.addEventListener('change', function() {
+          if (startInput.value) {
+            endInput.disabled = false;
+            endInput.min = startInput.value;
+            // Eğer bitiş tarihi, başlangıçtan önceyse sıfırla
+            if (endInput.value && endInput.value < startInput.value) {
+              endInput.value = '';
+              endTimeInput.value = '';
+            }
+            endTimeInput.disabled = !endInput.value;
+          } else {
+            resetEndFields();
+          }
+        });
+        endInput.addEventListener('change', function() {
+          if (endInput.value && startInput.value && endInput.value < startInput.value) {
+            alert('Bitiş tarihi, başlangıç tarihinden önce olamaz!');
+            endInput.value = '';
+            endTimeInput.value = '';
+            endTimeInput.disabled = true;
+          } else if (endInput.value) {
+            endTimeInput.disabled = false;
+          } else {
+            endTimeInput.disabled = true;
+            endTimeInput.value = '';
+          }
+        });
+        // Saat ve dakika validasyonu (tarih aynıysa)
+        function validateDateTime() {
+          if (
+            startInput.value && endInput.value &&
+            startInput.value === endInput.value &&
+            startTimeInput.value && endTimeInput.value &&
+            endTimeInput.value <= startTimeInput.value
+          ) {
+            alert('Bitiş saati, başlangıç saatinden önce olamaz!');
+            endTimeInput.value = '';
+          }
+        }
+        startTimeInput.addEventListener('change', validateDateTime);
+        endTimeInput.addEventListener('change', validateDateTime);
 
-			@@media (max-width: 600px) {
-				.modern-btn {
-					min-width: 120px;
-					min-height: 48px;
-					font-size: 1rem;
-					border-radius: 0.8rem;
-					padding: 0.5rem 0.6rem;
-				}
 
-				.card.shadow-lg {
-					padding: 1.2rem !important;
-					min-width: unset !important;
-					max-width: 98vw !important;
-				}
-			}
-		</style>
-	</div>
-
-	<script>
-		// Başlangıç tarihi seçilmeden bitiş tarihi ve saat aktif olmasın
-		const startInput = document.getElementById('start-date');
-		const endInput = document.getElementById('end-date');
-		const startTimeInput = document.getElementById('start-time');
-		const endTimeInput = document.getElementById('end-time');
-
-		function resetEndFields() {
-		  endInput.disabled = true;
-		  endInput.value = '';
-		  endTimeInput.disabled = true;
-		  endTimeInput.value = '';
-		}
-
-		startInput.addEventListener('change', function() {
-		  if (startInput.value) {
-			endInput.disabled = false;
-			endInput.min = startInput.value;
-			// Eğer bitiş tarihi, başlangıçtan önceyse sıfırla
-			if (endInput.value && endInput.value < startInput.value) {
-			  endInput.value = '';
-			  endTimeInput.value = '';
-			}
-			endTimeInput.disabled = !endInput.value;
-		  } else {
-			resetEndFields();
-		  }
-		});
-		endInput.addEventListener('change', function() {
-		  if (endInput.value && startInput.value && endInput.value < startInput.value) {
-			alert('Bitiş tarihi, başlangıç tarihinden önce olamaz!');
-			endInput.value = '';
-			endTimeInput.value = '';
-			endTimeInput.disabled = true;
-		  } else if (endInput.value) {
-			endTimeInput.disabled = false;
-		  } else {
-			endTimeInput.disabled = true;
-			endTimeInput.value = '';
-		  }
-		});
-		// Saat ve dakika validasyonu (tarih aynıysa)
-		function validateDateTime() {
-		  if (
-			startInput.value && endInput.value &&
-			startInput.value === endInput.value &&
-			startTimeInput.value && endTimeInput.value &&
-			endTimeInput.value <= startTimeInput.value
-		  ) {
-			alert('Bitiş saati, başlangıç saatinden önce olamaz!');
-			endTimeInput.value = '';
-		  }
-		}
-		startTimeInput.addEventListener('change', validateDateTime);
-		endTimeInput.addEventListener('change', validateDateTime);
-
-			
-	</script>
-</div>
+    </script>

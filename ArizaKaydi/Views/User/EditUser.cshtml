@@ -21,12 +21,12 @@
                     @Html.HiddenFor(x => x.Id)
                 </div>
 
-                @Html.Label("Email")
-                @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                @Html.Label("Email", "Email", htmlAttributes: new { @class = "custom-label" })
+                @Html.TextBoxFor(x => x.Email, new { @class = "form-control custom-input-bg" })
                 @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
                 <br />
-                @Html.Label("Kullanıcı Adı")
-                @Html.TextBoxFor(x => x.UserName, new { @class = "form-control" })
+                @Html.Label("UserName", "Kullanıcı Adı", htmlAttributes: new { @class = "custom-label" })
+                @Html.TextBoxFor(x => x.UserName, new { @class = "form-controlcustom-input-bg" })
                 @Html.ValidationMessageFor(x => x.UserName, "", new { @class = "text-danger" })
                 <br />
                 <br />

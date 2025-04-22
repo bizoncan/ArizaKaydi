@@ -17,18 +17,18 @@
                 <form class="forms-sample">
 
 
-                    @Html.Label("Makine Adı")
-                    @Html.TextBoxFor(x => x.name, new { @class = "form-control" })
+                    @Html.Label("name", "Makine Adı", htmlAttributes: new { @class = "custom-label" })
+                    @Html.TextBoxFor(x => x.name, new { @class = "form-control custom-input-bg" })
                     <br />
-                    @Html.Label("Makine açıklaması")
-                    @Html.TextBoxFor(x => x.desc, new { @class = "form-control" })
+                    @Html.Label("desc", "Makine açıklaması", htmlAttributes: new { @class = "custom-label" })
+                    @Html.TextBoxFor(x => x.desc, new { @class = "form-control custom-input-bg" })
                     <br />
-                    @Html.Label("Makine sayısı")
-                    @Html.TextBoxFor(x => x.number, new { @class = "form-control" })
+                    @Html.Label("number", "Makine sayısı", htmlAttributes: new { @class = "custom-label" })
+                    @Html.TextBoxFor(x => x.number, new { @class = "form-control custom-input-bg" })
 
                     <br />
-                    @Html.Label("Resim Adresi")
-                    @Html.TextBoxFor(x => x.imgURL, new { @class = "form-control" })
+                    @Html.Label("imgURL", "Resim Adresi", htmlAttributes: new { @class = "custom-label" })
+                    @Html.TextBoxFor(x => x.imgURL, new { @class = "form-control custom-input-bg" })
                     <br />
                     <br />
                     <button class="btn btn-success">Kaydet</button>

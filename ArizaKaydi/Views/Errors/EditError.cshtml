@@ -20,22 +20,22 @@
                         @Html.HiddenFor(x => x.id)
                     </div>
 
-                    @Html.Label("Makina ID")
-                    @Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control", id = "machineDropdown" })
+                    @Html.Label("machineId", "Makine ID", htmlAttributes: new { @class = "custom-label"})
+                    @Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg", id = "machineDropdown" })
                     <br />
-                    @Html.Label("Makine Parçası")
-                    <select id="partDropdown" name="machinePartId" class="form-control">
+                    @Html.Label("machinePartId", "Makine Parçası", htmlAttributes: new { @class = "custom-label" })
+                    <select id="partDropdown" name="machinePartId" class="form-control custom-input-bg">
                         <option value="">Parça Seçiniz</option>
                     </select>
                     <br />
-                    @Html.Label("Arıza tipi")
-                    @Html.TextBoxFor(x => x.errorType, new { @class = "form-control" })
+                    @Html.Label("errorType", "Arıza tipi", htmlAttributes: new { @class = "custom-label" })
+                    @Html.TextBoxFor(x => x.errorType, new { @class = "form-control custom-input-bg" })
                     <br />
-                    @Html.Label("Arıza tarihi")
-                    @Html.TextBoxFor(x => x.errorDate, new { @class = "form-control", @type = "datetime-local", @id = "datetimepicker" })
+                    @Html.Label("errorDate", "Arıza tarihi", htmlAttributes: new { @class = "custom-label" })
+                    @Html.TextBoxFor(x => x.errorDate, new { @class = "form-control custom-input-bg", @type = "datetime-local", @id = "datetimepicker" })
                     <br />
-                    @Html.Label("Arıza açıklaması")
-                    @Html.TextBoxFor(x => x.errorDesc, new { @class = "form-control" })
+                    @Html.Label("errorDesc", "Arıza açıklaması", htmlAttributes: new { @class = "custom-label" })
+                    @Html.TextBoxFor(x => x.errorDesc, new { @class = "form-control custom-input-bg" })
                     <br />
 
                     <br />

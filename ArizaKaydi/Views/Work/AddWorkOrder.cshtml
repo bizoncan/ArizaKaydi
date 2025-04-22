@@ -1,78 +1,79 @@
 ﻿@model EntityLayer.Concrete.workOrder
 @{
 
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="card-header border-0">
-    <h3 class="mb-0">İş Emri Ekle</h3>
+	<h3 class="mb-0">İş Emri Ekle</h3>
 </div>
 <br />
 @using (Html.BeginForm("AddWorkOrder", "Work", FormMethod.Post))
 {
-    <div class="col-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">İş Emri Ekleme</h4>
-                <p class="card-description"></p>
-                
+	<div class="col-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">İş Emri Ekleme</h4>
+				<p class="card-description"></p>
 
-                    @Html.Label("Makine ID")
-                    @Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control", id = "machineDropdown" })
-                    <br />
-                    @Html.Label("Makine Parçası")
-                    <select id="partDropdown" name="machinePartId" class="form-control">
-                        <option value="">Parça Seçiniz</option>
-                    </select>
-                    <br />
-                    @Html.Label("Atanacak Kullanıcı Seç")
-                    @Html.DropDownListFor(x => x.userId, ViewBag.UserList as List<SelectListItem>, "Seçiniz", new { @class = "form-control", id = "userDropdown" })
-                    <br />
-                    @Html.Label("İş başlığı")
-                    @Html.TextBoxFor(x => x.title, new { @class = "form-control" })
-                    <br />
-                    @Html.Label("İş açıklama")
-                    @Html.TextBoxFor(x => x.desc, new { @class = "form-control" })
-                    <br />
-                    <br />
-                    
-                    <button class="btn btn-success">Kaydet</button>
-                
-            </div>
-        </div>
-    </div>
+
+				@Html.Label("machineId", "Makine ID", htmlAttributes: new { @class = "custom-label" })
+				@Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg", id = "machineDropdown" })
+				<br />
+				@Html.Label("machinePartId", "Makine Parçası", htmlAttributes: new { @class = "custom-label" })
+				<select id="partDropdown" name="machinePartId" class="form-control custom-input-bg">
+					<option value="">Parça Seçiniz</option>
+				</select>
+				<br />
+				@Html.Label("userId", "Atanacak Kullanıcı Seç", htmlAttributes: new { @class = "custom-label" })
+				@Html.DropDownListFor(x => x.userId, ViewBag.UserList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg", id = "userDropdown" })
+				<br />
+				@Html.Label("title", "İş başlığı", htmlAttributes: new { @class = "custom-label" })
+				@Html.TextBoxFor(x => x.title, new { @class = "form-control custom-input-bg" })
+				<br />
+				@Html.Label("desc", "İş açıklama", htmlAttributes: new { @class = "custom-label" })
+				@Html.TextBoxFor(x => x.desc, new { @class = "form-control custom-input-bg" })
+				<br />
+				<br />
+
+				<button class="btn btn-success">Kaydet</button>
+
+			</div>
+		</div>
+	</div>
 }
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            console.log("aaaaaaaaaaaaa");
+	<script>
+		$(document).ready(function () {
+			console.log("aaaaaaaaaaaaa");
 
-            $('#machineDropdown').on('change', function () {
-                console.log("Dropdown changed to: " + $(this).val());
-                var machineId = $(this).val();
-                $('#partDropdown').empty().append('<option value="">Yükleniyor...</option>');
+			$('#machineDropdown').on('change', function () {
+				console.log("Dropdown changed to: " + $(this).val());
+				var machineId = $(this).val();
+				$('#partDropdown').empty().append('<option value="">Yükleniyor...</option>');
 
-                if (machineId) {
-                    $.ajax({
-                        url: '@Url.Action("GetMachineParts", "Work")',
-                        type: 'GET',
-                        data: { machineId: machineId },
-                        success: function (data) {
-                            $('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
-                            $.each(data, function (i, item) {
-                                $('#partDropdown').append('<option value="' + item.value + '">' + item.text + '</option>');
-                            });
-                        },
-                        error: function (xhr, status, error) {
-                            console.error("AJAX Hatası: " + error);
-                            $('#partDropdown').empty().append('<option value="">Parça listesi yüklenemedi.</option>');
-                        }
-                    });
-                } else {
-                    $('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
-                }
-            });
-        });
-    </script>
+				if (machineId) {
+					$.ajax({
+						url: '@Url.Action("GetMachineParts", "Work")',
+						type: 'GET',
+						data: { machineId: machineId },
+						success: function (data) {
+							$('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+							$.each(data, function (i, item) {
+								$('#partDropdown').append('<option value="' + item.value + '">' + item.text + '</option>');
+							});
+						},
+						error: function (xhr, status, error) {
+							console.error("AJAX Hatası: " + error);
+							$('#partDropdown').empty().append('<option value="">Parça listesi yüklenemedi.</option>');
+						}
+					});
+				} else {
+					$('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+				}
+			});
+		});
+	</script>
 }
 
 

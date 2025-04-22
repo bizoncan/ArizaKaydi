@@ -7,7 +7,7 @@
 <div class="card-header border-0">
     <h3 class="mb-0">Bildirim Düzenleme</h3>
 </div>
-<br />
+
 @using (Html.BeginForm("EditNotification", "Notification", FormMethod.Post))
 {
     <div class="col-12 grid-margin stretch-card">
@@ -21,20 +21,20 @@
                     @Html.HiddenFor(x => x.id)
                 </div>
 
-                @Html.Label("Makina ID")
-                @Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control", id = "machineDropdown" })
+                @Html.Label("machineId", "Makina ID", htmlAttributes: new { @class = "custom-label" })
+                @Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg", id = "machineDropdown" })
                 <br />
-                @Html.Label("Makine Parçası")
-                <select id="partDropdown" name="machinePartId" class="form-control">
+                @Html.Label("machinePartId", "Makine Parçası", htmlAttributes: new { @class = "custom-label" })
+                <select id="partDropdown" name="machinePartId" class="form-control custom-input-bg">
                     <option value="">Parça Seçiniz</option>
                 </select>
                 <br />
-                @Html.Label("Bildirim başlığı")
-                @Html.TextBoxFor(x => x.title, new { @class = "form-control" })
+                @Html.Label("title", "Bildirim başlığı", htmlAttributes: new { @class = "custom-label" })
+                @Html.TextBoxFor(x => x.title, new { @class = "form-control custom-input-bg" })
                 <br />
 
-                @Html.Label("Bildirim açıklama")
-                @Html.TextBoxFor(x => x.description, new { @class = "form-control" })
+                @Html.Label("description", "Bildirim açıklama", htmlAttributes: new { @class = "custom-label" })
+                @Html.TextBoxFor(x => x.description, new { @class = "form-control custom-input-bg" })
                 <br />
                 <br />
 

@@ -2,157 +2,418 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Corona Admin</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/jvectormap/jquery-jvectormap.css">
-    <link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/flag-icon-css/css/flag-icon.min.css">
-    <link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/owl-carousel-2/owl.carousel.min.css">
-    <link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/owl-carousel-2/owl.theme.default.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
-    <link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/css/style.css">
-    <!-- End layout styles -->
-    <link rel="shortcut icon" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/favicon.png" />
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Corona Admin</title>
+	<!-- plugins:css -->
+	<link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/mdi/css/materialdesignicons.min.css">
+	<link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/css/vendor.bundle.base.css">
+	<!-- endinject -->
+	<!-- Plugin css for this page -->
+	<link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/jvectormap/jquery-jvectormap.css">
+	<link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/flag-icon-css/css/flag-icon.min.css">
+	<link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/owl-carousel-2/owl.carousel.min.css">
+	<link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/owl-carousel-2/owl.theme.default.min.css">
+	<!-- End plugin css for this page -->
+	<!-- inject:css -->
+	<!-- endinject -->
+	<!-- Layout styles -->
+	<link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/css/style.css">
+	<!-- End layout styles -->
+	<link rel="shortcut icon" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/favicon.png" />
+	<style>
+		/* Genel arka planı beyaz yap */
+		body, .container-scroller, .main-panel, .content-wrapper, .page-body-wrapper {
+			background: #fff !important;
+		}
+		/* Sidebar arka planı beyaz, kenarlık hafif gri */
+		.sidebar {
+			background: #fff !important;
+			border-right: 1px solid #eee;
+		}
+		/* Sidebar başlığı (CORONA) ve profil alanı */
+		.sidebar-brand-wrapper, .profile-desc {
+			background: #fff !important;
+		}
+		/* Sidebar menü başlığı */
+		.sidebar .nav-category .nav-link {
+			color: #dc3545 !important;
+			font-weight: bold;
+		}
+		/* Sidebar menü linkleri */
+		.sidebar .nav .nav-item .nav-link {
+			color: #c82333 !important;
+			background: transparent !important;
+			transition: background 0.2s, color 0.2s;
+		}
 
+			.sidebar .nav .nav-item .nav-link .menu-icon i {
+				color: #c82333 !important;
+			}
+		/* Sidebar aktif ve hover */
+		.sidebar .nav .nav-item.active > .nav-link,
+		.sidebar .nav .nav-item:hover > .nav-link {
+			background: #dc3545 !important;
+			color: #fff !important;
+		}
+
+			.sidebar .nav .nav-item.active > .nav-link:before {
+				background: #000000
+			}
+				.sidebar .nav .nav-item.active > .nav-link .menu-icon i,
+			.sidebar .nav .nav-item:hover > .nav-link .menu-icon i {
+				color: #fff !important;
+			}
+		/* Sidebar ikonları normalde kırmızı, aktif/hover beyaz */
+		.sidebar .nav .nav-item .nav-link .menu-icon i {
+			color: #c82333 !important;
+		}
+		/* Sidebar nav link hover için border efekti */
+		.sidebar .nav .nav-item .nav-link {
+			border-radius: 6px;
+		}
+		/* Sidebar Navigation başlığı ve ikonları biraz daha belirgin */
+		.sidebar .nav .nav-link, .sidebar .nav .menu-title {
+			font-weight: 500;
+		}
+		/* Navbar arka planı beyaz */
+		.navbar, .navbar .navbar-brand-wrapper, .navbar .navbar-menu-wrapper {
+			background: #fff !important;
+			border-bottom: 1px solid #eee;
+		}
+			/* Navbar ikonları ve metinleri kırmızı veya koyu gri */
+			.navbar .navbar-nav .nav-item .nav-link, .navbar .navbar-brand {
+				color: #c82333 !important;
+			}
+
+				.navbar .navbar-nav .nav-item .nav-link i {
+					color: #c82333 !important;
+				}
+
+				.navbar .navbar-nav .nav-item .nav-link:hover, .navbar .navbar-nav .nav-item .nav-link:hover i {
+					color: #dc3545 !important;
+				}
+		/* Bildirim balonu kırmızı */
+		.count-indicator .count {
+			background: #dc3545 !important;
+		}
+		/* Profil adı ve tipi */
+		.profile-name h5, .profile-name span {
+			color: #c82333 !important;
+		}
+		/* Sidebar avatar çerçevesi kırmızı */
+		.avatar.rounded-circle {
+			border: 2px solid #dc3545 !important;
+		}
+		/* Ana kart arka planı ve metin rengi */
+		.card.bg-default {
+			background-color: #ffffff !important;
+			color: #333 !important;
+		}
+		/* Kart başlığı */
+		.card-header.bg-transparent {
+			background-color: #dc3545 !important;
+			border-bottom: 1px solid #c82333 !important;
+		}
+
+		.card-header h3, .card-header h3.text-white {
+			color: #ffffff !important;
+		}
+		/* Tablo stilleri */
+		.table-dark {
+			background-color: #f8f9fa !important;
+			color: #212529 !important;
+		}
+
+			.table-dark th,
+			.table-dark td,
+			.table-dark thead th {
+				border-color: #dee2e6 !important;
+				color: #212529 !important;
+			}
+		/* Tablo başlığı */
+		.thead-dark th {
+			background-color: #c82333 !important;
+			color: #ffffff !important;
+			border-color: #b21f2c !important;
+		}
+		/* Buton Renkleri */
+		.btn-outline-primary {
+			color: #dc3545 !important;
+			border-color: #dc3545 !important;
+		}
+
+			.btn-outline-primary:hover {
+				background-color: #dc3545 !important;
+				color: #ffffff !important;
+			}
+
+		.btn-outline-success {
+			color: #c82333 !important;
+			border-color: #c82333 !important;
+		}
+
+			.btn-outline-success:hover {
+				background-color: #c82333 !important;
+				color: #ffffff !important;
+			}
+
+		.btn-outline-warning {
+			color: #b21f2c !important;
+			border-color: #b21f2c !important;
+		}
+
+			.btn-outline-warning:hover {
+				background-color: #b21f2c !important;
+				color: #ffffff !important;
+			}
+		/* Genel Buton Renkleri (Yeni Ekle gibi) */
+		.btn-info,
+		.btn-primary {
+			background-color: #dc3545 !important;
+			border-color: #dc3545 !important;
+			color: #ffffff !important;
+		}
+
+			.btn-info:hover,
+			.btn-primary:hover {
+				background-color: #c82333 !important;
+				border-color: #c82333 !important;
+			}
+
+		/* NotificationList override */
+		.navbar-dropdown.preview-list .dropdown-item.preview-item {
+			background-color: #fff !important;
+			background-image: none !important;
+			border-left: 4px solid #dc3545 !important;
+			border-radius: 0.75rem !important;
+			margin: 0.5rem 0 !important;
+		}
+
+		.navbar-dropdown.preview-list .dropdown-item.preview-item:hover {
+				background-color: rgba(220,53,69,0.1) !important;
+				
+			}
+
+		.dropdown-menu{
+			background-color: #f2808b !important;
+			border-radius: 0.75rem !important;
+			box-shadow: 0 8px 32px 0 rgba(220, 53, 69, 0.15) !important;
+			border: 1px solid rgba(220, 53, 69, 0.1) !important;
+		}
+		/* NotificationList nested override */
+		.navbar-dropdown.preview-list .notification-list .dropdown-divider {
+			border-top: 1px solid rgba(220,53,69,0.2) !important;
+			margin: 0.5rem 0 !important;
+		}
+		/* Error Pages Theming */
+		/* Card header for error pages */
+		.card-header.border-0 {
+			background-color: #fff !important;
+			border-bottom: 1px solid #dc3545 !important;
+		}
+
+			.card-header.border-0 h3.mb-0 {
+				color: #dc3545 !important;
+			}
+		/* Card wrapper */
+		.grid-margin.stretch-card .card {
+			background: #fff !important;
+			border-radius: 1.5rem !important;
+			box-shadow: 0 8px 32px 0 rgba(220,53,69,0.15) !important;
+			border: 1px solid rgba(220,53,69,0.1) !important;
+		}
+		/* Titles and descriptions */
+		.forms-sample .card-title,
+		.grid-margin.stretch-card .card-body h4.card-title {
+			color: #dc3545 !important;
+			font-weight: 700 !important;
+		}
+		/* Form controls */
+		.forms-sample .form-control {
+			border: 1px solid #dc3545 !important;
+			border-radius: 0.75rem !important;
+		}
+
+			.forms-sample .form-control:focus {
+				border-color: #dc3545 !important;
+				box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.25) !important;
+			}
+		/* Buttons on error forms */
+		.forms-sample .btn-success,
+		.forms-sample .btn-outline-success {
+			background: linear-gradient(90deg, #dc3545 0%, #ff7eb3 100%) !important;
+			border: none !important;
+			color: #fff !important;
+		}
+
+			.forms-sample .btn-success:hover,
+			.forms-sample .btn-outline-success:hover {
+				background-color: #c82333 !important;
+			}
+		/* Error Page Inputs & Text override */
+		.forms-sample .form-control {
+			background-color: #fff !important;
+			color: #333 !important;
+		}
+
+			.forms-sample .form-control:focus {
+				background-color: #fff !important;
+				color: #333 !important;
+			}
+
+		.forms-sample label,
+		.forms-sample .form-control-static,
+		.forms-sample .card-description {
+			color: #333 !important;
+		}
+
+		.custom-input-bg{
+			background-color: #f59aa3; /* istediğin renk */
+		}
+
+		.custom-input-bg:focus {
+				background-color: #f26d7a; /* istediğin renk */
+				border-color: #dc3545 !important;
+		}
+		.custom-label{
+			color: #000 !important;
+			font-weight: 500 !important;
+		}
+		
+	</style>
 </head>
 <body>
-    <div class="container-scroller">
-        <!-- partial:partials/_sidebar.html -->
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-                <a class="sidebar-brand brand-logo" href="/Default/Index"><img src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/logo.svg" alt="logo" /></a>
-                <a class="sidebar-brand brand-logo-mini" href="/Default/Index"><img src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/logo-mini.svg" alt="logo" /></a>
-            </div>
-            <ul class="nav">
-                <li class="nav-item profile">
-                    <div class="profile-desc">
-                        <div class="profile-pic">
-                            <div class="count-indicator">
-                                <img class="img-xs rounded-circle " src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/faces/face15.jpg" alt="">
-                                <span class="count bg-success"></span>
-                            </div>
-                            <div class="profile-name">
-                                <h5 class="mb-0 font-weight-normal">Henry Klein</h5>
-                                <span>Gold Member</span>
-                            </div>
-                        </div>
-                        <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
-                        
-                    </div>
-                </li>
-                <li class="nav-item nav-category">
-                    <span class="nav-link">Navigation</span>
-                </li>
-                <li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Work", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
-                    <a class="nav-link" asp-controller="Work" asp-action="Index" >
-                        <span class="menu-icon">
-                            <i class="mdi mdi-clipboard-outline"></i>
-                        </span>
-                        <span class="menu-title">İş Emirleri</span>
-                    </a>
-                </li>
+	<div class="container-scroller">
+		<!-- partial:partials/_sidebar.html -->
+		<nav class="sidebar sidebar-offcanvas" id="sidebar">
+			<div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+				<a class="sidebar-brand brand-logo" href="/Default/Index"><img src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/trace.svg" style="height:auto;width:135px" alt="logo" /></a>
+				<a class="sidebar-brand brand-logo-mini" href="/Default/Index"><img src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/trace.svg" style="height:auto;width:150px" alt="logo" /></a>
+			</div>
+			<ul class="nav">
+				<li class="nav-item profile">
+					<div class="profile-desc">
+						<div class="profile-pic">
+							<div class="count-indicator">
+								<img class="img-xs rounded-circle " src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/faces/user_avatar.png" alt="">
+								<span class="count bg-success"></span>
+							</div>
+							<div class="profile-name">
+								<h5 class="mb-0 font-weight-normal">Henry Klein</h5>
+								<span>Gold Member</span>
+							</div>
+						</div>
+						<a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
 
-                <li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Notification", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
-                    <a class="nav-link" asp-controller="Notification" asp-action="Index">
-                        <span class="menu-icon">
-                            <i class="mdi mdi-bell-outline"></i>
-                        </span>
-                        <span class="menu-title">Bildirimler</span>
-                    </a>
-                </li>
-                <li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("User", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
-                    <a class="nav-link" asp-controller="User" asp-action="Index">
-                        <span class="menu-icon">
-                            <i class="mdi mdi-account"></i>
-                        </span>
-                        <span class="menu-title">Yeni Kullanıcı Tanımla</span>
-                    </a>
-                </li>
-                <li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Calculation", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
-                    <a class="nav-link" asp-controller="Calculation" asp-action="Index">
-                        <span class="menu-icon">
-                            <i class="mdi mdi-calculator"></i>
-                        </span>
-                        <span class="menu-title">MTTR/MTBF Hesapla</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+					</div>
+				</li>
+				<li class="nav-item nav-category">
+					<span class="nav-link">Navigation</span>
+				</li>
+				<li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Work", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
+					<a class="nav-link" asp-controller="Work" asp-action="Index">
+						<span class="menu-icon">
+							<i class="mdi mdi-clipboard-outline"></i>
+						</span>
+						<span class="menu-title">İş Emirleri</span>
+					</a>
+				</li>
 
-        <!-- partial -->
-        <div class="container-fluid page-body-wrapper">
+				<li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Notification", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
+					<a class="nav-link" asp-controller="Notification" asp-action="Index">
+						<span class="menu-icon">
+							<i class="mdi mdi-bell-outline"></i>
+						</span>
+						<span class="menu-title">Bildirimler</span>
+					</a>
+				</li>
+				<li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("User", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
+					<a class="nav-link" asp-controller="User" asp-action="Index">
+						<span class="menu-icon">
+							<i class="mdi mdi-account"></i>
+						</span>
+						<span class="menu-title">Yeni Kullanıcı Tanımla</span>
+					</a>
+				</li>
+				<li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Calculation", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
+					<a class="nav-link" asp-controller="Calculation" asp-action="Index">
+						<span class="menu-icon">
+							<i class="mdi mdi-calculator"></i>
+						</span>
+						<span class="menu-title">MTTR/MTBF Hesapla</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
 
-            <nav class="navbar p-0 fixed-top d-flex flex-row">
-                <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-                    <a class="navbar-brand brand-logo-mini" href="index.html"><img src="assets/images/logo-mini.svg" alt="logo" /></a>
-                </div>
-                <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
-                    <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-                        <span class="mdi mdi-menu"></span>
-                    </button>
-                    
-                    <ul class="navbar-nav navbar-nav-right">                
-                        <li class="nav-item dropdown border-left">
-                            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-                                <i class="mdi mdi-bell"></i>
-                                <span class="count bg-danger"></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-                                <h6 class="p-3 mb-0">Notifications</h6>
-                                <div class="dropdown-divider"></div>
-                               @await Component.InvokeAsync("NotificationList")
-                                
-                            </div>
-                        </li>                     
-                    </ul>
-                    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-                        <span class="mdi mdi-format-line-spacing"></span>
-                    </button>
-                </div>
-            </nav>
+		<!-- partial -->
+		<div class="container-fluid page-body-wrapper">
+
+			<nav class="navbar p-0 fixed-top d-flex flex-row">
+				<div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+					<a class="navbar-brand brand-logo" href="index.html"><img src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/trace.svg" style="height:auto;width:135px" alt="logo" asp-append-version="true" /></a>
+					<a class="navbar-brand brand-logo-mini" href="index.html"><img src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/trace.svg" style="height:auto;width:150px" alt="logo" asp-append-version="true" /></a>
+				</div>
+				<div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+					<button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+						<span class="mdi mdi-menu"></span>
+					</button>
+
+					<ul class="navbar-nav navbar-nav-right">
+						<li class="nav-item dropdown border-left">
+							<a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+								<i class="mdi mdi-bell"></i>
+								<span class="count bg-danger"></span>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+								<h6 class="p-3 mb-0">Notifications</h6>
+								<div class="dropdown-divider"></div>
+								@await Component.InvokeAsync("NotificationList")
+
+							</div>
+						</li>
+					</ul>
+					<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+						<span class="mdi mdi-format-line-spacing"></span>
+					</button>
+				</div>
+			</nav>
 
 
-            <div class="main-panel">
-                <div class="content-wrapper">
+			<div class="main-panel">
+				<div class="content-wrapper">
 
-                   @RenderBody()
-                </div>
+					@RenderBody()
+				</div>
 
-            </div>
+			</div>
 
-        </div>
-        <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/chart.js/Chart.min.js"></script>
-    <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/progressbar.js/progressbar.min.js"></script>
-    <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
-    <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-    <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/off-canvas.js"></script>
-    <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/hoverable-collapse.js"></script>
-    <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/misc.js"></script>
-    <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/settings.js"></script>
-    <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/dashboard.js"></script>
-    <!-- End custom js for this page -->
-    @RenderSection("Scripts", required: false)
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	<!-- container-scroller -->
+	<!-- plugins:js -->
+	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/js/vendor.bundle.base.js"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/chart.js/Chart.min.js"></script>
+	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/progressbar.js/progressbar.min.js"></script>
+	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/off-canvas.js"></script>
+	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/hoverable-collapse.js"></script>
+	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/misc.js"></script>
+	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/settings.js"></script>
+	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/todolist.js"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page -->
+	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/dashboard.js"></script>
+	<!-- End custom js for this page -->
+	@RenderSection("Scripts", required: false)
 </body>
 </html>

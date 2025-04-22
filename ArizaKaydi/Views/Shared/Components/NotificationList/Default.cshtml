@@ -1,23 +1,74 @@
 ﻿@using EntityLayer.Concrete
 @model List<machineNotifications>
-<div style="max-height: 300px; overflow-y: auto;">
-	@foreach (var item in Model)
-	{
-		<a class="dropdown-item preview-item" href="/Notification/EditNotification/@item.id">
-			<div class="preview-thumbnail">
-				<div class="preview-icon bg-dark rounded-circle">
-					<i class="mdi mdi-bell-ring text-success"></i>
-				</div>
-			</div>
+<style>
+    .notification-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
 
-			<div class="preview-item-content">
-				<p class="preview-subject mb-1">@item.title</p>
-				<p class="text-muted ellipsis mb-0">@(item.machineName != null ? item.machineName.name : "Makine bilgisi yok")</p>
+        .notification-list .dropdown-item.preview-item {
+            background-color: #fff !important;
+            background-image: none !important;
+            border-left: 4px solid #dc3545;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
 
-			</div>
+            .notification-list .dropdown-item.preview-item:hover {
+                background-color: rgba(220,53,69,0.1) !important;
+                background-image: none !important;
+            }
+
+        .notification-list .preview-icon {
+            background: #dc3545;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+            .notification-list .preview-icon .mdi {
+                font-size: 1.3rem;
+            }
+
+        .notification-list .preview-item-content .preview-subject {
+            color: #dc3545;
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .notification-list .preview-item-content .text-muted {
+            color: #6c757d !important;
+        }
+
+        .notification-list .dropdown-divider {
+            border-top: 1px solid rgba(220,53,69,0.2);
+            margin: 0.5rem 0;
+        }
+</style>
+<div class="notification-list">
+    @foreach (var item in Model)
+    {
+        <a class="dropdown-item preview-item" href="/Notification/EditNotification/@item.id">
+            <div class="preview-thumbnail">
+                <div class="preview-icon rounded-circle">
+                    <i class="mdi mdi-bell-ring text-white"></i>
+                </div>
+            </div>
+
+            <div class="preview-item-content">
+                <p class="preview-subject mb-1">@item.title</p>
+                <p class="text-muted ellipsis mb-0">@(item.machineName != null ? item.machineName.name : "Makine bilgisi yok")</p>
+
+            </div>
 
 
-		</a>
-		<div class="dropdown-divider"></div>
-	}
+        </a>
+        <div class="dropdown-divider"></div>
+    }
 </div>

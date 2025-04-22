@@ -247,67 +247,83 @@ namespace ArizaKayitApi.Controllers
 		[HttpGet("FilterListView")]
 		public IActionResult filterListView([FromQuery] string? s1, [FromQuery] string? s2, [FromQuery] string? s3, [FromQuery] string? s4, [FromQuery] string? s5)
 		{
+			// Start with IQueryable instead of materializing to list immediately
+			var query = _context.Errors
+				.Include(e => e.machines)
+				.Include(e => e.machinePartName)
+				.Include(e => e.userName)
+				.AsQueryable();
 
-			var filtered = _context.Errors.ToList();
-			var temp = _context.Errors.ToList();
+			// Apply date filter
 			if (s1 != null)
 			{
 				var today = DateTime.Today;
-				var month = DateTime.Now.Month;
-				var year = DateTime.Now.Year;
-				var dayOfWeek = today.DayOfWeek;
-				var startOfWeek = today.AddDays(-(int)dayOfWeek + (int)DayOfWeek.Monday);
-				var endOfWeek = startOfWeek.AddDays(6);
 				if (s1 == "Bugün")
 				{
-					filtered = filtered.Where(e => e.errorDate.Date == today).ToList();
-
+					query = query.Where(e => e.errorDate.Date == today);
 				}
 				else if (s1 == "Bu hafta")
 				{
-					filtered = filtered.Where(e => e.errorDate >= startOfWeek && e.errorDate <= endOfWeek).ToList();
+					var dayOfWeek = today.DayOfWeek;
+					var startOfWeek = today.AddDays(-(int)dayOfWeek + (int)DayOfWeek.Monday);
+					var endOfWeek = startOfWeek.AddDays(6);
+					query = query.Where(e => e.errorDate >= startOfWeek && e.errorDate <= endOfWeek);
 				}
 				else if (s1 == "Bu ay")
 				{
-					filtered = filtered.Where(e => e.errorDate.Year == year && e.errorDate.Month == month).ToList();
+					var month = DateTime.Now.Month;
+					var year = DateTime.Now.Year;
+					query = query.Where(e => e.errorDate.Year == year && e.errorDate.Month == month);
 				}
 			}
+
+			// Apply machine filter
 			if (s2 != null)
 			{
-				var mac_id = _context.Machines.Where(u => u.name == s2).Select(u => u.id).FirstOrDefault();
-				filtered = filtered.Where(e => e.machineId == mac_id).ToList();
+				query = query.Where(e => e.machines.name == s2);
 			}
+
+			// Apply machine part filter
 			if (s3 != null)
 			{
-
-				var mac_part_id = _context.MachineParts.Where(u => u.name == s3).Select(u => u.Id).ToList();
-
-				filtered = filtered
-					.Where(e => mac_part_id.Contains(e.machinePartId ?? 0))
-					.ToList();
-
+				query = query.Where(e => e.machinePartName.name == s3);
 			}
+
+			// Apply image filter
 			if (s4 != null)
 			{
 				if (s4 == "Var")
 				{
-
-					filtered = filtered.Where(e => e.errorImageType != null).ToList();
-
+					query = query.Where(e => e.errorImage != null);
 				}
 				else
 				{
-					filtered = filtered.Where(e => e.errorImageType == null).ToList();
-
+					query = query.Where(e => e.errorImage == null);
 				}
 			}
+
+			// Apply user filter
 			if (s5 != null)
 			{
-				var us_id = _context.Users.Where(u => u.UserName == s5).Select(u => u.Id).FirstOrDefault();
-				filtered = filtered.Where(e => e.userId == us_id).ToList();
-
+				query = query.Where(e => e.userName.UserName == s5);
 			}
-			return Ok(filtered);
+
+			// Finally materialize query and select desired fields
+			var results = query.Select(e => new
+			{
+				e.id,
+				machineName = e.machines.name,
+				machinePartName = e.machinePartName.name,
+				machinePartId = e.machinePartId,
+				machineId = e.machineId,
+				userName = e.userName.UserName,
+				startDate = e.errorDate,
+				endDate = e.errorEndDate,
+				errorImage = e.errorImage,
+				errorType = e.errorType,
+				errorDesc = e.errorDesc,
+			}).ToList();
+			return Ok(results);
 		}
 
 		[HttpGet("GetMachineNameAndPart/{id}")]
@@ -323,6 +339,66 @@ namespace ArizaKayitApi.Controllers
 				userName = e.userName,
 			});
 			return Ok();
+		}
+
+
+
+		[HttpGet("GetErrorSupModel")]
+		public IActionResult getErrorSupModel()
+		{
+			var err = _context.Errors.Include(e => e.machines).Include(e => e.machinePartName).Include(e => e.userName).Select(e => new
+			{
+				e.id,
+				machineName = e.machines.name,
+				machinePartName = e.machinePartName.name,
+				machinePartId = e.machinePartId,
+				machineId = e.machineId,
+				userName = e.userName.UserName,
+				startDate = e.errorDate,
+				endDate = e.errorEndDate,
+				errorImage = e.errorImage,
+				errorType = e.errorType,
+				errorDesc = e.errorDesc,
+			}).ToList();
+			return Ok(err);
+		}
+		[HttpGet("GetErrorSupModelByMachine/{id}")]
+		public IActionResult getErrorSupModelByMachine(int id)
+		{
+			var err = _context.Errors.Include(e => e.machines).Include(e => e.machinePartName).Include(e => e.userName).Where(e=> e.machineId ==id).Select(e => new
+			{
+				e.id,
+				machineName = e.machines.name,
+				machinePartName = e.machinePartName.name,
+				machinePartId = e.machinePartId,
+				machineId = e.machineId,
+				userName = e.userName.UserName,
+				startDate = e.errorDate,
+				endDate = e.errorEndDate,
+				errorImage = e.errorImage,
+				errorType = e.errorType,
+				errorDesc = e.errorDesc,
+			}).ToList();
+			return Ok(err);
+		}
+		[HttpGet("GetErrorSupModelByMachinePart/{id}")]
+		public IActionResult getErrorSupModelByMachinePart(int id)
+		{
+			var err = _context.Errors.Include(e => e.machines).Include(e => e.machinePartName).Include(e => e.userName).Where(e=> e.machinePartId == id).Select(e => new
+			{
+				e.id,
+				machineName = e.machines.name,
+				machinePartName = e.machinePartName.name,
+				machinePartId = e.machinePartId,
+				machineId = e.machineId,
+				userName = e.userName.UserName,
+				startDate = e.errorDate,
+				endDate = e.errorEndDate,
+				errorImage = e.errorImage,
+				errorType = e.errorType,
+				errorDesc = e.errorDesc,
+			}).ToList();
+			return Ok(err);
 		}
 	}
 }

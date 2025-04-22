@@ -1,47 +1,52 @@
 ﻿@{
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
-	.main-panel {
-		margin-top: 0;
-		padding-top: 0;
-	}
+    /* Calculation index sayfası temasıyla uyumlu kırmızı-beyaz tema */
+    .main-panel {
+        margin-top: 0;
+        padding-top: 0;
+    }
 
-	.result-card {
-		background: rgba(30, 32, 43, 0.98);
-		border-radius: 2rem;
-		min-width: 370px;
-		max-width: 650px;
-		width: 100%;
-		padding: 2rem;
-		box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-	}
+    .content-wrapper .card.shadow-lg {
+        background: #fff !important;
+        border-radius: 1.5rem !important;
+        box-shadow: 0 8px 32px 0 rgba(220, 53, 69, 0.15) !important;
+        border: 1px solid rgba(220, 53, 69, 0.1) !important;
+        padding: 2rem !important;
+    }
 
-	.result-title {
-		color: #fff;
-		font-weight: 700;
-		text-align: center;
-		margin-bottom: 1.5rem;
-	}
+    .result-title {
+        color: #dc3545;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
 
-	.result-content {
-		color: #fff;
-		font-size: 1.2rem;
-		font-weight: 500;
-		text-align: center;
-	}
+    .result-content {
+        color: #333;
+        font-size: 1.2rem;
+        font-weight: 500;
+        text-align: center;
+    }
+    @@media (max-width: 600px) {
+        .content-wrapper .card.shadow-lg
+
+    {
+        margin: 1rem auto !important;
+        max-width: 98vw !important;
+    }
+
+    }
 </style>
 <div class="main-panel">
-	<div class="content-wrapper d-flex flex-column align-items-start justify-content-start" style="min-height: 80vh;">
-		<div class="card shadow-lg p-5 mt-4 ml-3 d-flex flex-column align-items-center" style="background: rgba(30,32,43,0.98); border-radius: 2rem; min-width: 370px; max-width: 650px; width: 100%;">
+    <div class="content-wrapper d-flex flex-column align-items-start justify-content-start" style="min-height: 80vh;">
+        <div class="card shadow-lg p-5 mt-4 ml-3 d-flex flex-column align-items-center">
+            <h4 class="result-title">Sonuç</h4>
+            <div class="result-content">
+                @ViewBag.Result
+            </div>
+        </div>
 
-			<div class="result-card">
-				<h4 class="result-title">Sonuç</h4>
-				<div class="result-content">
-					@ViewBag.Result
-				</div>
-			</div>
-		</div>
-
-	</div>
+    </div>
 </div>

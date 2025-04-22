@@ -4,6 +4,13 @@
 @{
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head>
+	<style>
+		.form-check-input ms-2 {
+			accent-color: red; /* Checkbox rengini kırmızı yapar */
+		}
+	</style>
+</head>
 <div class="card-header border-0">
 	<h3 class="mb-0">İş Emri Düzenleme</h3>
 </div>
@@ -21,28 +28,29 @@
 					@Html.HiddenFor(x => x.id)
 				</div>
 
-				@Html.Label("Makina ID")
-				@Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control", id = "machineDropdown" })
+				@Html.Label("machineId", "Makine ID", htmlAttributes: new { @class = "custom-label" })
+				@Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg", id = "machineDropdown" })
 				<br />
-				@Html.Label("Makine Parçası")
-				<select id="partDropdown" name="machinePartId" class="form-control">
+				@Html.Label("machinePartId", "Makine Parçası", htmlAttributes: new { @class = "custom-label" })
+				<select id="partDropdown" name="machinePartId" class="form-control custom-input-bg">
 					<option value="">Parça Seçiniz</option>
 				</select>
 				<br />
-				@Html.Label("Atanacak Kullanıcı Seç")
-				@Html.DropDownListFor(x => x.userId, ViewBag.UserList as List<SelectListItem>, "Seçiniz", new { @class = "form-control", id = "userDropdown" })
+				@Html.Label("userId", "Atanacak Kullanıcı Seç", htmlAttributes: new { @class = "custom-label" })
+				@Html.DropDownListFor(x => x.userId, ViewBag.UserList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg", id = "userDropdown" })
 				<br />
-				@Html.Label("İş emri başlığı")
-				@Html.TextBoxFor(x => x.title, new { @class = "form-control" })
+				@Html.Label("title", "İş emri başlığı", htmlAttributes: new { @class = "custom-label" })
+				@Html.TextBoxFor(x => x.title, new { @class = "form-control custom-input-bg" })
 				<br />
 
-				@Html.Label("İş emri açıklama")
-				@Html.TextBoxFor(x => x.desc, new { @class = "form-control" })
+				@Html.Label("desc", "İş emri açıklama", htmlAttributes: new { @class = "custom-label" })
+				@Html.TextBoxFor(x => x.desc, new { @class = "form-control custom-input-bg" })
 				<br />
 				<div class="form-check" style="width: 200px;">
 					<label class="form-check-label d-flex justify-content-between align-items-center w-100">
 						İş tamamlandı mı?
 						@Html.CheckBoxFor(x => x.isClosed, new { @class = "form-check-input ms-2", id = "isClosedCheckbox" })
+
 					</label>
 				</div>
 				<br />
