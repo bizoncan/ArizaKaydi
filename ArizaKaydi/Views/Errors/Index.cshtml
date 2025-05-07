@@ -1,73 +1,145 @@
 ﻿@using EntityLayer.Concrete
 @model List<error>
 @{
-
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<div class="row mb-4">
+	<div class="col-md-12">
+		<div class="card bg-default shadow">
+			<div class="card-header">
+				<h4>Filtreler</h4>
+			</div>
+			<div class="card-body">
+				<form id="filterForm" method="get" action="@Url.Action("Index", "Errors")">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="startDate">Başlangıç Tarihi</label>
+								<input type="date" id="startDate" name="startDate" class="form-control" value="@ViewBag.StartDate" onchange="updateEndDateMin()">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="endDate">Bitiş Tarihi</label>
+								<input type="date" id="endDate" name="endDate" class="form-control" value="@ViewBag.EndDate" min="@ViewBag.StartDate">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="machinePartId">Makine Parçası</label>
+								<select id="machinePartId" name="machinePartId" class="form-control">
+									<option value="">Tümü</option>
+									@foreach (var part in (List<machinePart>)ViewBag.MachineParts)
+									{
+										if (ViewBag.SelectedMachinePartId != null && (int)ViewBag.SelectedMachinePartId == part.Id)
+										{
+											<option value="@part.Id" selected>@part.name</option>
+										}
+										else
+										{
+											<option value="@part.Id" >@part.name</option>
+										}
+									
+									}
+								</select>
+							</div>
+						</div>
+						<div class="col-md-3 d-flex align-items-end">
+							<button type="submit" class="btn btn-primary mr-2">Filtrele</button>
+							<a href="@Url.Action("Index", "Errors")" class="btn btn-secondary">Filtreleri Temizle</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="row">
-    <div class="col">
-        <div class="card bg-default shadow">
-            <div class="card-header bg-transparent border-0">
-                <h3 class="text-white mb-0">Geçmiş Arızalar</h3>
-            </div>
-            <div class="table-responsive">
-                <table class="table align-items-center table-dark table-flush">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col" class="sort">#</th>
-                            <th scope="col" class="sort" data-sort="name">Makine ID</th>
-                            <th scope="col" class="sort" data-sort="name">Arıza Türü</th>
-                            <th scope="col" class="sort" data-sort="name">Arıza Tarihi</th>
-                            <th scope="col">Görüntüle</th>
-                            <th scope="col">Düzenle</th>
-                            <th scope="col">Sil</th>
-                        </tr>
-                    </thead>
-                    <tbody class="list">
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <th>@item.id</th>
-                                <th scope="row">
-                                    <div class="media align-items-center">
-
-                                        <div class="media-body">
-                                            <span class="name mb-0 text-sm">@item.machineId</span>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th scope="row">
-                                    <div class="media align-items-center">
-
-                                        <div class="media-body">
-                                            <span class="name mb-0 text-sm">@item.errorType</span>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th scope="row">
-                                    <div class="media align-items-center">
-
-                                        <div class="media-body">
-                                            <span class="name mb-0 text-sm">@item.errorDate</span>
-                                        </div>
-                                    </div>
-                                </th>
-
-                                
-                                <td><a href="@Url.Action("ErrorDetail","Errors",new{id=item.id})" class="btn btn-outline-success">Görüntüle</a></td>
-                                <td><a href="/Errors/EditError/@item.id" class="btn btn-outline-warning">Düzenle</a></td>
-                                <td><a href="/Errors/DeleteError/@item.id" class="btn btn-outline-danger">Sil</a></td>
-                            </tr>
-                        }
-
-
-
-                    </tbody>
-                </table>
-
-            </div>
-        </div>
-    </div>
+	<div class="col">
+		<div class="card bg-default shadow">
+			<div class="card-header bg-transparent border-0">
+				<h3 class="text-white mb-0">Geçmiş Arızalar</h3>
+			</div>
+			<div class="table-responsive">
+				<table class="table align-items-center table-dark table-flush">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col" class="sort">#</th>
+							<th scope="col" class="sort" data-sort="name">Makine Parçası Adı</th>
+							<th scope="col" class="sort" data-sort="name">Arıza Türü</th>
+							<th scope="col" class="sort" data-sort="name">Arıza Tarihi</th>
+							<th scope="col">Görüntüle</th>
+							<th scope="col">Düzenle</th>
+							<th scope="col">Sil</th>
+						</tr>
+					</thead>
+					<tbody class="list">
+						@if (Model != null && Model.Any())
+						{
+							@foreach (var item in Model)
+							{
+								<tr>
+									<th>@item.id</th>
+									<th scope="row">
+										<div class="media align-items-center">
+											<div class="media-body">
+												<span class="name mb-0 text-sm">
+													@(item.machinePartName?.name ?? "Bilinmiyor")
+												</span>
+											</div>
+										</div>
+									</th>
+									<th scope="row">
+										<div class="media align-items-center">
+											<div class="media-body">
+												<span class="name mb-0 text-sm">@item.errorType</span>
+											</div>
+										</div>
+									</th>
+									<th scope="row">
+										<div class="media align-items-center">
+											<div class="media-body">
+												<span class="name mb-0 text-sm">@item.errorDate</span>
+											</div>
+										</div>
+									</th>
+									<td><a href="@Url.Action("ErrorDetail","Errors",new{id=item.id})" class="btn btn-outline-success">Görüntüle</a></td>
+									<td><a href="/Errors/EditError/@item.id" class="btn btn-outline-warning">Düzenle</a></td>
+									<td><a href="/Errors/DeleteError/@item.id" class="btn btn-outline-danger">Sil</a></td>
+								</tr>
+							}
+						}
+						else
+						{
+							<tr>
+								<td colspan="7" class="text-center">Filtrelenen kriterlere uygun arıza bulunamadı.</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
 <br />
 <a href="/Errors/AddError/" class="btn btn-info"> Yeni Arıza Ekle</a>
+
+<script>
+	function updateEndDateMin() {
+		var startDate = document.getElementById('startDate').value;
+		document.getElementById('endDate').min = startDate;
+
+		// If end date is before start date, reset it to start date
+		var endDate = document.getElementById('endDate').value;
+		if (endDate && endDate < startDate) {
+			document.getElementById('endDate').value = startDate;
+		}
+	}
+
+	// Initialize on page load
+	document.addEventListener('DOMContentLoaded', function() {
+		updateEndDateMin();
+	});
+</script>

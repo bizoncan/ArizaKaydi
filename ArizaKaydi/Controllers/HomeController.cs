@@ -1,5 +1,7 @@
 ﻿using ArizaKaydi.Models;
+using DataAccessLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace ArizaKaydi.Controllers
@@ -7,15 +9,31 @@ namespace ArizaKaydi.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly context _context;
 
-        public HomeController(ILogger<HomeController> logger)
+		public HomeController(ILogger<HomeController> logger, context _context)
         {
             _logger = logger;
-        }
+			this._context = _context;
+		}
 
-        public IActionResult Index()
+		
+
+		public IActionResult Index()
         {
-            return View();
+            ViewBag.WorkOrderCount = _context.WorkOrders.Where(e=> e.isClosed != true).Count();
+            ViewBag.UserCount = _context.mobileUsers.Count();
+            /*var totalPairTime = 0.0;
+            foreach(var item in _context.Errors.ToList())
+            {
+				if (item.errorEndDate != null)
+				{
+					totalPairTime += (item.errorEndDate - item.errorDate).TotalHours;
+				}
+			}
+            ViewBag.MTTR = totalPairTime / _context.Errors.Count();*/
+			var m = _context.WorkOrders.Include(x=>x.machine).Include(x=>x.machinePart).Include(x=> x.userI).ToList();
+			return View(m);
         }
 
         public IActionResult Privacy()

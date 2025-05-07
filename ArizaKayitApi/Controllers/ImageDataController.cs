@@ -23,7 +23,7 @@ namespace ArizaKayitApi.Controllers
         public IActionResult addImageData(List<String> img_data)
         {
             int veri = 1;
-            SqlConnection con = new SqlConnection("server=10.10.82.247,1433;database=ArizaKayit;User Id=sa ;Password=A/f-mrf_12 ;TrustServerCertificate=True;");
+            SqlConnection con = new SqlConnection("server=10.10.82.69,1433;database=ArizaKayit;User Id=sa ;Password=A/f-mrf_12 ;TrustServerCertificate=True ;");
             con.Open();
             string query = "select top 1 * from dbo.Errors order by id desc";
             SqlCommand cmd = new SqlCommand(query, con);

@@ -1,23 +1,15 @@
 ﻿@using EntityLayer.Concrete
-@model List<workOrder>
+@model List<work>
 @{
 	Layout = "~/Views/Shared/_Layout.cshtml";
 	bool isMachineSelectedInitially = ViewBag.SelectedMachineId != null && (int)ViewBag.SelectedMachineId > 0;
-	
-
 }
-
-@* CSRF token'ının sayfada render edildiğinden emin olun (genellikle _Layout.cshtml içinde veya bir formda bulunur) *@
-@* Gerekliyse ve başka yerde yoksa: @Html.AntiForgeryToken() *@
-
-<a href="/Work/AddWorkOrder/" class="btn btn-info"> Yeni İş Emri Ekle</a>
 <button id="excelAktarBtn" class="btn btn-success">Excel'e Aktar</button>
 @* Excel'e aktarma sırasında gösterilecek loading indicator *@
 <div id="loadingIndicator" style="display: none; margin-top: 10px;">
 	<span class="text-info">Excel dosyası oluşturuluyor, lütfen bekleyin...</span>
 	@* İsterseniz buraya bir spinner ikonu ekleyebilirsiniz, örn: <i class="fa fa-spinner fa-spin"></i> *@
 </div>
-
 <br />
 <br />
 <div class="row mb-4">
@@ -27,9 +19,8 @@
 				<h4>Filtreler</h4>
 			</div>
 			<div class="card-body">
-				<form id="filterForm" method="get" action="@Url.Action("Index", "Work")">
+				<form id="filterForm" method="get" action="@Url.Action("WorkReportss", "Report")">
 					@Html.AntiForgeryToken()
-					@* Filtre form içeriği (değişiklik yok) *@
 					<div class="row">
 						<div class="col-md-3">
 							<div class="form-group">
@@ -58,6 +49,7 @@
 										{
 											<option value="@part.id">@part.name</option>
 										}
+
 									}
 								</select>
 							</div>
@@ -79,40 +71,17 @@
 											{
 												<option value="@part.Id">@part.name</option>
 											}
+
 										}
 									}
-								</select>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="form-group">
-								<label for="isClosed">Durum</label>
-								<select id="isClosed" name="isClosed" class="form-control">
-									<option value="">Tümü</option>
-									@if (ViewBag.IsClosed?.ToString().ToLower() == "false")
-									{
-										<option value="false" selected>Sonlanmadı</option>
-									}
-									else
-									{
-										<option value="false">Sonlanmadı</option>
-									}
 
-									@if (ViewBag.IsClosed?.ToString().ToLower() == "true")
-									{
-										<option value="true" selected>Sonlandı</option>
-									}
-									else
-									{
-										<option value="true">Sonlandı</option>
-									}
 
 								</select>
 							</div>
 						</div>
 						<div class="col-md-3 d-flex align-items-end">
 							<button type="submit" class="btn btn-primary mr-2">Filtrele</button>
-							<a href="@Url.Action("Index", "Work")" class="btn btn-secondary">Filtreleri Temizle</a> @* Düzeltme: Errors yerine Work olmalı muhtemelen *@
+							<a href="@Url.Action("WorkReportss", "Report")" class="btn btn-secondary">Filtreleri Temizle</a>
 						</div>
 					</div>
 				</form>
@@ -125,38 +94,37 @@
 	<div class="col">
 		<div class="card bg-default shadow">
 			<div class="card-header bg-transparent border-0">
-				<h3 class="text-white mb-0">İş Emirleri</h3>
+				<h3 class="text-white mb-0">İş Emri Raporları </h3>
 			</div>
 			<div class="table-responsive">
-				@* Tablo ID'si eklemek selector için faydalı olabilir ama şart değil *@
-				<table id="isEmirleriTablosu" class="table align-items-center table-dark table-flush">
+				<table class="table align-items-center table-dark table-flush">
 					<thead class="thead-dark">
 						<tr>
-							@* Başlıklar (değişiklik yok) *@
-							<th scope="col" class="sort">
-								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,sortBy="id",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "id" ? "desc" : "asc"} )" style="color:#ffffff !important">
-									#
-									@if (Context.Request.Query["sortBy"] == "id")
+							<th scope="col" class="sort" data-sort="name">
+								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId,sortBy="id",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "id" ? "desc" : "asc"})" style="color:#ffffff !important">
+								#
+								@if (Context.Request.Query["sortBy"] == "id")
+								{
+									@if (Context.Request.Query["sortOrder"] == "asc")
 									{
-										@if (Context.Request.Query["sortOrder"] == "asc")
-										{
-											<i class="mdi mdi-arrow-up"></i>
-										}
-										else
-										{
-											<i class="mdi mdi-arrow-down"></i>
-										}
+										<i class="mdi mdi-arrow-up"></i>
 									}
 									else
 									{
-										<i class="mdi mdi-color-helper"></i>
+										<i class="mdi mdi-arrow-down"></i>
 									}
-								</a>
+								}
+								else
+								{
+									<i class="mdi mdi-color-helper"></i>
+								}
+
+							</a>
 							</th>
-							<th scope="col" class="sort" data-sort="name">İş Emri</th>
+							<th scope="col" class="sort" data-sort="name">Rapor Başlığı</th>
 							<th scope="col" class="sort" data-sort="name">
-								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,sortBy="start",sortOrder= Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "start" ? "desc" : "asc"})" style="color:#ffffff !important">
-									İş Emri Başlangıç Tarihi
+								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId,sortBy="start",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "start" ? "desc" : "asc"})" style="color:#ffffff !important">
+									İşin alınma tarihi
 									@if (Context.Request.Query["sortBy"] == "start")
 									{
 										@if (Context.Request.Query["sortOrder"] == "asc")
@@ -172,11 +140,12 @@
 									{
 										<i class="mdi mdi-color-helper"></i>
 									}
+
 								</a>
 							</th>
 							<th scope="col" class="sort" data-sort="name">
-								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,sortBy="end",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "end" ? "desc" : "asc"})" style="color:#ffffff !important">
-									İş Emri Bitiş Tarihi
+								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId,sortBy="end",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "end" ? "desc" : "asc"})" style="color:#ffffff !important">
+									İşin bitiş tarihi
 									@if (Context.Request.Query["sortBy"] == "end")
 									{
 										@if (Context.Request.Query["sortOrder"] == "asc")
@@ -192,10 +161,11 @@
 									{
 										<i class="mdi mdi-color-helper"></i>
 									}
+
 								</a>
 							</th>
 							<th scope="col" class="sort" data-sort="name">
-								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,sortBy="machineId",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "machineId" ? "desc" : "asc"})" style="color:#ffffff !important">
+								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId,sortBy="machineId",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "machineId" ? "desc" : "asc"})" style="color:#ffffff !important">
 									Makine Adı
 									@if (Context.Request.Query["sortBy"] == "machineId")
 									{
@@ -214,38 +184,15 @@
 									}
 								</a>
 							</th>
-							<th scope="col" class="sort" data-sort="name">
-								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,sortBy="isClosed",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "isClosed" ? "desc" : "asc"})" style="color:#ffffff !important">
-									İş emri sonlandı mı
-									@if (Context.Request.Query["sortBy"] == "isClosed")
-									{
-										@if (Context.Request.Query["sortOrder"] == "asc")
-										{
-											<i class="mdi mdi-arrow-up"></i>
-										}
-										else
-										{
-											<i class="mdi mdi-arrow-down"></i>
-										}
-									}
-									else
-									{
-										<i class="mdi mdi-color-helper"></i>
-									}
-								</a>
-								
-								
-								</th>
-							<!--<th scope="col">İş Emri Raporu</th>-->
-							<th scope="col">Düzenle</th>
+							<!--	<th scope="col" class="sort" data-sort="name">Geçmiş Rapor mu</th>-->
+							<th scope="col">İş Emri Raporu</th>
 							<th scope="col">Sil</th>
+
 						</tr>
 					</thead>
-					@* *** DEĞİŞİKLİK: tbody'ye ID ekleyebilir veya class'ı kullanabiliriz. Class'ı kullanalım. *** *@
 					<tbody class="list">
 						@foreach (var item in Model)
 						{
-							@* *** DEĞİŞİKLİK: Her satıra data-id attribute'u ekliyoruz *** *@
 							<tr data-id="@item.id">
 								<td>@item.id</td>
 								<td scope="row">
@@ -258,119 +205,95 @@
 								<td scope="row">
 									<div class="media align-items-center">
 										<div class="media-body">
-											<span class="name mb-0 text-sm">
-												@(item.workOrderStartDate.HasValue ? item.workOrderStartDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : "Tarih Yok")
-											</span>
+											<span class="name mb-0 text-sm">@item.workOrderStartDate</span>
 										</div>
 									</div>
 								</td>
 								<td scope="row">
 									<div class="media align-items-center">
 										<div class="media-body">
-											<span class="name mb-0 text-sm">
-												@(item.workOrderEndDate.HasValue ? item.workOrderEndDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : "İş henüz bitmedi")
-											</span>
+											<span class="name mb-0 text-sm">@item.workOrderEndDate</span>
 										</div>
 									</div>
 								</td>
 								<td scope="row">
 									<div class="media align-items-center">
 										<div class="media-body">
-											<span class="name mb-0 text-sm">
-												@(item.machine?.name ?? "Makine adı belirtilmedi")
-											</span>
+											<span class="name mb-0 text-sm">@(item.machine?.name?? "Makine bilgisi bulunamadı")</span>
 										</div>
 									</div>
 								</td>
-								<th style="text-align: center; vertical-align: middle;">
-									<span class="badge @((item.isClosed) ? "bg-success" : "bg-danger")">
-										@((item.isClosed) ? "Evet" : "Hayır")
+								<!--<th>
+									<span class="badge @((item.isPastWork) ? "bg-success" : "bg-danger")">
+										@((item.isPastWork) ? "Evet" : "Hayır")
 									</span>
-								</th>
-								<!--	<td><a href="/Work/WorkReports/@item.id" class="btn btn-outline-primary">İş Emri Raporları</a></td>-->
-								<td><a href="/Work/EditWorkOrder/@item.id" class="btn btn-outline-success">Düzenle</a></td>
-								<td><a href="/Work/RemoveWorkOrder/@item.id" class="btn btn-outline-warning">Sil</a></td>
+								</th>-->
+								<td><a href="/Work/SeeWorkReport/@item.id" class="btn btn-outline-primary">Raporu Gör</a></td>
+								<td><a href="/Work/DeleteWork/@item.id" class="btn btn-outline-warning">Sil</a></td>
 							</tr>
 						}
+
+
+
 					</tbody>
 				</table>
+
 			</div>
 		</div>
 	</div>
 </div>
 <br />
-
-@{
-	var swalMessage = TempData["SwalMessage"] as string;
-	var swalType = TempData["SwalType"] as string;
-}
-
-@section Scripts {
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	@if (!string.IsNullOrEmpty(swalMessage) && !string.IsNullOrEmpty(swalType))
-	{
-		// Mark TempData as read so it won't persist
-		TempData.Remove("SwalMessage");
-		TempData.Remove("SwalType");
-
-		<script>
-			Swal.fire({
-				icon: '@swalType',
-				title: 'Uyarı',
-				text: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(swalMessage))',
-				showConfirmButton: false,
-				timer: 2500
-			});
-		</script>
-	}
-
-	@* Mevcut JavaScript Kodlarınız (değişiklik yok) *@
+@section Scripts{
 	<script>
-		// Tarih fonksiyonu
+		// Tarih fonksiyonu (varsa)
 		function updateEndDateMin() {
 			var startDate = document.getElementById("startDate").value;
 			document.getElementById("endDate").min = startDate;
+			 // Eğer bitiş tarihi başlangıçtan önceyse, bitişi başlangıçla aynı yap
 			var endDateInput = document.getElementById("endDate");
 			if (endDateInput.value && startDate && endDateInput.value < startDate) {
 				endDateInput.value = startDate;
 			}
 		}
 
-		// jQuery Document Ready
 		$(document).ready(function() {
 			$('#machineId').on('change', function() {
 				var selectedMachineId = $(this).val();
 				var machinePartDropdown = $('#machinePartId');
 
 				if (selectedMachineId) {
+					// Opsiyonel: AJAX isteği başlarken kullanıcıya geri bildirim ver
 					machinePartDropdown.prop('disabled', true).empty().append($('<option>', { value: '', text: 'Yükleniyor...' }));
 
 					$.ajax({
-						url: '@Url.Action("GetMachineParts", "Work")', // Controller ve Action doğru varsayılıyor
+						url: '@Url.Action("GetMachineParts", "Report")',
 						type: 'GET',
 						dataType: 'json',
 						data: { machineId: selectedMachineId },
-						success: function(parts) {
-							machinePartDropdown.prop('disabled', false);
+						success: function(parts) { // parts = [{ Value:"1", Text:"Ad1"}, ...]
+							machinePartDropdown.prop('disabled', false); // Başarılı olunca etkinleştir
 							machinePartDropdown.empty();
 							machinePartDropdown.append($('<option>', { value: '', text: 'Tümü' }));
+
 							$.each(parts, function(index, part) {
 								machinePartDropdown.append($('<option>', {
+									// *** DÜZELTME: part.value ve part.text KULLAN ***
 									value: part.value,
 									text: part.text
 								}));
 							});
-							machinePartDropdown.val('');
+							machinePartDropdown.val(''); // "Tümü" seçili kalsın
 						},
 						error: function(xhr, status, error) {
 							console.error("Makine parçaları alınamadı:", status, error);
+							// Hata durumunda dropdown'ı sıfırla ve devre dışı bırak
 							machinePartDropdown.prop('disabled', true);
 							machinePartDropdown.empty();
 							machinePartDropdown.append($('<option>', { value: '', text: 'Hata - Tümü' }));
 							machinePartDropdown.val('');
 						}
 					});
-				} else {
+				} else { // Makine "Tümü" seçildi
 					machinePartDropdown.empty();
 					machinePartDropdown.append($('<option>', { value: '', text: 'Tümü' }));
 					machinePartDropdown.prop('disabled', true);
@@ -378,14 +301,19 @@
 				}
 			});
 
-			// Sayfa yüklendiğinde tarih ayarını yap
-			if (typeof updateEndDateMin === "function" && $('#startDate').val()) {
-				updateEndDateMin();
-			}
+			 // Sayfa yüklendiğinde tarih ayarını yap
+			 if (typeof updateEndDateMin === "function" && $('#startDate').val()) {
+				 updateEndDateMin();
+			 }
+
+			 // ÖNEMLİ: Sayfa yüklendiğinde makine zaten seçiliyse (filtrelemeden sonra),
+			 // parça listesinin doğru görünmesi için Index action'ındaki ViewBag.MachineParts
+			 // atamasının doğru yapılması yeterlidir. JavaScript'in tekrar AJAX yapmasına gerek yok.
+			 // Bu yüzden sayfa yüklenirken change event'ini tetiklemeye GEREK YOKTUR.
+			 // (Eğer Index action'daki ViewBag ataması düzgün çalışıyorsa)
+
 		});
 	</script>
-
-	@* *** YENİ: Excel'e Aktarma JavaScript Kodu *** *@
 	<script>
 		document.getElementById('excelAktarBtn').addEventListener('click', function() {
 			// *** DEĞİŞİKLİK: Selector'ü güncelledik (tbody class'ı "list") ***
@@ -430,7 +358,7 @@
 			}
 
 			// *** DEĞİŞİKLİK: fetch URL'sini projenize göre güncelleyin (Controller: Work, Action: ExportToExcel varsayıldı) ***
-			fetch('/Work/ExportToExcel', {
+			fetch('/Report/ExportToExcel', {
 				method: 'POST',
 				headers: headers,
 				body: JSON.stringify(siraliIdler) // ID listesini JSON formatında gönder
@@ -483,3 +411,4 @@
 		});
 	</script>
 }
+

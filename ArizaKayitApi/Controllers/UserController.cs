@@ -35,7 +35,7 @@ namespace ArizaKayitApi.Controllers
             var passwordHasher = new PasswordHasher<user>();
             u.PasswordHash = passwordHasher.HashPassword(u, u.PasswordHash);
 
-            _context.Users.Add(u);
+            _context.mobileUsers.Add(u);
             _context.SaveChanges();
             return Ok(u);
         }
@@ -44,7 +44,7 @@ namespace ArizaKayitApi.Controllers
         {
             //var c = new context();
             var passwordHasher = new PasswordHasher<user>();
-            foreach (user user in _context.Users)
+            foreach (user user in _context.mobileUsers)
             {
                 if (username == user.UserName)
                 {

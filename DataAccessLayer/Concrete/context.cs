@@ -1,4 +1,5 @@
 ﻿using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,17 +11,18 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Concrete
 {
-	public class context : DbContext
+	public class context : IdentityDbContext<panelUser,panelUserRole,int>
 	{
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseSqlServer("server=10.10.82.247,1433;database=ArizaKayit;User Id=sa ;Password=A/f-mrf_12 ;TrustServerCertificate=True;", options =>
+			optionsBuilder.UseSqlServer("server=10.10.82.69,1433;database=ArizaKayit;User Id=sa ;Password=A/f-mrf_12 ;TrustServerCertificate=True ;", options =>
 			{
 				options.CommandTimeout(3000);
 			});
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			base.OnModelCreating(modelBuilder);
 			modelBuilder.Entity<imageCollection>()
 				.HasOne(ic => ic.workName)
 				.WithMany()
@@ -50,7 +52,7 @@ namespace DataAccessLayer.Concrete
 			.HasOne(ic => ic.machine)
 			.WithMany()
 			.HasForeignKey(ic => ic.machineId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.Restrict);
 			modelBuilder.Entity<workOrder>()
 			.HasOne(ic => ic.machine)
 			.WithMany()
@@ -60,37 +62,37 @@ namespace DataAccessLayer.Concrete
 			.HasOne(ic => ic.machines)
 			.WithMany()
 			.HasForeignKey(ic => ic.machineId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.Restrict);
 			modelBuilder.Entity<machineNotifications>()
 			.HasOne(ic => ic.machineName)
 			.WithMany()
 			.HasForeignKey(ic => ic.machineId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.Restrict);
 			modelBuilder.Entity<machinePart>()
 			.HasOne(ic => ic.machineName)
 			.WithMany()
 			.HasForeignKey(ic => ic.machineId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.Restrict);
 			modelBuilder.Entity<workOrder>()
 			.HasOne(ic => ic.machinePart)
 			.WithMany()
 			.HasForeignKey(ic => ic.machinePartId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.SetNull);
 			modelBuilder.Entity<error>()
 			.HasOne(ic => ic.machinePartName)
 			.WithMany()
 			.HasForeignKey(ic => ic.machinePartId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.SetNull);
 			modelBuilder.Entity<machineNotifications>()
 			.HasOne(ic => ic.machinePartName)
 			.WithMany()
 			.HasForeignKey(ic => ic.machinePartId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.SetNull);
 			modelBuilder.Entity<work>()
 			.HasOne(ic => ic.machinePart)
 			.WithMany()
 			.HasForeignKey(ic => ic.machinePartId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.SetNull);
 			modelBuilder.Entity<work>()
 			.HasOne(ic => ic.workOrder)
 			.WithMany()
@@ -105,7 +107,7 @@ namespace DataAccessLayer.Concrete
 		public DbSet<machineNotifications> MachineNotifications { get; set; }
 		public DbSet<machinePart> MachineParts { get; set; }
 		public DbSet<machinePartError> MachinePartsError { get; set; }
-		public DbSet<user> Users { get; set; }
+		public DbSet<user> mobileUsers { get; set; }
 		public DbSet<imageCollection> ImageCollection { get; set; }
 		public DbSet<workOrder> WorkOrders { get; set; }
 		public DbSet<work> Works { get; set; }

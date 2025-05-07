@@ -7,13 +7,14 @@ using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using ArizaKaydi.Models;
+using Microsoft.EntityFrameworkCore;
 namespace ArizaKaydi.Controllers
 {
     public class ErrorsController : Controller
     {
         ErrorManager errorManager;
         ImageCollectionManager imageCollectionManager;
-        context _context;
+        private readonly context _context;
         
 		public ErrorsController(ErrorManager errorManager, ImageCollectionManager imageCollectionManager, context context)
 		{
@@ -22,16 +23,37 @@ namespace ArizaKaydi.Controllers
 			this.imageCollectionManager = imageCollectionManager;
 		}
 
-		public IActionResult Index(int id)
+		public IActionResult Index(int id, DateTime? startDate = null, DateTime? endDate = null, int? machinePartId = null)
         {
-            var p = errorManager.TGetList().Where(x => x.machineId == id).Select(x => new error
+
+			ViewBag.MachineParts = _context.MachineParts.Where(p=> p.machineId == id).ToList();
+			var p = _context.Errors.Include(e => e.machinePartName).Where(x => x.machineId == id).Select(x => new error
 			{
 				id = x.id,
 				errorType = x.errorType,
 				errorDate = x.errorDate,
 				machineId = x.machineId,
+				machinePartName = x.machinePartName,
+				machinePartId = x.machinePartId,
 			}).ToList();
-            return View(p);
+			if (startDate.HasValue)
+			{
+				p = p.Where(e => e.errorDate >= startDate.Value).ToList();
+				ViewBag.StartDate = startDate.Value.ToString("yyyy-MM-dd");
+			}
+
+			if (endDate.HasValue)
+			{
+				p = p.Where(e => e.errorDate <= endDate.Value.AddDays(1).AddSeconds(-1)).ToList();
+				ViewBag.EndDate = endDate.Value.ToString("yyyy-MM-dd");
+			}
+			if (machinePartId.HasValue && machinePartId.Value > 0)
+			{
+				p = p.Where(e => e.machinePartId == machinePartId.Value).ToList();
+				ViewBag.SelectedMachinePartId = machinePartId.Value;
+			}
+
+			return View(p);
         }
 
         [HttpGet]

@@ -2,20 +2,22 @@
 using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArizaKaydi.Controllers
 {
+	[Authorize(Roles = "Admin")]
 	public class UserController : Controller
 	{
-		UserManager _userManager;
+		MobileUserManager _userManager;
 		context _context;
 		public UserController(context context)
 		{
 			
 			_context = context;
-			_userManager = new UserManager(new EFUserDal(_context));
+			_userManager = new MobileUserManager(new EFMobileUserDal(_context));
 		}
 		public IActionResult Index()
 		{

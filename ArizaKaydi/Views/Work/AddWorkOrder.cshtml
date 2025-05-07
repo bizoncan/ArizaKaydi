@@ -27,12 +27,15 @@
 				<br />
 				@Html.Label("userId", "Atanacak Kullanıcı Seç", htmlAttributes: new { @class = "custom-label" })
 				@Html.DropDownListFor(x => x.userId, ViewBag.UserList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg", id = "userDropdown" })
+				@Html.ValidationMessageFor(x => x.userId, "", new { @class = "text-danger" })
 				<br />
 				@Html.Label("title", "İş başlığı", htmlAttributes: new { @class = "custom-label" })
 				@Html.TextBoxFor(x => x.title, new { @class = "form-control custom-input-bg" })
+				@Html.ValidationMessageFor(x => x.title, "", new { @class = "text-danger" })
 				<br />
 				@Html.Label("desc", "İş açıklama", htmlAttributes: new { @class = "custom-label" })
 				@Html.TextBoxFor(x => x.desc, new { @class = "form-control custom-input-bg" })
+				@Html.ValidationMessageFor(x => x.desc, "", new { @class = "text-danger" })
 				<br />
 				<br />
 

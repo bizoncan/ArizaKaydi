@@ -5,6 +5,44 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+	.table th,
+	.table td {
+		padding: 0.75rem;
+		vertical-align: middle;
+		border: 1px solid #dc3545;
+	}
+
+	.table th {
+		background-color: #dc3545;
+		color: #fff;
+		border-color: #ffffff;
+		text-align: left;
+		font-weight: 600;
+	}
+
+	.table tbody tr:nth-child(even) {
+		background-color: #f8d7da; /* Açık pembe */
+	}
+
+	.table tbody tr:hover {
+		background-color: #f1b0b7; /* Hover efekti */
+	}
+
+	.table td {
+		background-color: #fff;
+		color: #dc3545;
+		white-space: normal;
+	}
+
+	.aciklama-hucresi {
+		/* max-width: 400px; */ /* Opsiyonel: Hücreye maksimum bir genişlik de atayabilirsiniz */
+		overflow-wrap: break-word;
+		white-space: normal;
+		word-break: break-all;
+	}
+</style>
+
 <div class="card-header border-0">
 	<h3 class="mb-0">İş Raporu</h3>
 </div>
@@ -39,7 +77,7 @@
 			</tr>
 			<tr>
 				<th scope="row">İş Emri Açıklama</th>
-				<td>@Model.workInfo.desc</td>
+				<td class="aciklama-hucresi">@Model.workInfo.desc</td>
 			</tr>
 			<tr>
 				<th scope="row">İş emri başlangıç tarihi</th>

@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Concrete
 {
-	public class UserManager : IUserService
+	public class MobileUserManager : IMobileUserService
 	{
-		IUserDal _userDal;
+		IMobileUserDal _userDal;
 
-		public UserManager(IUserDal userDal)
+		public MobileUserManager(IMobileUserDal userDal)
 		{
 			_userDal = userDal;
 		}

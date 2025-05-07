@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.EntityFramework
 {
-	public class EFUserDal : GenericRepository<user>, IUserDal
+	public class EFMobileUserDal : GenericRepository<user>, IMobileUserDal
 	{
-		public EFUserDal(context context) : base(context)
+		public EFMobileUserDal(context context) : base(context)
 		{
 		}
 	}

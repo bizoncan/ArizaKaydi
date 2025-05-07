@@ -1,4 +1,4 @@
-﻿
+﻿@using ArizaKaydi.Helper
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,7 +61,8 @@
 			.sidebar .nav .nav-item.active > .nav-link:before {
 				background: #000000
 			}
-				.sidebar .nav .nav-item.active > .nav-link .menu-icon i,
+
+			.sidebar .nav .nav-item.active > .nav-link .menu-icon i,
 			.sidebar .nav .nav-item:hover > .nav-link .menu-icon i {
 				color: #fff !important;
 			}
@@ -80,6 +81,7 @@
 		/* Navbar arka planı beyaz */
 		.navbar, .navbar .navbar-brand-wrapper, .navbar .navbar-menu-wrapper {
 			background: #fff !important;
+			box-shadow: 20px 19px 34px -15px rgba(220,53,69,0.15) !important;
 			border-bottom: 1px solid #eee;
 		}
 			/* Navbar ikonları ve metinleri kırmızı veya koyu gri */
@@ -112,25 +114,30 @@
 			color: #333 !important;
 		}
 		/* Kart başlığı */
-		.card-header.bg-transparent {
-			background-color: #dc3545 !important;
+		.card-header.bg-transparent, .card-header, .card-form-custom {
+			background-color: #c82333 !important;
+			color: #ffffff !important;
 			border-bottom: 1px solid #c82333 !important;
 		}
 
-		.card-header h3, .card-header h3.text-white {
-			color: #ffffff !important;
-		}
+			.card-header h3, .card-header h3.text-white {
+				color: #ffffff !important;
+			}
 		/* Tablo stilleri */
-		.table-dark {
+		.table-dark, .card-body {
 			background-color: #f8f9fa !important;
 			color: #212529 !important;
 		}
 
 			.table-dark th,
-			.table-dark td,
 			.table-dark thead th {
 				border-color: #dee2e6 !important;
-				color: #212529 !important;
+				color: #ffffff !important;
+			}
+
+			.table-dark td {
+				border-color: #dee2e6 !important;
+				color: #c82333 !important;
 			}
 		/* Tablo başlığı */
 		.thead-dark th {
@@ -191,12 +198,11 @@
 			margin: 0.5rem 0 !important;
 		}
 
-		.navbar-dropdown.preview-list .dropdown-item.preview-item:hover {
+			.navbar-dropdown.preview-list .dropdown-item.preview-item:hover {
 				background-color: rgba(220,53,69,0.1) !important;
-				
 			}
 
-		.dropdown-menu{
+		.dropdown-menu {
 			background-color: #f2808b !important;
 			border-radius: 0.75rem !important;
 			box-shadow: 0 8px 32px 0 rgba(220, 53, 69, 0.15) !important;
@@ -269,19 +275,49 @@
 			color: #333 !important;
 		}
 
-		.custom-input-bg{
+		.custom-input-bg {
 			background-color: #f59aa3; /* istediğin renk */
 		}
 
-		.custom-input-bg:focus {
+			.custom-input-bg:focus {
 				background-color: #f26d7a; /* istediğin renk */
 				border-color: #dc3545 !important;
-		}
-		.custom-label{
-			color: #000 !important;
+			}
+
+		.custom-label {
+			color: #c82333 !important;
 			font-weight: 500 !important;
 		}
-		
+
+		.form-control {
+			border-radius: 0.75rem;
+			border: 1px solid #dc3545;
+			color: #333;
+			background-color: #fff;
+			transition: border-color 0.2s, box-shadow 0.2s;
+		}
+
+			.form-control:focus {
+				border-radius: 0.75rem;
+				border: 1px solid #dc3545;
+				border-color: #dc3545;
+				color: #333;
+				background-color: #fff;
+				transition: border-color 0.2s, box-shadow 0.2s;
+			}
+
+		select.form-control {
+			border-radius: 0.75rem;
+			border: 1px solid #dc3545;
+			color: #333;
+			background-color: #fff;
+			transition: border-color 0.2s, box-shadow 0.2s;
+		}
+
+		.shadow {
+			box-shadow: 0 0.5rem 1rem rgba(220,53,69,0.15) !important;
+		}
+
 	</style>
 </head>
 <body>
@@ -295,24 +331,23 @@
 			<ul class="nav">
 				<li class="nav-item profile">
 					<div class="profile-desc">
-						<div class="profile-pic">
-							<div class="count-indicator">
-								<img class="img-xs rounded-circle " src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/faces/user_avatar.png" alt="">
-								<span class="count bg-success"></span>
-							</div>
-							<div class="profile-name">
-								<h5 class="mb-0 font-weight-normal">Henry Klein</h5>
-								<span>Gold Member</span>
-							</div>
-						</div>
+						@await Component.InvokeAsync("UserInfoList")
 						<a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
 
 					</div>
 				</li>
-				<li class="nav-item nav-category">
+				<!--<li class="nav-item nav-category">
 					<span class="nav-link">Navigation</span>
+				</li>-->
+				<li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Home", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
+					<a class="nav-link" asp-controller="Home" asp-action="Index">
+						<span class="menu-icon">
+							<i class="mdi mdi-home-variant"></i>
+						</span>
+						<span class="menu-title">Ana Ekran</span>
+					</a>
 				</li>
-				<li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Work", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
+				<li class="nav-item menu-items" data-controller="Work" data-action="Index">
 					<a class="nav-link" asp-controller="Work" asp-action="Index">
 						<span class="menu-icon">
 							<i class="mdi mdi-clipboard-outline"></i>
@@ -320,15 +355,31 @@
 						<span class="menu-title">İş Emirleri</span>
 					</a>
 				</li>
-
-				<li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Notification", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
+				<li class="nav-item menu-items" data-controller="Report" data-action="WorkReportss">
+					<a class="nav-link" asp-controller="Report" asp-action="WorkReportss">
+						<span class="menu-icon">
+							<i class="mdi mdi-chart-line"></i>
+						</span>
+						<span class="menu-title">Raporlar</span>
+					</a>
+				</li>
+				<li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Default", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
+					<a class="nav-link" asp-controller="Default" asp-action="Index">
+						<span class="menu-icon">
+							<i class="mdi mdi-factory"></i>
+						</span>
+						<span class="menu-title">Makineler</span>
+					</a>
+				</li>
+				
+			<!--	<li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Notification", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
 					<a class="nav-link" asp-controller="Notification" asp-action="Index">
 						<span class="menu-icon">
 							<i class="mdi mdi-bell-outline"></i>
 						</span>
 						<span class="menu-title">Bildirimler</span>
 					</a>
-				</li>
+					</li>-->
 				<li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("User", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
 					<a class="nav-link" asp-controller="User" asp-action="Index">
 						<span class="menu-icon">
@@ -373,7 +424,9 @@
 								@await Component.InvokeAsync("NotificationList")
 
 							</div>
+
 						</li>
+						@await Component.InvokeAsync("UserDInfo")
 					</ul>
 					<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
 						<span class="mdi mdi-format-line-spacing"></span>
@@ -393,6 +446,10 @@
 		</div>
 		<!-- page-body-wrapper ends -->
 	</div>
+	<script>
+		const CURRENT_CONTROLLER = '@(ViewContext.RouteData.Values["Controller"]?.ToString() ?? "")'.toLowerCase();
+		const CURRENT_ACTION = '@(ViewContext.RouteData.Values["Action"]?.ToString() ?? "")'.toLowerCase();
+	</script>
 	<!-- container-scroller -->
 	<!-- plugins:js -->
 	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/js/vendor.bundle.base.js"></script>
@@ -414,6 +471,31 @@
 	<!-- Custom js for this page -->
 	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/dashboard.js"></script>
 	<!-- End custom js for this page -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			setTimeout(function() {
+				const menuItems = document.querySelectorAll('#sidebar .nav-item[data-controller]');
+				let foundActive = false; // Doğru olanı bulduk mu?
+
+				menuItems.forEach(item => {
+					const itemController = item.getAttribute('data-controller').toLowerCase();
+					const itemAction = item.getAttribute('data-action').toLowerCase();
+
+					// Birebir eşleşme var mı? (ve henüz başka birini aktif yapmadıysak)
+					if (!foundActive && itemController === CURRENT_CONTROLLER && itemAction === CURRENT_ACTION) {
+						item.classList.add('active');
+						foundActive = true; // İlk doğru eşleşmeyi aktif yaptık, başkasını yapma
+					} else {
+						item.classList.remove('active'); // Diğerlerini veya mükerrerleri pasif yap
+					}
+				});
+
+				// Eğer action bazlı eşleşme bulunamadıysa, belki sadece controller bazlı bir fallback eklenebilir?
+				// (Şimdilik eklemiyorum, önce yukarıdakinin çalışıp çalışmadığına bak)
+
+			}, 200); // Gecikmeyi biraz artırdım, belki JS daha geç çalışıyor
+		});
+	</script>
 	@RenderSection("Scripts", required: false)
 </body>
 </html>

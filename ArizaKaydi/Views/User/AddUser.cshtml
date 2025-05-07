@@ -7,13 +7,14 @@
     <h3 class="mb-0">Kullanıcı Ekle</h3>
 </div>
 <br />
+
 @using (Html.BeginForm("AddUser", "User", FormMethod.Post))
 {
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Kullanıcı Ekleme</h4>
-                <p class="card-description"></p>
+               
+                
 
 
                 @Html.Label("Email", "Email", htmlAttributes: new { @class = "custom-label" })
