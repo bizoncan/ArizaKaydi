@@ -26,11 +26,13 @@
 		/* Genel arka planı beyaz yap */
 		body, .container-scroller, .main-panel, .content-wrapper, .page-body-wrapper {
 			background: #fff !important;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 		}
 		/* Sidebar arka planı beyaz, kenarlık hafif gri */
 		.sidebar {
 			background: #fff !important;
 			border-right: 1px solid #eee;
+			box-shadow: 0 0.5rem 1rem rgba(220,53,69,0.15) !important;
 		}
 		/* Sidebar başlığı (CORONA) ve profil alanı */
 		.sidebar-brand-wrapper, .profile-desc {
@@ -40,22 +42,28 @@
 		.sidebar .nav-category .nav-link {
 			color: #dc3545 !important;
 			font-weight: bold;
+			letter-spacing: 0.5px;
 		}
 		/* Sidebar menü linkleri */
 		.sidebar .nav .nav-item .nav-link {
 			color: #c82333 !important;
 			background: transparent !important;
 			transition: background 0.2s, color 0.2s;
+			border-radius: 8px;
+			
+			padding: 10px 15px;
 		}
 
 			.sidebar .nav .nav-item .nav-link .menu-icon i {
 				color: #c82333 !important;
+				transition: all 0.3s ease;
 			}
 		/* Sidebar aktif ve hover */
 		.sidebar .nav .nav-item.active > .nav-link,
 		.sidebar .nav .nav-item:hover > .nav-link {
 			background: #dc3545 !important;
 			color: #fff !important;
+			box-shadow: box-shadow: 0 0.5rem 1rem rgba(220,53,69,0.15) !important;
 		}
 
 			.sidebar .nav .nav-item.active > .nav-link:before {
@@ -114,30 +122,52 @@
 			color: #333 !important;
 		}
 		/* Kart başlığı */
-		.card-header.bg-transparent, .card-header, .card-form-custom {
-			background-color: #c82333 !important;
-			color: #ffffff !important;
-			border-bottom: 1px solid #c82333 !important;
+		.card, .card-body {
+			background: #fff !important;
+			border: none !important;
+			border-radius: 12px !important;
+			margin-bottom: 24px;
+			transition: all 0.3s ease;
 		}
 
-			.card-header h3, .card-header h3.text-white {
-				color: #ffffff !important;
+			
+
+		.card-header {
+			background: #DA291C !important;
+			color: #ffffff !important;
+			border-bottom: 1px solid rgba(220, 53, 69, 0.1) !important;
+			padding: 1.25rem;
+			border-radius: 12px 12px 0 0 !important;
+		}
+
+			.card-header h3,
+			.card-header h4 {
+				color: #FFFFFF !important;
+				font-weight: 600;
+				margin: 0;
 			}
+
+		.card-body {
+			padding: 1.5rem;
+		}
 		/* Tablo stilleri */
 		.table-dark, .card-body {
-			background-color: #f8f9fa !important;
+			background-color: #fff !important;
 			color: #212529 !important;
+			padding: 1rem;
 		}
 
 			.table-dark th,
 			.table-dark thead th {
 				border-color: #dee2e6 !important;
 				color: #ffffff !important;
+				padding: 1rem;
 			}
 
 			.table-dark td {
 				border-color: #dee2e6 !important;
 				color: #c82333 !important;
+				padding: 1rem;
 			}
 		/* Tablo başlığı */
 		.thead-dark th {
@@ -176,19 +206,106 @@
 				color: #ffffff !important;
 			}
 		/* Genel Buton Renkleri (Yeni Ekle gibi) */
-		.btn-info,
-		.btn-primary {
-			background-color: #dc3545 !important;
+		/* Ana butonlar */
+		.btn-success,
+		.btn-primary,
+		.btn-info {
+			background: #dc3545 !important;
 			border-color: #dc3545 !important;
-			color: #ffffff !important;
+			color: #fff !important;
 		}
 
-			.btn-info:hover,
-			.btn-primary:hover {
-				background-color: #c82333 !important;
+			.btn-success:hover,
+			.btn-primary:hover,
+			.btn-info:hover {
+				background: #c82333 !important;
 				border-color: #c82333 !important;
+				box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+				transform: translateY(-1px);
 			}
 
+		/* Excel'e aktar butonu */
+		.btn-excel {
+			background: #28a745 !important;
+			border-color: #28a745 !important;
+			color: #fff !important;
+		}
+
+			.btn-excel:hover {
+				background: #218838 !important;
+				border-color: #218838 !important;
+				box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+				transform: translateY(-1px);
+			}
+
+		/* Outline butonlar */
+		.btn-outline-success,
+		.btn-outline-primary,
+		.btn-outline-info {
+			color: #c82333 !important;
+			border-color: #c82333 !important;
+		}
+
+			.btn-outline-success:hover,
+			.btn-outline-primary:hover,
+			.btn-outline-info:hover {
+				background: #c82333 !important;
+				color: #fff !important;
+				box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+				transform: translateY(-1px);
+			}
+
+		/* Uyarı butonları */
+		.btn-warning {
+			background: #ffc107 !important;
+			border-color: #ffc107 !important;
+			color: #212529 !important;
+		}
+
+			.btn-warning:hover {
+				background: #e0a800 !important;
+				border-color: #e0a800 !important;
+				box-shadow: 0 4px 8px rgba(255, 193, 7, 0.2);
+				transform: translateY(-1px);
+			}
+
+		.btn-outline-warning {
+			color: #ffc107 !important;
+			border-color: #ffc107 !important;
+		}
+
+			.btn-outline-warning:hover {
+				background: #ffc107 !important;
+				color: #212529 !important;
+				box-shadow: 0 4px 8px rgba(255, 193, 7, 0.2);
+				transform: translateY(-1px);
+			}
+
+		/* Tehlikeli butonlar */
+		.btn-danger {
+			background: #dc3545 !important;
+			border-color: #dc3545 !important;
+			color: #fff !important;
+		}
+
+			.btn-danger:hover {
+				background: #c82333 !important;
+				border-color: #c82333 !important;
+				box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+				transform: translateY(-1px);
+			}
+
+		.btn-outline-danger {
+			color: #dc3545 !important;
+			border-color: #dc3545 !important;
+		}
+
+			.btn-outline-danger:hover {
+				background: #dc3545 !important;
+				color: #fff !important;
+				box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+				transform: translateY(-1px);
+			}
 		/* NotificationList override */
 		.navbar-dropdown.preview-list .dropdown-item.preview-item {
 			background-color: #fff !important;
@@ -226,7 +343,7 @@
 		/* Card wrapper */
 		.grid-margin.stretch-card .card {
 			background: #fff !important;
-			border-radius: 1.5rem !important;
+			border-radius: 1rem !important;
 			box-shadow: 0 8px 32px 0 rgba(220,53,69,0.15) !important;
 			border: 1px solid rgba(220,53,69,0.1) !important;
 		}
@@ -315,7 +432,7 @@
 		}
 
 		.shadow {
-			box-shadow: 0 0.5rem 1rem rgba(220,53,69,0.15) !important;
+			box-shadow: 0 0.5rem 1rem 5px rgba(220,53,69,0.15) !important;
 		}
 
 	</style>

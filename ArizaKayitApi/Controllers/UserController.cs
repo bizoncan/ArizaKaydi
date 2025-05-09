@@ -21,7 +21,7 @@ namespace ArizaKayitApi.Controllers
         public IActionResult checkUser(String username, String email)
         {
             //var c = new context();
-            Boolean userExists = _context.Users.Any(c => c.Email == email || c.UserName == username);
+            Boolean userExists = _context.mobileUsers.Any(c => c.Email == email || c.UserName == username);
             if (userExists)
             {
                 return Ok(true);

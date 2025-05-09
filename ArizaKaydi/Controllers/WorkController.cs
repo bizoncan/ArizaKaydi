@@ -26,11 +26,13 @@ namespace ArizaKaydi.Controllers
 			imageCollectionManager = new ImageCollectionManager(new EFImageCollectionDal(_context));
 		}
 		//[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		public IActionResult Index(DateTime? startDate = null, DateTime? endDate = null, int? machineId = null, int? machinePartId = null, string? sortBy=null, string? sortOrder=null, Boolean? isClosed=null)
+		public IActionResult Index(DateTime? startDate = null, DateTime? endDate = null, int? machineId = null, int? machinePartId = null, string? sortBy=null, string? sortOrder=null, Boolean? isClosed=null,int? userId=null)
 		{
 			var values = _context.WorkOrders.Include(x => x.machine).ToList(); // Başlangıçta tüm iş emirlerini al
 
 			ViewBag.Machines = _context.Machines.ToList(); // Makine dropdown'ı için tüm makineler
+
+			ViewBag.MobileUsers = _context.mobileUsers.ToList(); // Kullanıcı dropdown'ı için tüm kullanıcılar
 
 			// Makine Parçaları için boş bir liste oluştur, sonra dolduracağız
 			List<machinePart> partsForViewBag = new List<machinePart>();
@@ -49,6 +51,16 @@ namespace ArizaKaydi.Controllers
 				// Bitiş tarihi olan ve belirtilen aralıkta olanları filtrele
 				values = values.Where(e => e.workOrderStartDate <= endOfDay).ToList();
 				ViewBag.EndDate = endDate.Value.ToString("yyyy-MM-dd");
+			}
+
+			if(userId.HasValue && userId.Value > 0)
+			{
+				values = values.Where(e => e.userId == userId.Value).ToList();
+				ViewBag.SelectedUserId = userId.Value;
+			}
+			else
+			{
+				ViewBag.SelectedUserId = null; // Seçili kullanıcı yoksa null yap
 			}
 
 			// Makine Filtresi
@@ -121,7 +133,7 @@ namespace ArizaKaydi.Controllers
 					case "isClosed":
 						values = sortOrder == "desc" ? values.OrderByDescending(x => x.isClosed).ToList() : values.OrderBy(x => x.isClosed).ToList();
 						break;
-			}
+				}
 			return View(values); // Filtrelenmiş iş emirlerini View'a gönder
 		}
 		public IActionResult RemoveWorkOrder(int id)
@@ -162,8 +174,14 @@ namespace ArizaKaydi.Controllers
 			return View();
 		}
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public IActionResult AddWorkOrder(workOrder p)
 		{
+			if(!ModelState.IsValid)
+			{
+				ModelState.AddModelError("", "Lütfen gerekli alanları doldurunuz.");
+				return View(p);
+			}
 			bool isBlankField=false;
 			ViewBag.MachineList = _context.Machines.Select(m => new SelectListItem
 			{
@@ -246,8 +264,14 @@ namespace ArizaKaydi.Controllers
 			return View(value);
 		}
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public IActionResult EditWorkOrder(workOrder p)
 		{
+			if (!ModelState.IsValid)
+			{
+				ModelState.AddModelError("", "Lütfen gerekli alanları doldurunuz.");
+				return View(p);
+			}
 			var existing = workOrderManager.TGetById(p.id); // Bu DbContext tarafından takip ediliyor
 
 			if (existing == null)
@@ -336,9 +360,13 @@ namespace ArizaKaydi.Controllers
 		}
 		[HttpPost]
 		[ValidateAntiForgeryToken] // CSRF koruması için (eğer token gönderdiyseniz)
-		public async Task<IActionResult> ExportToExcel([FromBody] List<string> orderedIds) // Gelen ID listesi (tipi int ise List<int> yapın)
+		public async Task<IActionResult> ExportToExcel([FromBody] List<string> workOrderIds) // Gelen ID listesi (tipi int ise List<int> yapın)
 		{
-			if (orderedIds == null || !orderedIds.Any())
+			if (workOrderIds.Count > 1000)
+			{
+				return BadRequest("Excel'e aktarılacak veri sayısı 1000'den fazla olamaz.");
+			}
+			if (workOrderIds == null || !workOrderIds.Any())
 			{
 				return BadRequest("Aktarılacak ID listesi boş.");
 			}
@@ -346,7 +374,7 @@ namespace ArizaKaydi.Controllers
 			try
 			{
 				// ID'leri int'e çevirme (eğer veritabanı ID'leriniz int ise)
-				var idListesiInt = orderedIds.Select(int.Parse).ToList();
+				var idListesiInt = workOrderIds.Select(int.Parse).ToList();
 
 				// 1. Veritabanından verileri çekme (Örnek - Entity Framework Core ile)
 				// Not: Tüm veriyi çekip sonra sıralamak yerine, veritabanında WHERE IN ile filtrelemek daha performanslıdır.
@@ -391,8 +419,8 @@ namespace ArizaKaydi.Controllers
 						worksheet.Cell(currentRow, 4).Value = veri.isClosed == true ? "EVET": "HAYIR";
 						worksheet.Cell(currentRow, 5).Value = veri.workOrderStartDate;
 						worksheet.Cell(currentRow, 6).Value = veri.workOrderEndDate;
-						worksheet.Cell(currentRow, 7).Value = veri.machine?.name;
-						worksheet.Cell(currentRow, 8).Value = veri.machinePart?.name;
+						worksheet.Cell(currentRow, 7).Value = veri.machine?.name?? "Makine bilgisi yok.";
+						worksheet.Cell(currentRow, 8).Value = veri.machinePart?.name?? "Makine parçası bilgisi yok.";
 
 						// ... Diğer özellikler
 						currentRow++;

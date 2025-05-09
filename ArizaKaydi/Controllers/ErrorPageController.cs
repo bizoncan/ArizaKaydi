@@ -14,5 +14,9 @@ namespace ArizaKaydi.Controllers
 		{
 			return View();
 		}
+		public IActionResult TheErrorView()
+		{
+			return View();
+		}
 	}
 }

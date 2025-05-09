@@ -13,6 +13,7 @@ namespace ArizaKaydi.Controllers
 	public class DefaultController : Controller
     {
         MachineManager machineManager;
+		MachinePartManager machinePartManager;
 		ErrorManager errorManager;
 		context _context;
 		public DefaultController(context _context)
@@ -20,8 +21,8 @@ namespace ArizaKaydi.Controllers
             this._context = _context;
 			errorManager = new ErrorManager(new EFErrorDal(_context));
 			machineManager = new MachineManager(new EFMachineDal(_context));
-            
-        }
+            machinePartManager = new MachinePartManager(new EFMachinePartDal(_context));
+		}
 
         public IActionResult Index(int? selectedMachineId)
         {
@@ -64,7 +65,35 @@ namespace ArizaKaydi.Controllers
             machineManager.TUpdate(p);
             return RedirectToAction("Index");
         }
-
-        
-    }
+        [HttpGet]
+        public IActionResult AddMachinePart(int id)
+		{
+			ViewBag.MachineId = id;
+			return View();
+		}
+        [HttpPost]
+		public IActionResult AddMachinePart(machinePart p)
+        {
+			machinePartManager.TAdd(p);
+			return RedirectToAction("Index", new { selectedMachineId = p.machineId});
+		}
+        public IActionResult RemoveMachinePart(int id)
+		{
+			var value = machinePartManager.TGetById(id);
+			machinePartManager.TRemove(value);
+			return RedirectToAction("Index" ,new { selectedMachineId = value.machineId});
+		}
+		[HttpGet]
+		public IActionResult EditMachinePart(int id)
+		{
+			var values = machinePartManager.TGetById(id);
+			return View(values);
+		}
+		[HttpPost]
+		public IActionResult EditMachinePart(machinePart p)
+		{
+			machinePartManager.TUpdate(p);
+			return RedirectToAction("Index", new { selectedMachineId = p.machineId });
+		}
+	}
 }

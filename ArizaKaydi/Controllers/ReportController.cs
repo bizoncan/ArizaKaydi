@@ -2,6 +2,7 @@
 using ClosedXML.Excel;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
+using DocumentFormat.OpenXml.Spreadsheet;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -30,11 +31,12 @@ namespace ArizaKaydi.Controllers
 		
 			return View();
 		}
-		public IActionResult WorkReportss(DateTime? startDate = null, DateTime? endDate = null, int? machineId = null, int? machinePartId = null, string? sortBy=null, string? sortOrder=null)
+		public IActionResult WorkReportss(DateTime? startDate = null, DateTime? endDate = null, int? machineId = null, int? machinePartId = null, string? sortBy=null, string? sortOrder=null, int? userId=null)
 		{
 			var values = _context.Works.Include(x => x.machine).ToList();
 			ViewBag.Machines = _context.Machines.ToList(); // Makine dropdown'ı için tüm makineler
 			List<machinePart> partsForViewBag = new List<machinePart>();
+			ViewBag.MobileUsers = _context.mobileUsers.ToList();
 			if (startDate.HasValue)
 			{
 				values = values.Where(e => e.workOrderStartDate >= startDate.Value).ToList();
@@ -46,6 +48,17 @@ namespace ArizaKaydi.Controllers
 				values = values.Where(e => e.workOrderStartDate <= endOfDay).ToList();
 				ViewBag.EndDate = endDate.Value.ToString("yyyy-MM-dd");
 			}
+
+			if (userId.HasValue && userId.Value > 0)
+			{
+				values = values.Where(e => e.userId == userId.Value).ToList();
+				ViewBag.SelectedUserId = userId.Value;
+			}
+			else
+			{
+				ViewBag.SelectedUserId = null; // Seçili kullanıcı yoksa null yap
+			}
+
 			// Makine Filtresi
 			if (machineId.HasValue && machineId.Value > 0)
 			{
@@ -175,12 +188,11 @@ namespace ArizaKaydi.Controllers
 						worksheet.Cell(currentRow, 1).Value = veri.id;
 						worksheet.Cell(currentRow, 2).Value = veri.title;
 						worksheet.Cell(currentRow, 3).Value = veri.desc;
-						
 						worksheet.Cell(currentRow, 4).Value = veri.workOrderStartDate;
 						worksheet.Cell(currentRow, 5).Value = veri.workOrderEndDate;
 						worksheet.Cell(currentRow, 6).Value = veri.machine?.name;
-						worksheet.Cell(currentRow, 7).Value = veri.machinePart?.name;
-						worksheet.Cell(currentRow, 8).Value = veri.userI?.UserName;
+						worksheet.Cell(currentRow, 7).Value = veri.machinePart?.name?? "Makine parçası bilgisi yok.";
+						worksheet.Cell(currentRow, 8).Value = veri.userI?.UserName?? "Kullanıcı bilgisi yok.";
 						worksheet.Cell(currentRow, 9).Value = veri.workOrderId;
 
 						// ... Diğer özellikler

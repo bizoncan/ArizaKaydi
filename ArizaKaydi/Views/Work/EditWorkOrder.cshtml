@@ -9,6 +9,26 @@
 		.form-check-input ms-2 {
 			accent-color: red; /* Checkbox rengini kırmızı yapar */
 		}
+
+		.description-textarea {
+			min-height: 150px;
+			resize: vertical;
+			font-size: 14px;
+			line-height: 1.5;
+			padding: 10px;
+			width: 100%;
+			
+			color: #333 !important;
+			border: 1px solid #dc3545;
+			border-radius: 0.75rem;
+		}
+
+			.description-textarea:focus {
+				
+				border-color: #dc3545;
+				box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.25);
+				outline: none;
+			}
 	</style>
 </head>
 <div class="card-header border-0">
@@ -17,6 +37,7 @@
 <br />
 @using (Html.BeginForm("EditWorkOrder", "Work", FormMethod.Post))
 {
+	@Html.AntiForgeryToken()
 	<div class="col-12 grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
@@ -44,7 +65,7 @@
 				<br />
 
 				@Html.Label("desc", "İş emri açıklama", htmlAttributes: new { @class = "custom-label" })
-				@Html.TextBoxFor(x => x.desc, new { @class = "form-control custom-input-bg" })
+				@Html.TextAreaFor(x => x.desc, new { @class = "form-control description-textarea", rows = "5", style = "width: 100%;" })
 				<br />
 				<div class="form-check" style="width: 200px;">
 					<label class="form-check-label d-flex justify-content-between align-items-center w-100">
@@ -62,7 +83,13 @@
 				</div>
 				<br />
 				<br />
-				<button class="btn btn-outline-success">Güncelle</button>
+				<div class="form-group">
+					<button class="btn btn btn-success"> <i class="mdi mdi-content-save"></i>Güncelle</button>
+					<a href="/Default/Index?selectedMachineId=@ViewBag.MachineId" class="btn btn-outline-danger">
+						<i class="mdi mdi-close"></i> İptal
+					</a>
+				</div>
+				
 			</div>
 		</div>
 	</div>

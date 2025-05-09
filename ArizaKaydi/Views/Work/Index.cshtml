@@ -11,7 +11,7 @@
 @* Gerekliyse ve başka yerde yoksa: @Html.AntiForgeryToken() *@
 
 <a href="/Work/AddWorkOrder/" class="btn btn-info"> Yeni İş Emri Ekle</a>
-<button id="excelAktarBtn" class="btn btn-success">Excel'e Aktar</button>
+<button id="excelAktarBtn" class="btn btn-excel">Excel'e Aktar</button>
 @* Excel'e aktarma sırasında gösterilecek loading indicator *@
 <div id="loadingIndicator" style="display: none; margin-top: 10px;">
 	<span class="text-info">Excel dosyası oluşturuluyor, lütfen bekleyin...</span>
@@ -86,6 +86,27 @@
 						</div>
 						<div class="col-md-3">
 							<div class="form-group">
+								<label for="userId">Personel</label>
+								<select id="userId" name="userId" class="form-control")>
+									<option value="">Tümü</option>
+									
+										@foreach (var user in (List<user>)ViewBag.MobileUsers)
+										{
+										if (ViewBag.SelectedUserId != null && (int)ViewBag.SelectedUserId == user.Id)
+											{
+											<option value="@user.Id" selected>@user.UserName</option>
+											}
+											else
+											{
+											<option value="@user.Id">@user.UserName</option>
+											}
+										
+									}
+								</select>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
 								<label for="isClosed">Durum</label>
 								<select id="isClosed" name="isClosed" class="form-control">
 									<option value="">Tümü</option>
@@ -134,7 +155,7 @@
 						<tr>
 							@* Başlıklar (değişiklik yok) *@
 							<th scope="col" class="sort">
-								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,sortBy="id",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "id" ? "desc" : "asc"} )" style="color:#ffffff !important">
+								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,userId = ViewBag.SelectedUserId,sortBy="id",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "id" ? "desc" : "asc"} )" style="color:#ffffff !important">
 									#
 									@if (Context.Request.Query["sortBy"] == "id")
 									{
@@ -155,7 +176,7 @@
 							</th>
 							<th scope="col" class="sort" data-sort="name">İş Emri</th>
 							<th scope="col" class="sort" data-sort="name">
-								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,sortBy="start",sortOrder= Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "start" ? "desc" : "asc"})" style="color:#ffffff !important">
+								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,userId = ViewBag.SelectedUserId,sortBy="start",sortOrder= Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "start" ? "desc" : "asc"})" style="color:#ffffff !important">
 									İş Emri Başlangıç Tarihi
 									@if (Context.Request.Query["sortBy"] == "start")
 									{
@@ -175,7 +196,7 @@
 								</a>
 							</th>
 							<th scope="col" class="sort" data-sort="name">
-								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,sortBy="end",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "end" ? "desc" : "asc"})" style="color:#ffffff !important">
+								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,userId = ViewBag.SelectedUserId,sortBy="end",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "end" ? "desc" : "asc"})" style="color:#ffffff !important">
 									İş Emri Bitiş Tarihi
 									@if (Context.Request.Query["sortBy"] == "end")
 									{
@@ -195,7 +216,7 @@
 								</a>
 							</th>
 							<th scope="col" class="sort" data-sort="name">
-								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,sortBy="machineId",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "machineId" ? "desc" : "asc"})" style="color:#ffffff !important">
+								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,userId = ViewBag.SelectedUserId,sortBy="machineId",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "machineId" ? "desc" : "asc"})" style="color:#ffffff !important">
 									Makine Adı
 									@if (Context.Request.Query["sortBy"] == "machineId")
 									{
@@ -215,7 +236,7 @@
 								</a>
 							</th>
 							<th scope="col" class="sort" data-sort="name">
-								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,sortBy="isClosed",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "isClosed" ? "desc" : "asc"})" style="color:#ffffff !important">
+								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,userId = ViewBag.SelectedUserId,sortBy="isClosed",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "isClosed" ? "desc" : "asc"})" style="color:#ffffff !important">
 									İş emri sonlandı mı
 									@if (Context.Request.Query["sortBy"] == "isClosed")
 									{
@@ -282,7 +303,7 @@
 										</div>
 									</div>
 								</td>
-								<th style="text-align: center; vertical-align: middle;">
+								<th scope="row" style="text-align: center; vertical-align: middle;">
 									<span class="badge @((item.isClosed) ? "bg-success" : "bg-danger")">
 										@((item.isClosed) ? "Evet" : "Hayır")
 									</span>

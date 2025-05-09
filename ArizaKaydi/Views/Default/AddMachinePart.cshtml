@@ -1,0 +1,43 @@
+﻿@model EntityLayer.Concrete.machinePart
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">Yeni Parça Ekle</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" action="/Default/AddMachinePart">
+                    <input type="hidden" name="machineId" value="@ViewBag.MachineId" />
+
+                    <div class="form-group">
+                        <label class="custom-label">Parça Adı</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="custom-label">Parça Sayısı</label>
+                        <input type="text" class="form-control" name="number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="custom-label">Açıklama</label>
+                        <textarea class="form-control description-textarea" name="desc" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">
+                            <i class="mdi mdi-content-save"></i> Kaydet
+                        </button>
+                        <a href="/Default/Index?selectedMachineId=@ViewBag.MachineId" class="btn btn-outline-danger">
+                            <i class="mdi mdi-close"></i> İptal
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

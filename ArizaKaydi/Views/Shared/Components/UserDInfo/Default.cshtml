@@ -1,4 +1,10 @@
 ﻿@model EntityLayer.Concrete.panelUser
+@{
+    // Varsayılan resim yolu, eğer Model.ImageURL boşsa kullanılacak.
+    var defaultProfilePic = "~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/faces/user_avatar.png";
+    var profilePicSource = !string.IsNullOrEmpty(Model.ImageURL) ? Model.ImageURL : Url.Content(defaultProfilePic);
+    var altText = !string.IsNullOrEmpty(Model.ImageURL) ? "Profil Resmi" : "Varsayılan Profil Resmi";
+}   
 <style>
     .user-dropdown-list {
         max-height: 300px;
@@ -54,7 +60,7 @@
 <li class="nav-item dropdown">
     <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
         <div class="navbar-profile">
-            <img class="img-xs rounded-circle" src="assets/images/faces/face15.jpg" alt="">
+            <img class="img-xs rounded-circle" src="@profilePicSource" alt="@altText">
             <p class="mb-0 d-none d-sm-block navbar-profile-name">@Model.UserName</p>
             <i class="mdi mdi-menu-down d-none d-sm-block"></i>
         </div>
@@ -63,7 +69,7 @@
         <h6 class="p-3 mb-0">Profile</h6>
         <div class="user-dropdown-divider"></div>
 
-        <a class="dropdown-item user-dropdown-item">
+        <a class="dropdown-item user-dropdown-item" href="/PanelUser/PanelUserSetting">
             <div class="preview-thumbnail">
                 <div class="user-dropdown-icon rounded-circle">
                     <i class="mdi mdi-settings text-white"></i>

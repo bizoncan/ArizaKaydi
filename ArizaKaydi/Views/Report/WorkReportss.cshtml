@@ -4,7 +4,7 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 	bool isMachineSelectedInitially = ViewBag.SelectedMachineId != null && (int)ViewBag.SelectedMachineId > 0;
 }
-<button id="excelAktarBtn" class="btn btn-success">Excel'e Aktar</button>
+<button id="excelAktarBtn" class="btn btn-excel">Excel'e Aktar</button>
 @* Excel'e aktarma sırasında gösterilecek loading indicator *@
 <div id="loadingIndicator" style="display: none; margin-top: 10px;">
 	<span class="text-info">Excel dosyası oluşturuluyor, lütfen bekleyin...</span>
@@ -79,6 +79,27 @@
 								</select>
 							</div>
 						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="userId">Personel</label>
+								<select id="userId" name="userId" class="form-control" )>
+									<option value="">Tümü</option>
+
+									@foreach (var user in (List<user>)ViewBag.MobileUsers)
+									{
+										if (ViewBag.SelectedUserId != null && (int)ViewBag.SelectedUserId == user.Id)
+										{
+											<option value="@user.Id" selected>@user.UserName</option>
+										}
+										else
+										{
+											<option value="@user.Id">@user.UserName</option>
+										}
+
+									}
+								</select>
+							</div>
+						</div>
 						<div class="col-md-3 d-flex align-items-end">
 							<button type="submit" class="btn btn-primary mr-2">Filtrele</button>
 							<a href="@Url.Action("WorkReportss", "Report")" class="btn btn-secondary">Filtreleri Temizle</a>
@@ -101,7 +122,7 @@
 					<thead class="thead-dark">
 						<tr>
 							<th scope="col" class="sort" data-sort="name">
-								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId,sortBy="id",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "id" ? "desc" : "asc"})" style="color:#ffffff !important">
+								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId,userId = ViewBag.SelectedUserId,sortBy="id",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "id" ? "desc" : "asc"})" style="color:#ffffff !important">
 								#
 								@if (Context.Request.Query["sortBy"] == "id")
 								{
@@ -123,7 +144,7 @@
 							</th>
 							<th scope="col" class="sort" data-sort="name">Rapor Başlığı</th>
 							<th scope="col" class="sort" data-sort="name">
-								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId,sortBy="start",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "start" ? "desc" : "asc"})" style="color:#ffffff !important">
+								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId,userId = ViewBag.SelectedUserId,sortBy="start",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "start" ? "desc" : "asc"})" style="color:#ffffff !important">
 									İşin alınma tarihi
 									@if (Context.Request.Query["sortBy"] == "start")
 									{
@@ -144,7 +165,7 @@
 								</a>
 							</th>
 							<th scope="col" class="sort" data-sort="name">
-								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId,sortBy="end",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "end" ? "desc" : "asc"})" style="color:#ffffff !important">
+								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId,userId = ViewBag.SelectedUserId,sortBy="end",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "end" ? "desc" : "asc"})" style="color:#ffffff !important">
 									İşin bitiş tarihi
 									@if (Context.Request.Query["sortBy"] == "end")
 									{
@@ -165,7 +186,7 @@
 								</a>
 							</th>
 							<th scope="col" class="sort" data-sort="name">
-								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId,sortBy="machineId",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "machineId" ? "desc" : "asc"})" style="color:#ffffff !important">
+								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId,userId = ViewBag.SelectedUserId,sortBy="machineId",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "machineId" ? "desc" : "asc"})" style="color:#ffffff !important">
 									Makine Adı
 									@if (Context.Request.Query["sortBy"] == "machineId")
 									{

@@ -1,11 +1,22 @@
 ﻿@model EntityLayer.Concrete.panelUser
+@{
+    // Varsayılan resim yolu, eğer Model.ImageURL boşsa kullanılacak.
+    var defaultProfilePic = "~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/faces/user_avatar.png";
+    var profilePicSource = !string.IsNullOrEmpty(Model.ImageURL) ? Model.ImageURL : Url.Content(defaultProfilePic);
+    var altText = !string.IsNullOrEmpty(Model.ImageURL) ? "Profil Resmi" : "Varsayılan Profil Resmi";
+}
+
 <div class="profile-pic">
-	<div class="count-indicator">
-		<img class="img-xs rounded-circle " src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/faces/user_avatar.png" alt="">
-		<span class="count bg-success"></span>
-	</div>
-	<div class="profile-name">
-		<h5 class="mb-0 font-weight-normal">@Model.UserName</h5>
-		<span>Gold Member</span>
-	</div>
+    <div class="count-indicator">
+        @*
+            Eğer Model.ImageURL doluysa, Base64 verisini src olarak kullan.
+            Değilse, varsayılan resmi kullan.
+        *@
+        <img class="img-xs rounded-circle" src="@profilePicSource" alt="@altText">
+        <span class="count bg-success"></span> @* Bu span'ın ne işe yaradığını temanız belirler, olduğu gibi kalabilir *@
+    </div>
+    <div class="profile-name">
+        <h5 class="mb-0 font-weight-normal">@Model.UserName</h5>
+        <span>Gold Member</span> @* Bu kısım statik veya dinamik olabilir, isteğinize bağlı *@
+    </div>
 </div>

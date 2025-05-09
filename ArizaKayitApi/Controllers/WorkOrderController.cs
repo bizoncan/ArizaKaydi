@@ -2,6 +2,8 @@
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection.PortableExecutable;
 
 namespace ArizaKayitApi.Controllers
 {
@@ -18,7 +20,11 @@ namespace ArizaKayitApi.Controllers
 		[HttpGet]
 		public IActionResult getWorkOrders()
 		{
-			var values = _context.WorkOrders.ToList();
+			var values = _context.WorkOrders.Include(e=>e.machine).Select( e=> new
+			{
+				workOrderModel = e,
+				machineName= e.machine.name,
+			}).ToList();
 			return Ok(values);
 		}
 		[HttpGet("{id}")]
@@ -37,7 +43,7 @@ namespace ArizaKayitApi.Controllers
 		[HttpGet("GetUserId")]
 		public IActionResult getUserId(String username)
 		{
-			var user = _context.Users.FirstOrDefault(u => u.UserName == username);
+			var user = _context.mobileUsers.FirstOrDefault(u => u.UserName == username);
 			if (user != null)
 			{
 
@@ -49,7 +55,7 @@ namespace ArizaKayitApi.Controllers
 		[HttpGet("GetUserName")]
 		public IActionResult getUserName([FromQuery]int userId)
 		{
-			var user = _context.Users.Find(userId);
+			var user = _context.mobileUsers.Find(userId);
 			if (user != null)
 			{
 				return Ok(user.UserName);
