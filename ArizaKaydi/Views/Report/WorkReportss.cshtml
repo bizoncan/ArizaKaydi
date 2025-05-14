@@ -37,8 +37,16 @@
 						<div class="col-md-3">
 							<div class="form-group">
 								<label for="machineId">Makine</label>
-								<select id="machineId" name="machineId" class="form-control">
+								<select id="machineId" name="machineId" class="form-control select2">
 									<option value="">Tümü</option>
+									@if (ViewBag.SelectedMachineId == 0)
+									{
+										<option value="0" selected>Makine Bilgisi Yok</option>
+									}
+									else
+									{
+										<option value="0">Makine Bilgisi Yok</option>
+									})
 									@foreach (var part in (List<machine>)ViewBag.Machines)
 									{
 										if (ViewBag.SelectedMachineId != null && (int)ViewBag.SelectedMachineId == part.id)
@@ -57,10 +65,19 @@
 						<div class="col-md-3">
 							<div class="form-group">
 								<label for="machinePartId">Makine Parçası</label>
-								<select id="machinePartId" name="machinePartId" class="form-control" @(!isMachineSelectedInitially ? "disabled" : "")>
+								<select id="machinePartId" name="machinePartId" class="form-control select2" @(!isMachineSelectedInitially ? "disabled" : "")>
 									<option value="">Tümü</option>
+									@if (ViewBag.SelectedMachinePartId == 0)
+									{
+										<option value="0" selected>Makine Parçası Bilgisi Yok</option>
+									}
+									else
+									{
+										<option value="0">Makine Parçası Bilgisi Yok</option>
+									})
 									@if (isMachineSelectedInitially)
 									{
+
 										@foreach (var part in (List<machinePart>)ViewBag.MachineParts)
 										{
 											if (ViewBag.SelectedMachinePartId != null && (int)ViewBag.SelectedMachinePartId == part.Id)
@@ -82,7 +99,7 @@
 						<div class="col-md-3">
 							<div class="form-group">
 								<label for="userId">Personel</label>
-								<select id="userId" name="userId" class="form-control" )>
+								<select id="userId" name="userId" class="form-control select2" )>
 									<option value="">Tümü</option>
 
 									@foreach (var user in (List<user>)ViewBag.MobileUsers)
@@ -278,6 +295,19 @@
 		}
 
 		$(document).ready(function() {
+			$('.select2').select2({
+				theme: 'bootstrap4',
+				width: '100%',
+				dropdownParent: $('#filterForm'),
+				placeholder: 'Seçiniz...',
+				allowClear: true,
+				minimumResultsForSearch: Infinity,
+				language: {
+					noResults: function() {
+						return "Sonuç bulunamadı";
+					}
+				}
+			});
 			$('#machineId').on('change', function() {
 				var selectedMachineId = $(this).val();
 				var machinePartDropdown = $('#machinePartId');
@@ -295,7 +325,7 @@
 							machinePartDropdown.prop('disabled', false); // Başarılı olunca etkinleştir
 							machinePartDropdown.empty();
 							machinePartDropdown.append($('<option>', { value: '', text: 'Tümü' }));
-
+							machinePartDropdown.append($('<option>', { value: '0', text: 'Makine Parçası Bilgisi Yok' }));
 							$.each(parts, function(index, part) {
 								machinePartDropdown.append($('<option>', {
 									// *** DÜZELTME: part.value ve part.text KULLAN ***

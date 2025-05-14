@@ -57,7 +57,7 @@ namespace DataAccessLayer.Concrete
 			.HasOne(ic => ic.machine)
 			.WithMany()
 			.HasForeignKey(ic => ic.machineId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.ClientSetNull);
 			modelBuilder.Entity<error>()
 			.HasOne(ic => ic.machines)
 			.WithMany()
@@ -72,12 +72,12 @@ namespace DataAccessLayer.Concrete
 			.HasOne(ic => ic.machineName)
 			.WithMany()
 			.HasForeignKey(ic => ic.machineId)
-			.OnDelete(DeleteBehavior.Restrict);
+			.OnDelete(DeleteBehavior.Cascade);
 			modelBuilder.Entity<workOrder>()
 			.HasOne(ic => ic.machinePart)
 			.WithMany()
 			.HasForeignKey(ic => ic.machinePartId)
-			.OnDelete(DeleteBehavior.SetNull);
+			.OnDelete(DeleteBehavior.ClientSetNull);
 			modelBuilder.Entity<error>()
 			.HasOne(ic => ic.machinePartName)
 			.WithMany()

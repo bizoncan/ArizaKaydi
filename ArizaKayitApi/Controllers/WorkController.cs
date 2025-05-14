@@ -24,12 +24,26 @@ namespace ArizaKayitApi.Controllers
 		[HttpPost]
 		public IActionResult addWork([FromBody] work w)
 		{
-			
 			SetPastWork(w.workOrderId);
-			_context.Works.Add(w);
-			_context.SaveChanges();
-			return Ok();
+			
+
+			if (_context.WorkOrders.Where(e => e.id == w.workOrderId).FirstOrDefault() == null)
+			{
+				return NotFound();
+			}
+
+			try
+			{
+				_context.Works.Add(w);
+				_context.SaveChanges();
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { message = "İş kaydı oluşturulurken bir hata oluştu", error = ex.Message });
+			}
 		}
+
 		private void SetPastWork(int id)
 		{
 			var work = _context.Works.Where(x => x.workOrderId == id && x.isPastWork == false).FirstOrDefault();

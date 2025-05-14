@@ -44,21 +44,21 @@
 				<h4 class="card-title">İş Emri Düzenleme</h4>
 				<p class="card-description"></p>
 				<div class="form-group">
-					<label>ID</label>
+					<label class="custom-label">ID</label>
 					<p class="form-control-static">@Model.id</p>
 					@Html.HiddenFor(x => x.id)
 				</div>
 
 				@Html.Label("machineId", "Makine ID", htmlAttributes: new { @class = "custom-label" })
-				@Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg", id = "machineDropdown" })
+				@Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg select2", id = "machineDropdown" })
 				<br />
 				@Html.Label("machinePartId", "Makine Parçası", htmlAttributes: new { @class = "custom-label" })
-				<select id="partDropdown" name="machinePartId" class="form-control custom-input-bg">
+				<select id="partDropdown" name="machinePartId" class="form-control custom-input-bg select2">
 					<option value="">Parça Seçiniz</option>
 				</select>
 				<br />
 				@Html.Label("userId", "Atanacak Kullanıcı Seç", htmlAttributes: new { @class = "custom-label" })
-				@Html.DropDownListFor(x => x.userId, ViewBag.UserList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg", id = "userDropdown" })
+				@Html.DropDownListFor(x => x.userId, ViewBag.UserList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg select2", id = "userDropdown" })
 				<br />
 				@Html.Label("title", "İş emri başlığı", htmlAttributes: new { @class = "custom-label" })
 				@Html.TextBoxFor(x => x.title, new { @class = "form-control custom-input-bg" })
@@ -98,6 +98,19 @@
 	<script>
 
 		$(document).ready(function () {
+			$('.select2').select2({
+				theme: 'bootstrap4',
+				width: '100%',
+				//dropdownParent: $('#filterForm'),
+				placeholder: 'Seçiniz...',
+				allowClear: true,
+				minimumResultsForSearch: Infinity,
+				language: {
+					noResults: function() {
+						return "Sonuç bulunamadı";
+					}
+				}
+			});
 			// AJAX ile parça verisi alma
 			$('#machineDropdown').on('change', function () {
 				var machineId = $(this).val();

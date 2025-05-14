@@ -3,7 +3,7 @@
 @{
 	Layout = "~/Views/Shared/_Layout.cshtml";
 	bool isMachineSelectedInitially = ViewBag.SelectedMachineId != null && (int)ViewBag.SelectedMachineId > 0;
-	
+
 
 }
 
@@ -46,14 +46,23 @@
 						<div class="col-md-3">
 							<div class="form-group">
 								<label for="machineId">Makine</label>
-								<select id="machineId" name="machineId" class="form-control">
+								<select id="machineId" name="machineId" class="form-control select2">
 									<option value="">Tümü</option>
+									@if (ViewBag.SelectedMachineId == 0)
+									{
+										<option value="0" selected>Makine Bilgisi Yok</option>
+									}
+									else
+									{
+										<option value="0">Makine Bilgisi Yok</option>
+									})
 									@foreach (var part in (List<machine>)ViewBag.Machines)
 									{
 										if (ViewBag.SelectedMachineId != null && (int)ViewBag.SelectedMachineId == part.id)
 										{
 											<option value="@part.id" selected>@part.name</option>
 										}
+										
 										else
 										{
 											<option value="@part.id">@part.name</option>
@@ -65,8 +74,17 @@
 						<div class="col-md-3">
 							<div class="form-group">
 								<label for="machinePartId">Makine Parçası</label>
-								<select id="machinePartId" name="machinePartId" class="form-control" @(!isMachineSelectedInitially ? "disabled" : "")>
+								<select id="machinePartId" name="machinePartId" class="form-control select2" @(!isMachineSelectedInitially ? "disabled" : "")>
 									<option value="">Tümü</option>
+									
+									@if (ViewBag.SelectedMachinePartId == 0)
+									{
+										<option value="0" selected>Makine Parçası Bilgisi Yok</option>
+									}
+									else
+									{
+										<option value="0">Makine Parçası Bilgisi Yok</option>
+									})
 									@if (isMachineSelectedInitially)
 									{
 										@foreach (var part in (List<machinePart>)ViewBag.MachineParts)
@@ -87,7 +105,7 @@
 						<div class="col-md-3">
 							<div class="form-group">
 								<label for="userId">Personel</label>
-								<select id="userId" name="userId" class="form-control")>
+								<select id="userId" name="userId" class="form-control select2" )>
 									<option value="">Tümü</option>
 									
 										@foreach (var user in (List<user>)ViewBag.MobileUsers)
@@ -108,7 +126,7 @@
 						<div class="col-md-3">
 							<div class="form-group">
 								<label for="isClosed">Durum</label>
-								<select id="isClosed" name="isClosed" class="form-control">
+								<select id="isClosed" name="isClosed" class="form-control select2">
 									<option value="">Tümü</option>
 									@if (ViewBag.IsClosed?.ToString().ToLower() == "false")
 									{
@@ -359,15 +377,32 @@
 
 		// jQuery Document Ready
 		$(document).ready(function() {
+			// Select2'yi initialize et
+			$('.select2').select2({
+				theme: 'bootstrap4',
+				width: '100%',
+				dropdownParent: $('#filterForm'),
+				placeholder: 'Seçiniz...',
+				allowClear: true,
+				minimumResultsForSearch: Infinity,
+				language: {
+					noResults: function() {
+						return "Sonuç bulunamadı";
+					}
+				}
+			});
+
+			// Makine seçildiğinde parça listesini güncelle
 			$('#machineId').on('change', function() {
 				var selectedMachineId = $(this).val();
 				var machinePartDropdown = $('#machinePartId');
 
 				if (selectedMachineId) {
-					machinePartDropdown.prop('disabled', true).empty().append($('<option>', { value: '', text: 'Yükleniyor...' }));
+					machinePartDropdown.prop('disabled', true);
+					machinePartDropdown.empty().append($('<option>', { value: '', text: 'Yükleniyor...' }));
 
 					$.ajax({
-						url: '@Url.Action("GetMachineParts", "Work")', // Controller ve Action doğru varsayılıyor
+						url: '@Url.Action("GetMachineParts", "Work")',
 						type: 'GET',
 						dataType: 'json',
 						data: { machineId: selectedMachineId },
@@ -375,33 +410,34 @@
 							machinePartDropdown.prop('disabled', false);
 							machinePartDropdown.empty();
 							machinePartDropdown.append($('<option>', { value: '', text: 'Tümü' }));
+							machinePartDropdown.append($('<option>', { value: '0', text: 'Makine Parçası Bilgisi Yok' }));
 							$.each(parts, function(index, part) {
 								machinePartDropdown.append($('<option>', {
 									value: part.value,
 									text: part.text
 								}));
 							});
-							machinePartDropdown.val('');
+							machinePartDropdown.val('').trigger('change');
 						},
 						error: function(xhr, status, error) {
 							console.error("Makine parçaları alınamadı:", status, error);
 							machinePartDropdown.prop('disabled', true);
 							machinePartDropdown.empty();
 							machinePartDropdown.append($('<option>', { value: '', text: 'Hata - Tümü' }));
-							machinePartDropdown.val('');
+							machinePartDropdown.val('').trigger('change');
 						}
 					});
 				} else {
 					machinePartDropdown.empty();
 					machinePartDropdown.append($('<option>', { value: '', text: 'Tümü' }));
 					machinePartDropdown.prop('disabled', true);
-					machinePartDropdown.val('');
+					machinePartDropdown.val('').trigger('change');
 				}
 			});
 
-			// Sayfa yüklendiğinde tarih ayarını yap
-			if (typeof updateEndDateMin === "function" && $('#startDate').val()) {
-				updateEndDateMin();
+			// Sayfa yüklendiğinde makine parçası dropdown'ını güncelle
+			if ($('#machineId').val()) {
+				$('#machineId').trigger('change');
 			}
 		});
 	</script>

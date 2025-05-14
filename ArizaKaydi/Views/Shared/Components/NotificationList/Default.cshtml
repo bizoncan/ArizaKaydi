@@ -4,23 +4,33 @@
     .notification-list {
         max-height: 300px;
         overflow-y: auto;
+        padding: 0.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
         .notification-list .dropdown-item.preview-item {
             background-color: #fff !important;
-            background-image: none !important;
             border-left: 4px solid #dc3545;
-            border-radius: 0.75rem;
+            border-radius: 8px;
             padding: 0.75rem 1rem;
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
+            transition: all 0.3s ease;
         }
 
             .notification-list .dropdown-item.preview-item:hover {
-                background-color: rgba(220,53,69,0.1) !important;
-                background-image: none !important;
+                background-color: rgba(220, 53, 69, 0.1) !important;
             }
+
+                .notification-list .dropdown-item.preview-item:hover .preview-subject {
+                    color: #dc3545;
+                }
+
+                .notification-list .dropdown-item.preview-item:hover .text-muted {
+                    color: #dc3545 !important;
+                }
 
         .notification-list .preview-icon {
             background: #dc3545;
@@ -30,6 +40,8 @@
             justify-content: center;
             width: 2.5rem;
             height: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(220, 53, 69, 0.2);
         }
 
             .notification-list .preview-icon .mdi {
@@ -40,34 +52,50 @@
             color: #dc3545;
             font-weight: 500;
             margin-bottom: 0.2rem;
+            font-size: 0.95rem;
         }
 
         .notification-list .preview-item-content .text-muted {
             color: #6c757d !important;
+            font-size: 0.85rem;
         }
 
         .notification-list .dropdown-divider {
-            border-top: 1px solid rgba(220,53,69,0.2);
+            border-top: 1px solid rgba(220, 53, 69, 0.2);
             margin: 0.5rem 0;
         }
+
+    .notification-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #dc3545;
+        color: white;
+        border-radius: 50%;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        box-shadow: 0 2px 5px rgba(220, 53, 69, 0.2);
+    }
 </style>
+
 <div class="notification-list">
     @foreach (var item in Model)
     {
         <a class="dropdown-item preview-item" href="/Notification/EditNotification/@item.id">
-            <div class="preview-thumbnail">
-                <div class="preview-icon rounded-circle">
+            <div class="preview-thumbnail position-relative">
+                <div class="preview-icon">
                     <i class="mdi mdi-bell-ring text-white"></i>
                 </div>
             </div>
 
             <div class="preview-item-content">
                 <p class="preview-subject mb-1">@item.title</p>
-                <p class="text-muted ellipsis mb-0">@(item.machineName != null ? item.machineName.name : "Makine bilgisi yok")</p>
-
+                <p class="text-muted ellipsis mb-0">
+                    <i class="mdi mdi-cog text-muted mr-1"></i>
+                    @(item.machineName != null ? item.machineName.name : "Makine bilgisi yok")
+                </p>
             </div>
-
-
         </a>
         <div class="dropdown-divider"></div>
     }

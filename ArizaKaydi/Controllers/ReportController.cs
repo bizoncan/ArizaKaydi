@@ -85,6 +85,17 @@ namespace ArizaKaydi.Controllers
 						ViewBag.SelectedMachinePartId = null;
 					}
 				}
+				else if (machinePartId == 0)
+				{
+					values = values.Where(e => e.machinePartId == null).ToList();
+					ViewBag.SelectedMachinePartId = 0; // Seçili parça yoksa null yap
+				}
+			}
+			if (machineId == 0) // Makine seçilmemişse
+			{
+				// Makine seçilmediğinde tüm parçaları göster
+				values = values.Where(e => e.machineId == null).ToList();
+				ViewBag.SelectedMachineId = 0; // Seçili makine yoksa null yap
 			}
 			else // Makine seçilmemişse ("Tümü")
 			{
@@ -174,6 +185,7 @@ namespace ArizaKaydi.Controllers
 					worksheet.Cell(1, 7).Value = "Makine Parçası";
 					worksheet.Cell(1, 8).Value = "Raporu giren kullanıcı";
 					worksheet.Cell(1, 9).Value = "İş emri id'si";
+					worksheet.Cell(1, 10).Value = "Geçmiş Rapor mu";
 
 
 					// Başlık satırını biçimlendirme (Opsiyonel)
@@ -194,6 +206,7 @@ namespace ArizaKaydi.Controllers
 						worksheet.Cell(currentRow, 7).Value = veri.machinePart?.name?? "Makine parçası bilgisi yok.";
 						worksheet.Cell(currentRow, 8).Value = veri.userI?.UserName?? "Kullanıcı bilgisi yok.";
 						worksheet.Cell(currentRow, 9).Value = veri.workOrderId;
+						worksheet.Cell(currentRow, 10).Value = veri.isPastWork == true  ? "Evet":"Hayır";
 
 						// ... Diğer özellikler
 						currentRow++;

@@ -24,6 +24,7 @@ namespace ArizaKayitApi.Controllers
 			{
 				workOrderModel = e,
 				machineName= e.machine.name,
+				machineModel = e.machine,
 			}).ToList();
 			return Ok(values);
 		}
@@ -36,9 +37,17 @@ namespace ArizaKayitApi.Controllers
 		[HttpPut]
 		public IActionResult updateWorkOrder([FromBody]workOrder w)
 		{
-			_context.WorkOrders.Update(w);
-			_context.SaveChanges();
-			return Ok();
+		
+			if ( _context.WorkOrders.Where(e => e.id == w.id).FirstOrDefault() != null)
+			{
+				_context.ChangeTracker.Clear();
+				_context.WorkOrders.Update(w);
+				_context.SaveChanges();
+				return Ok();
+
+			}
+			return NotFound();
+			
 		}
 		[HttpGet("GetUserId")]
 		public IActionResult getUserId(String username)

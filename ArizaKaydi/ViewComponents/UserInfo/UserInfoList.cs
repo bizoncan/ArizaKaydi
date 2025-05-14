@@ -1,4 +1,5 @@
-﻿using EntityLayer.Concrete;
+﻿using ArizaKaydi.Models;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,8 +14,13 @@ namespace ArizaKaydi.ViewComponents.UserInfo
 		}
 		public async Task<IViewComponentResult> InvokeAsync()
 		{
-			
-			return View(await _userManager.FindByNameAsync(User.Identity.Name));
+			PanelUserViewModel panelUserViewModel = new PanelUserViewModel();
+			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+			panelUserViewModel.UserName = user.UserName;
+			panelUserViewModel.ImageURL = user.ImageURL;
+			var roles = await _userManager.GetRolesAsync(user);	
+			panelUserViewModel.Role = roles.FirstOrDefault();
+			return View(panelUserViewModel);
 		}
 	}
 }

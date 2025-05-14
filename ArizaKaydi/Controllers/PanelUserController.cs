@@ -59,6 +59,7 @@ namespace ArizaKaydi.Controllers
 			}
 
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+			panelUserViewModel.ImageURL = user.ImageURL;
 			if (user == null)
 			{
 				TempData["ErrorMessage"] = "Kullanıcı bulunamadı.";

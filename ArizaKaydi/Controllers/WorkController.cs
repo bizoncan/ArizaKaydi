@@ -83,12 +83,24 @@ namespace ArizaKaydi.Controllers
 						values = values.Where(e => e.machinePartId == machinePartId.Value).ToList();
 						ViewBag.SelectedMachinePartId = machinePartId.Value;
 					}
+				
 					else
 					{
 						// Eğer parça o makineye ait değilse, parça filtresini temizle (opsiyonel)
 						ViewBag.SelectedMachinePartId = null;
 					}
 				}
+				else if (machinePartId == 0)
+				{
+					values = values.Where(e => e.machinePartId == null).ToList();
+					ViewBag.SelectedMachinePartId = 0; // Seçili parça yoksa null yap
+				}
+			}
+			if ( machineId == 0) // Makine seçilmemişse
+			{
+				// Makine seçilmediğinde tüm parçaları göster
+				values = values.Where(e => e.machineId == null).ToList();
+				ViewBag.SelectedMachineId = 0; // Seçili makine yoksa null yap
 			}
 			else // Makine seçilmemişse ("Tümü")
 			{
@@ -149,10 +161,14 @@ namespace ArizaKaydi.Controllers
 		public IActionResult DeleteWork(int id)
 		{
 			var workk = workManager.TGetById(id);
+			var workOrder = _context.WorkOrders.FirstOrDefault(x => x.id == workk.workOrderId);
 			if (workk != null)
 			{
+				workOrder.workOrderEndDate = null;
+				workOrder.isClosed = false;
 				workManager.TRemove(workk);
-				return RedirectToAction("Index");
+
+				return RedirectToAction("WorkReportss","Report");
 			}
 			return NotFound();
 		}
@@ -418,7 +434,7 @@ namespace ArizaKaydi.Controllers
 						worksheet.Cell(currentRow, 3).Value = veri.desc;
 						worksheet.Cell(currentRow, 4).Value = veri.isClosed == true ? "EVET": "HAYIR";
 						worksheet.Cell(currentRow, 5).Value = veri.workOrderStartDate;
-						worksheet.Cell(currentRow, 6).Value = veri.workOrderEndDate;
+						worksheet.Cell(currentRow, 6).Value = veri.workOrderEndDate != null ? veri.workOrderEndDate.ToString() : "-";
 						worksheet.Cell(currentRow, 7).Value = veri.machine?.name?? "Makine bilgisi yok.";
 						worksheet.Cell(currentRow, 8).Value = veri.machinePart?.name?? "Makine parçası bilgisi yok.";
 

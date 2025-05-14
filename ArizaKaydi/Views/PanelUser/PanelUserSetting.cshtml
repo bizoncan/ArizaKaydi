@@ -1,193 +1,193 @@
 ﻿@model ArizaKaydi.Models.PanelUserEditViewModel
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Kullanıcı Ayarları"; // Sayfa başlığı
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Kullanıcı Ayarları"; // Sayfa başlığı
 }
 
 <style>
-    .description-textarea {
-        min-height: 150px;
-        resize: vertical;
-        font-size: 14px;
-        line-height: 1.5;
-        padding: 10px;
-        width: 100%;
-        color: #333 !important;
-        border: 1px solid #ced4da; /* Daha standart bir border rengi */
-        border-radius: 0.25rem; /* Bootstrap varsayılan border-radius */
-    }
+	.description-textarea {
+		min-height: 150px;
+		resize: vertical;
+		font-size: 14px;
+		line-height: 1.5;
+		padding: 10px;
+		width: 100%;
+		color: #333 !important;
+		border: 1px solid #ced4da; /* Daha standart bir border rengi */
+		border-radius: 0.25rem; /* Bootstrap varsayılan border-radius */
+	}
 
-        .description-textarea:focus {
-            border-color: #80bdff; /* Bootstrap focus rengi */
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25); /* Bootstrap focus shadow */
-            outline: none;
-        }
+		.description-textarea:focus {
+			border-color: #80bdff; /* Bootstrap focus rengi */
+			box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25); /* Bootstrap focus shadow */
+			outline: none;
+		}
 
-    .custom-label {
-        font-weight: bold;
-        margin-bottom: .5rem;
-    }
+	.custom-label {
+		font-weight: bold;
+		margin-bottom: .5rem;
+	}
 
-    .custom-input-bg {
-        /* background-color: #f8f9fa; */ /* Opsiyonel: Giriş alanları için hafif bir arka plan */
-    }
+	.custom-input-bg {
+		/* background-color: #f8f9fa; */ /* Opsiyonel: Giriş alanları için hafif bir arka plan */
+	}
 
-    .profile-image-preview {
-        max-width: 150px;
-        max-height: 150px;
-        border: 1px solid #ddd;
-        padding: 5px;
-        margin-top: 10px;
-        border-radius: .25rem;
-        object-fit: cover;
-    }
+	.profile-image-preview {
+		max-width: 150px;
+		max-height: 150px;
+		border: 1px solid #ddd;
+		padding: 5px;
+		margin-top: 10px;
+		border-radius: .25rem;
+		object-fit: cover;
+	}
 </style>
 
 
 
 @using (Html.BeginForm("PanelUserSetting", "PanelUser", FormMethod.Post, new { enctype = "multipart/form-data" })) // enctype eklendi!
 {
-    @Html.AntiForgeryToken()
+	@Html.AntiForgeryToken()
 
 
-    @* ModelState'den gelen genel (property'ye atanmamış) hatalar *@
-    @if (ViewData.ModelState.TryGetValue(string.Empty, out var errorsForEmptyKey) && errorsForEmptyKey.Errors.Any())
-    {
-        <div class="alert alert-danger" role="alert">
-            <ul class="mb-0">
-                @foreach (var error in errorsForEmptyKey.Errors)
-                {
-                    <li>@error.ErrorMessage</li>
-                }
-            </ul>
-        </div>
-    }
-    @* VEYA tüm model hatalarını özetlemek için: *@
-    @* @Html.ValidationSummary(false, "", new { @class = "text-danger alert alert-danger" }) *@
+	@* ModelState'den gelen genel (property'ye atanmamış) hatalar *@
+	@if (ViewData.ModelState.TryGetValue(string.Empty, out var errorsForEmptyKey) && errorsForEmptyKey.Errors.Any())
+	{
+		<div class="alert alert-danger" role="alert">
+			<ul class="mb-0">
+				@foreach (var error in errorsForEmptyKey.Errors)
+				{
+					<li>@error.ErrorMessage</li>
+				}
+			</ul>
+		</div>
+	}
+	@* VEYA tüm model hatalarını özetlemek için: *@
+	@* @Html.ValidationSummary(false, "", new { @class = "text-danger alert alert-danger" }) *@
 
 
-    <div class="col-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Kullanıcı Bilgilerini Düzenle</h4>
-                <p class="card-description">Lütfen bilgilerinizi güncelleyin.</p>
+	<div class="col-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">Kullanıcı Bilgilerini Düzenle</h4>
+				<p class="card-description">Lütfen bilgilerinizi güncelleyin.</p>
 
-                <div class="mb-3">
-                    @Html.LabelFor(x => x.Name, "İsim", htmlAttributes: new { @class = "form-label custom-label" })
-                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control custom-input-bg" })
-                    @Html.ValidationMessageFor(x => x.Name, "", new { @class = "text-danger" })
-                </div>
+				<div class="mb-3">
+					@Html.LabelFor(x => x.Name, "İsim", htmlAttributes: new { @class = "form-label custom-label" })
+					@Html.TextBoxFor(x => x.Name, new { @class = "form-control custom-input-bg" })
+					@Html.ValidationMessageFor(x => x.Name, "", new { @class = "text-danger" })
+				</div>
 
-                <div class="mb-3">
-                    @Html.LabelFor(x => x.Surname, "Soyad", htmlAttributes: new { @class = "form-label custom-label" })
-                    @Html.TextBoxFor(x => x.Surname, new { @class = "form-control custom-input-bg" })
-                    @Html.ValidationMessageFor(x => x.Surname, "", new { @class = "text-danger" })
-                </div>
+				<div class="mb-3">
+					@Html.LabelFor(x => x.Surname, "Soyad", htmlAttributes: new { @class = "form-label custom-label" })
+					@Html.TextBoxFor(x => x.Surname, new { @class = "form-control custom-input-bg" })
+					@Html.ValidationMessageFor(x => x.Surname, "", new { @class = "text-danger" })
+				</div>
 
-                <div class="mb-3">
-                    @Html.LabelFor(x => x.UserName, "Kullanıcı Adı", htmlAttributes: new { @class = "form-label custom-label" })
-                    @Html.TextBoxFor(x => x.UserName, new { @class = "form-control custom-input-bg" })
-                    @Html.ValidationMessageFor(x => x.UserName, "", new { @class = "text-danger" })
-                </div>
-                <hr />
-                <h5 class="card-title">Şifre Değişikliği</h5>
-                <p class="card-description text-muted">Şifrenizi değiştirmek istemiyorsanız bu bölümü boş bırakınız.</p>
+				<div class="mb-3">
+					@Html.LabelFor(x => x.UserName, "Kullanıcı Adı", htmlAttributes: new { @class = "form-label custom-label" })
+					@Html.TextBoxFor(x => x.UserName, new { @class = "form-control custom-input-bg" })
+					@Html.ValidationMessageFor(x => x.UserName, "", new { @class = "text-danger" })
+				</div>
+				<hr />
+				<h5 class="card-title">Şifre Değişikliği</h5>
+				<p class="card-description text-muted">Şifrenizi değiştirmek istemiyorsanız bu bölümü boş bırakınız.</p>
 
-                <div class="mb-3">
-                    @Html.LabelFor(x => x.passwordNow, "Mevcut Şifre", htmlAttributes: new { @class = "form-label custom-label" })
-                    @Html.PasswordFor(x => x.passwordNow, new { @class = "form-control custom-input-bg" }) @* type="password" için PasswordFor *@
-                    @Html.ValidationMessageFor(x => x.passwordNow, "", new { @class = "text-danger" })
-                </div>
+				<div class="mb-3">
+					@Html.LabelFor(x => x.passwordNow, "Mevcut Şifre", htmlAttributes: new { @class = "form-label custom-label" })
+					@Html.PasswordFor(x => x.passwordNow, new { @class = "form-control custom-input-bg" }) @* type="password" için PasswordFor *@
+					@Html.ValidationMessageFor(x => x.passwordNow, "", new { @class = "text-danger" })
+				</div>
 
-                <div class="mb-3">
-                    @Html.LabelFor(x => x.Password, "Yeni Şifre", htmlAttributes: new { @class = "form-label custom-label" })
-                    @Html.PasswordFor(x => x.Password, new { @class = "form-control custom-input-bg" })
-                    @Html.ValidationMessageFor(x => x.Password, "", new { @class = "text-danger" })
-                </div>
+				<div class="mb-3">
+					@Html.LabelFor(x => x.Password, "Yeni Şifre", htmlAttributes: new { @class = "form-label custom-label" })
+					@Html.PasswordFor(x => x.Password, new { @class = "form-control custom-input-bg" })
+					@Html.ValidationMessageFor(x => x.Password, "", new { @class = "text-danger" })
+				</div>
 
-                <div class="mb-3">
-                    @Html.LabelFor(x => x.ConfirmPassword, "Yeni Şifre Tekrar", htmlAttributes: new { @class = "form-label custom-label" })
-                    @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control custom-input-bg" })
-                    @Html.ValidationMessageFor(x => x.ConfirmPassword, "", new { @class = "text-danger" })
-                </div>
-                <hr />
-                <h5 class="card-title">Profil Resmi</h5>
-                <div class="mb-3">
-                    @Html.LabelFor(x => x.ImageFile, "Yeni Resim Yükle", htmlAttributes: new { @class = "form-label custom-label" })
-                    <input type="file" asp-for="ImageFile" class="form-control" /> @* asp-for ile daha iyi model bağlama *@
-                    @Html.ValidationMessageFor(x => x.ImageFile, "", new { @class = "text-danger" })
-                </div>
+				<div class="mb-3">
+					@Html.LabelFor(x => x.ConfirmPassword, "Yeni Şifre Tekrar", htmlAttributes: new { @class = "form-label custom-label" })
+					@Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control custom-input-bg" })
+					@Html.ValidationMessageFor(x => x.ConfirmPassword, "", new { @class = "text-danger" })
+				</div>
+				<hr />
+				<h5 class="card-title">Profil Resmi</h5>
+				<div class="mb-3">
+					@Html.LabelFor(x => x.ImageFile, "Yeni Resim Yükle", htmlAttributes: new { @class = "form-label custom-label" })
+					<input type="file" asp-for="ImageFile" class="form-control" /> @* asp-for ile daha iyi model bağlama *@
+					@Html.ValidationMessageFor(x => x.ImageFile, "", new { @class = "text-danger" })
+				</div>
 
-                @if (!string.IsNullOrEmpty(Model.ImageURL))
-                {
-                    <div class="mb-3">
-                        <label class="form-label custom-label">Mevcut Resim:</label><br />
-                        <img src="@Model.ImageURL" alt="Mevcut Profil Resmi" class="profile-image-preview" id="imagePreview" />
-                    </div>
-                }
-                else
-                {
-                    <div class="mb-3">
-                        <label class="form-label custom-label">Mevcut Resim:</label><br />
-                        <img src="/images/default-avatar.png" alt="Varsayılan Profil Resmi" class="profile-image-preview" id="imagePreview" />
-                    </div>
-                }
+				@if (!string.IsNullOrEmpty(Model.ImageURL))
+				{
+					<div class="mb-3">
+						<label class="form-label custom-label">Mevcut Resim:</label><br />
+						<img src="@Model.ImageURL" alt="Mevcut Profil Resmi" class="profile-image-preview" id="imagePreview" />
+					</div>
+				}
+				else
+				{
+					<div class="mb-3">
+						<label class="form-label custom-label">Mevcut Resim:</label><br />
+						<img src="/images/default-avatar.png" alt="Varsayılan Profil Resmi" class="profile-image-preview" id="imagePreview" />
+					</div>
+				}
 
 
-                <div class="from-group mt-4">
-                    <button type="submit" class="btn btn-success" onclick="return confirm('Kullanıcı adı ya da şifre başarılı şekilde değişirse tekrar giriş yapmak zorundasınız.');">
-                        <i class="mdi mdi-content-save"></i> Kaydet
-                    </button>
-                    <a href="/Home/Index" class="btn btn-outline-danger">
-                        <i class="mdi mdi-close"></i> İptal
-                    </a>
-                </div>
+				<div class="from-group mt-4">
+					<button type="submit" class="btn btn-success" onclick="return confirm('Kullanıcı adı ya da şifre başarılı şekilde değişirse tekrar giriş yapmak zorundasınız.');">
+						<i class="mdi mdi-content-save"></i> Kaydet
+					</button>
+					<a href="/Home/Index" class="btn btn-outline-danger">
+						<i class="mdi mdi-close"></i> İptal
+					</a>
+				</div>
 
-                @* Alan bazlı hatalar zaten ValidationMessageFor ile gösteriliyor.
+				@* Alan bazlı hatalar zaten ValidationMessageFor ile gösteriliyor.
                    Eğer tüm hataları bir yerde özetlemek isterseniz ValidationSummary kullanabilirsiniz:
                 *@
-                
-                @if (!ViewData.ModelState.IsValid)
-                {
-                    <div class="alert alert-danger mt-3">
-                        <strong>Lütfen formdaki hataları düzeltin:</strong>
-                        @Html.ValidationSummary(false) 
-                    </div>
-                }
-                
-            </div>
-        </div>
-    </div>
+
+				@if (!ViewData.ModelState.IsValid)
+				{
+					<div class="alert alert-danger mt-3">
+						<strong>Lütfen formdaki hataları düzeltin:</strong>
+						@Html.ValidationSummary(false)
+					</div>
+				}
+
+			</div>
+		</div>
+	</div>
 }
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-    <script>
-        // İsteğe bağlı: Dosya seçildiğinde anlık önizleme için JavaScript
-          document.addEventListener('DOMContentLoaded', function () {
-              const imageFileInput = document.querySelector('input[type="file"][asp-for="ImageFile"]');
-              const imagePreview = document.getElementById('imagePreview');
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	<script>
+		// İsteğe bağlı: Dosya seçildiğinde anlık önizleme için JavaScript
+		  document.addEventListener('DOMContentLoaded', function () {
+			  const imageFileInput = document.querySelector('input[type="file"][asp-for="ImageFile"]');
+			  const imagePreview = document.getElementById('imagePreview');
 
-              if (imageFileInput && imagePreview) {
-                  imageFileInput.addEventListener('change', function (event) {
-                      const file = event.target.files[0];
-                      if (file) {
-                          const reader = new FileReader();
-                          reader.onload = function (e) {
-                              imagePreview.src = e.target.result;
-                              if(imagePreview.style.display === 'none') { // Eğer başlangıçta gizliyse göster
-                                  imagePreview.style.display = 'block';
-                                  // Eğer bir "Mevcut Resim:" label'ı varsa ve gizliyse onu da göster
-                                  const label = document.querySelector('label[for="imagePreview"]'); // id'ye göre daha iyi olur
-                                  if(label && label.style.display === 'none') label.style.display = 'block';
-                              }
-                          }
-                          reader.readAsDataURL(file);
-                      }
-                  });
-              }
-          });
-    </script>
+			  if (imageFileInput && imagePreview) {
+				  imageFileInput.addEventListener('change', function (event) {
+					  const file = event.target.files[0];
+					  if (file) {
+						  const reader = new FileReader();
+						  reader.onload = function (e) {
+							  imagePreview.src = e.target.result;
+							  if(imagePreview.style.display === 'none') { // Eğer başlangıçta gizliyse göster
+								  imagePreview.style.display = 'block';
+								  // Eğer bir "Mevcut Resim:" label'ı varsa ve gizliyse onu da göster
+								  const label = document.querySelector('label[for="imagePreview"]'); // id'ye göre daha iyi olur
+								  if(label && label.style.display === 'none') label.style.display = 'block';
+							  }
+						  }
+						  reader.readAsDataURL(file);
+					  }
+				  });
+			  }
+		  });
+	</script>
 }
