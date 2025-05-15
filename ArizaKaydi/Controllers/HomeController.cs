@@ -23,7 +23,18 @@ namespace ArizaKaydi.Controllers
         {
             ViewBag.WorkOrderCount = _context.WorkOrders.Where(e=> e.isClosed != true).Count();
             ViewBag.UserCount = _context.mobileUsers.Count();
-            /*var totalPairTime = 0.0;
+            ViewBag.ReportCount = _context.WorkOrders.Count();
+            var worksF = _context.WorkOrders.Where(e=>e.isClosed==true).ToList();
+            double totalTime = 0.0;
+			foreach (var item in worksF)
+			{
+
+				totalTime += (item.workOrderEndDate - item.workOrderStartDate).Value.TotalHours;
+
+			}
+
+            ViewBag.MeanFinish = totalTime / worksF.Count();
+			/*var totalPairTime = 0.0;
             foreach(var item in _context.Errors.ToList())
             {
 				if (item.errorEndDate != null)

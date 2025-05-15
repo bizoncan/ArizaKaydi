@@ -22,9 +22,9 @@
 						</div>
 					</div>
 					<div class="col-3">
-						<div class="icon icon-box-success ">
-							<span class="mdi mdi-arrow-top-right icon-item"></span>
-						</div>
+						@* <div class="icon icon-box-success ">
+							@*<span class="mdi mdi-arrow-top-right icon-item"></span>
+						</div> *@
 					</div>
 				</div>
 				<h6 class="text-muted font-weight-normal">Aktif kullanıcı sayısı</h6>
@@ -42,9 +42,9 @@
 						</div>
 					</div>
 					<div class="col-3">
-						<div class="icon icon-box-success">
-							<span class="mdi mdi-arrow-top-right icon-item"></span>
-						</div>
+						@* <div class="icon icon-box-success">
+							@* <span class="mdi mdi-arrow-top-right icon-item"></span> 
+						</div> *@
 					</div>
 				</div>
 				<h6 class="text-muted font-weight-normal">Aktif iş emri sayısı</h6>
@@ -57,13 +57,13 @@
 				<div class="row">
 					<div class="col-9">
 						<div class="d-flex align-items-center align-self-start">
-							<h3 class="mb-0"><!--@ViewBag.MTTR--></h3>
+							<h3 class="mb-0">@ViewBag.ReportCount</h3>
 							<p class="text-danger ml-2 mb-0 font-weight-medium"></p>
 						</div>
 					</div>
 					
 				</div>
-				<h6 class="text-muted font-weight-normal">Güncel MTTR</h6>
+				<h6 class="text-muted font-weight-normal">Toplam Rapor</h6>
 			</div>
 		</div>
 	</div>
@@ -73,17 +73,17 @@
 				<div class="row">
 					<div class="col-9">
 						<div class="d-flex align-items-center align-self-start">
-							<h3 class="mb-0">$31.53</h3>
-							<p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+							<h3 class="mb-0">@ViewBag.MeanFinish </h3>
+							
 						</div>
 					</div>
 					<div class="col-3">
-						<div class="icon icon-box-success ">
-							<span class="mdi mdi-arrow-top-right icon-item"></span>
-						</div>
+						@* <div class="icon icon-box-success ">
+							@* <span class="mdi mdi-arrow-top-right icon-item"></span> 
+						</div> *@
 					</div>
 				</div>
-				<h6 class="text-muted font-weight-normal">Expense current</h6>
+				<h6 class="text-muted font-weight-normal">Ortalama İş Bitirme Süresi</h6>
 			</div>
 		</div>
 	</div>

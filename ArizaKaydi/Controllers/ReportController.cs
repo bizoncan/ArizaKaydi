@@ -202,7 +202,7 @@ namespace ArizaKaydi.Controllers
 						worksheet.Cell(currentRow, 3).Value = veri.desc;
 						worksheet.Cell(currentRow, 4).Value = veri.workOrderStartDate;
 						worksheet.Cell(currentRow, 5).Value = veri.workOrderEndDate;
-						worksheet.Cell(currentRow, 6).Value = veri.machine?.name;
+						worksheet.Cell(currentRow, 6).Value = veri.machine?.name?? "Makine bilgisi yok";
 						worksheet.Cell(currentRow, 7).Value = veri.machinePart?.name?? "Makine parçası bilgisi yok.";
 						worksheet.Cell(currentRow, 8).Value = veri.userI?.UserName?? "Kullanıcı bilgisi yok.";
 						worksheet.Cell(currentRow, 9).Value = veri.workOrderId;
