@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Concrete;
+﻿using ArizaKayitApi.Models;
+using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -57,19 +58,20 @@ namespace ArizaKayitApi.Controllers
             return Ok();
         }
 		[HttpPost("addImageDataWork")]
-		public IActionResult addImageDataWork(List<String> img_data)
+		public IActionResult addImageDataWork([FromBody] WorkImagePostModel workImagePostModel)
 		{
-			int veri = 1;
-			SqlConnection con = new SqlConnection("server=10.10.82.69,1433;database=ArizaKayit;User Id=sa ;Password=A/f-mrf_12 ;TrustServerCertificate=True");
-			con.Open();
-			string query = "select top 1 * from dbo.Works order by id desc";
-			SqlCommand cmd = new SqlCommand(query, con);
-			SqlDataReader reader = cmd.ExecuteReader();
-			if (reader.Read())
-			{
-				veri = reader.GetInt32(0);
-			}
-
+			//int veri = 1;
+			//SqlConnection con = new SqlConnection("server=10.10.82.69,1433;database=ArizaKayit;User Id=sa ;Password=A/f-mrf_12 ;TrustServerCertificate=True");
+			//con.Open();
+			//string query = "select top 1 * from dbo.Works order by id desc";
+			//SqlCommand cmd = new SqlCommand(query, con);
+			//SqlDataReader reader = cmd.ExecuteReader();
+			//if (reader.Read())
+			//{
+			//	veri = reader.GetInt32(0);
+			//}
+            List<String> img_data = workImagePostModel.imageCollectionModel;
+			int veri = workImagePostModel.workId;
 
 			if (img_data.Count() > 0)
 			{

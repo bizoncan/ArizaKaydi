@@ -99,15 +99,15 @@
 </style>
 
 <li class="nav-item dropdown">
-    <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+    <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown" data-target="#profileDropdownMenu">
         <div class="navbar-profile">
             <img class="img-xs rounded-circle" src="@profilePicSource" alt="@altText">
             <p class="mb-0 d-none d-sm-block navbar-profile-name">@Model.UserName</p>
             <i class="mdi mdi-menu-down d-none d-sm-block"></i>
         </div>
     </a>
-    <div class="dropdown-menu dropdown-menu-right navbar-dropdown user-dropdown-list" aria-labelledby="profileDropdown">
-        <h6 class="p-3 mb-0">Profile</h6>
+    <div class="dropdown-menu dropdown-menu-right navbar-dropdown user-dropdown-list" aria-labelledby="profileDropdown" id="profileDropdownMenu">
+        <h6 class="p-3 mb-0">Profil</h6>
         <div class="user-dropdown-divider"></div>
 
         <a class="dropdown-item user-dropdown-item" href="/PanelUser/PanelUserSetting">
@@ -134,7 +134,6 @@
             </div>
         </a>
 
-        <div class="user-dropdown-divider"></div>
-        <p class="p-3 mb-0 text-center">Advanced settings</p>
+       
     </div>
 </li>

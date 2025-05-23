@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Concrete;
+﻿using ArizaKaydi.Models;
+using BusinessLayer.Concrete;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
@@ -22,7 +23,18 @@ namespace ArizaKaydi.Controllers
 		public IActionResult Index()
 		{
 			var values = _userManager.TGetList();
-			return View(values);
+			List<MobileUserViewModel> userViewModels = new List<MobileUserViewModel>();
+			
+			int tCount = 0;
+			foreach (user u in values)
+			{
+				tCount = _context.Works.Where(x => x.userId == u.Id).Count();
+				MobileUserViewModel viewModel = new MobileUserViewModel();
+				viewModel.mobileUser = u;
+				viewModel.workCount = tCount;
+				userViewModels.Add(viewModel);	
+			}	
+			return View(userViewModels);
 		}
 		public IActionResult RemoveUser(int id)
 		{

@@ -222,9 +222,31 @@
 									}
 								</a>
 							</th>
+							<th scope="col" class="sort" data-sort="name">
+								<a href="@Url.Action("WorkReportss","Report",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,userId = ViewBag.SelectedUserId,sortBy="userId",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "userId" ? "desc" : "asc"})" style="color:#ffffff !important">
+									Personel
+									@if (Context.Request.Query["sortBy"] == "userId")
+									{
+										@if (Context.Request.Query["sortOrder"] == "asc")
+										{
+											<i class="mdi mdi-arrow-up"></i>
+										}
+										else
+										{
+											<i class="mdi mdi-arrow-down"></i>
+										}
+									}
+									else
+									{
+										<i class="mdi mdi-color-helper"></i>
+									}
+								</a>
+
+
+							</th>
 							<!--	<th scope="col" class="sort" data-sort="name">Geçmiş Rapor mu</th>-->
-							<th scope="col">İş Emri Raporu</th>
-							<th scope="col">Sil</th>
+							<th scope="col">İşlemler</th>
+							
 
 						</tr>
 					</thead>
@@ -261,13 +283,26 @@
 										</div>
 									</div>
 								</td>
+								<td scope="row">
+									<div class="media align-items-center">
+										<div class="media-body">
+											<span class="name mb-0 text-sm">
+												@(item.userI?.UserName ?? "Personel belirtilmedi")
+											</span>
+										</div>
+									</div>
+								</td>
 								<!--<th>
 									<span class="badge @((item.isPastWork) ? "bg-success" : "bg-danger")">
 										@((item.isPastWork) ? "Evet" : "Hayır")
 									</span>
 								</th>-->
-								<td><a href="/Work/SeeWorkReport/@item.id" class="btn btn-outline-primary">Raporu Gör</a></td>
-								<td><a href="/Work/DeleteWork/@item.id" class="btn btn-outline-warning">Sil</a></td>
+								<td>
+									<a href="/Work/EditWork/@item.id" class="btn btn-outline-primary">Düzenle</a>
+									<a href="/Work/SeeWorkReport/@item.id" class="btn btn-outline-primary">Raporu Gör</a>
+									<a href="/Work/DeleteWork/@item.id" class="btn btn-outline-warning">Sil</a>
+								</td>
+								
 							</tr>
 						}
 

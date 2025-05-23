@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace ArizaKaydi.Controllers
 {
@@ -28,7 +29,7 @@ namespace ArizaKaydi.Controllers
 		//[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Index(DateTime? startDate = null, DateTime? endDate = null, int? machineId = null, int? machinePartId = null, string? sortBy=null, string? sortOrder=null, Boolean? isClosed=null,int? userId=null)
 		{
-			var values = _context.WorkOrders.Include(x => x.machine).ToList(); // Başlangıçta tüm iş emirlerini al
+			var values = _context.WorkOrders.Include(x => x.machine).Include(x=> x.userI).ToList(); // Başlangıçta tüm iş emirlerini al
 
 			ViewBag.Machines = _context.Machines.ToList(); // Makine dropdown'ı için tüm makineler
 
@@ -145,7 +146,10 @@ namespace ArizaKaydi.Controllers
 					case "isClosed":
 						values = sortOrder == "desc" ? values.OrderByDescending(x => x.isClosed).ToList() : values.OrderBy(x => x.isClosed).ToList();
 						break;
-				}
+					case "userId":
+						values = sortOrder == "desc" ? values.OrderByDescending(x => x.userId).ToList() : values.OrderBy(x => x.userId).ToList();
+						break;
+			}
 			return View(values); // Filtrelenmiş iş emirlerini View'a gönder
 		}
 		public IActionResult RemoveWorkOrder(int id)
@@ -466,6 +470,44 @@ namespace ArizaKaydi.Controllers
 				// return StatusCode(500, "Excel dosyası oluşturulurken sunucu tarafında bir hata oluştu.");
 				return Problem("Excel dosyası oluşturulurken bir hata oluştu. Detaylar için sunucu loglarını kontrol edin.", statusCode: 500);
 			}
+		}
+		[HttpGet]
+		public IActionResult EditWork(int id)
+		{
+			var machines = _context.Machines.Select(m => new SelectListItem
+			{
+				Value = m.id.ToString(),
+				Text = m.name.ToString()
+			}).ToList();
+			ViewBag.MachineList = machines; // Use the same name as in AddError for consistency
+			var users = _context.mobileUsers.Select(m => new SelectListItem
+			{
+				Value = m.Id.ToString(),
+				Text = m.UserName.ToString()
+			}).ToList();
+			ViewBag.UserList = users;
+
+			var value = workManager.TGetById(id);
+			return View(value);
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult EditWork(work p)
+		{
+			if (!ModelState.IsValid)
+			{
+				ModelState.AddModelError("", "Lütfen gerekli alanları doldurunuz.");
+				return View(p);
+			}
+			var existing = workManager.TGetById(p.id);
+			existing.machineId = p.machineId;
+			existing.machinePartId = p.machinePartId;
+			existing.title = p.title;	
+			existing.desc = p.desc;
+			existing.userId = p.userId;
+			;
+			workManager.TUpdate(existing);
+			return RedirectToAction("WorkReportss","Report");
 		}
 	}
 }

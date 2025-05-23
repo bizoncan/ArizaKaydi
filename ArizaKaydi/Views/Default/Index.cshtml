@@ -81,6 +81,7 @@
 														<th>#</th>
 														<th>Parça Adı</th>
 														<th>Parça Sayısı</th>
+														<th>Rapor Sayısı</th>
 														<th>İşlemler</th>
 													</tr>
 												</thead>
@@ -88,19 +89,20 @@
 													@foreach (var part in Model.machineParts)
 													{
 														<tr>
-															<td>@part.Id</td>
-															<td>@part.name</td>
-															<td>@part.number</td>
+															<td>@part.machinePart.Id</td>
+															<td>@part.machinePart.name</td>
+															<td>@part.machinePart.number</td>
+															<td>@part.workCount</td>
 															<td>
-																<a href="/Default/EditMachinePart/@part.Id"
+																<a href="/Default/EditMachinePart/@part.machinePart.Id"
 																   class="btn btn-outline-primary btn-sm">
 																	<i class="mdi mdi-pencil"></i> Düzenle
 																</a>
-																<a href="/Default/RemoveMachinePart/@part.Id"
+																<a href="/Default/RemoveMachinePart/@part.machinePart.Id"
 																   class="btn btn-outline-danger btn-sm">
 																	<i class="mdi mdi-delete"></i> Sil
 																</a>
-                                                                <a href="/Report/WorkReportss?machineId=@selectedMachine.id&machinePartId=@part.Id"
+                                                                <a href="/Report/WorkReportss?machineId=@selectedMachine.id&machinePartId=@part.machinePart.Id"
                                                                   class="btn btn-outline-danger btn-sm">
 																	<i class="mdi mdi-filter"></i> Raporları Gör
                                                                 </a>

@@ -6,162 +6,100 @@
 }
 
 <style>
+	.table-container {
+		padding: 1rem; /* Add some padding around the table */
+		border-radius: 8px; /* Rounded corners for the container */
+		box-shadow: 0 0.5rem 1rem rgba(220,53,69,0.15) !important; /* Subtle shadow for depth */
+		background-color: #fff; /* Ensure background is white if not already */
+	}
+
 	.table th,
 	.table td {
-		padding: 0.75rem;
+		padding: 1rem; /* Increased padding for better spacing */
 		vertical-align: middle;
-		border: 1px solid #dc3545;
+		border: 1px solid #e9ecef; /* Lighter border color */
+		font-size: 0.9rem; /* Slightly smaller font size for a cleaner look */
 	}
 
 	.table th {
-		background-color: #dc3545;
-		color: #fff;
-		border-color: #ffffff;
+		background-color: #dc3545 !important; /* Light grey background for headers */
+		color: #fff !important; /* Darker text color for headers */
+		border-bottom-width: 2px; /* Thicker bottom border for headers */
+		border-top: none; /* Remove top border from header if it's the first row of the table */
 		text-align: left;
 		font-weight: 600;
+		white-space: nowrap; /* Prevent header text from wrapping */
 	}
 
 	.table tbody tr:nth-child(even) {
-		background-color: #f8d7da; /* Açık pembe */
+		background-color: #fdfdfe; /* Very subtle alternating row color */
 	}
 
 	.table tbody tr:hover {
-		background-color: #f1b0b7; /* Hover efekti */
+		background-color: #f1f3f5; /* Slightly darker hover effect */
 	}
 
 	.table td {
-		background-color: #fff;
-		color: #dc3545;
+		color: #dc3545; /* Standard dark text color for cells */
 		white-space: normal;
+	}
+
+	/* Specific style for the first column (headers like ID, İş Emri ID) */
+	.table tbody th[scope="row"] {
+		background-color: #f8f9fa; /* Match header background */
+		color: #495057; /* Match header text color */
+		font-weight: 600;
+		border-right: 1px solid #dee2e6; /* Distinct border for these row headers */
 	}
 
 	.aciklama-hucresi {
-		/* max-width: 400px; */ /* Opsiyonel: Hücreye maksimum bir genişlik de atayabilirsiniz */
 		overflow-wrap: break-word;
 		white-space: normal;
 		word-break: break-all;
+		min-width: 300px; /* Ensure description cell has some minimum width */
 	}
-</style>
 
-<div class="card-header border-0">
-	<h3 class="mb-0">İş Raporu</h3>
-</div>
-<br />
-
-<div class="table-responsive">
-	<table class="table table-bordered">
-		<tbody>
-			<tr>
-				<th scope="row">ID</th>
-				<td>@Model.workInfo.id</td>
-			</tr>
-			<tr>
-				<th scope="row">İş Emri ID</th>
-				<td>@Model.workInfo.workOrderId</td>
-			</tr>
-			<tr>
-				<th scope="row">Makine</th>
-				<td>@(Model.workInfo?.machine?.name ?? "Makine bilgisi yok.") </td>
-			</tr>
-			<tr>
-				<th scope="row">Makine Parçası</th>
-				<td>@(Model.workInfo?.machinePart?.name ?? "Makine parçası bilgisi yok.")</td>
-			</tr>
-			<tr>
-				<th scope="row">İşi Alan</th>
-				<td>@(Model.workInfo.userI?.UserName ?? "İşi alan kaydı silindi")</td>
-			</tr>
-			<tr>
-				<th scope="row">Rapor Başlığı</th>
-				<td>@Model.workInfo.title</td>
-			</tr>
-			<tr>
-				<th scope="row"> Rapor Açıklama</th>
-				<td class="aciklama-hucresi">@Model.workInfo.desc</td>
-			</tr>
-			<tr>
-				<th scope="row">İş emri başlangıç tarihi</th>
-				<td>@(Model.workInfo?.workOrderStartDate?.ToString("dd-MM-yyyy HH:mm:ss") ?? "Başlangıç tarihi bilgisi yok.")</td>
-			</tr>
-			<tr>
-				<th scope="row">İş emri tamamlama tarihi</th>
-				<td>@(Model.workInfo?.workOrderEndDate?.ToString("dd-MM-yyyy HH:mm:ss") ?? "Tamamlama tarihi bilgisi yok.")</td>
-			</tr>
-
-			<tr>
-				<th scope="row">Çekilen Resimler</th>
-				<td>
-					@if (Model.collection != null && Model.collection.Count > 0)
-					{
-						<h5>İş Fotoğrafları</h5>
-						@foreach (var i in Model.collection)
-						{
-							<a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="changeModalImage('@i')">
-								<img src="@i" alt="Arıza Fotoğrafı" class="thumbnail-img m-2" onclick="openImage('@i')" />
-							</a>
-						}
-					}
-
-				</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-
-<div class="d-flex justify-content-center mt-3">
-	@* <a href="/Work/EditWork/@Model.workInfo.id" class="btn btn-outline-warning mx-2">Düzenle</a> *@
-	<a href="/Work/DeleteWork/@Model.workInfo.id" class="btn btn-outline-danger mx-2">Sil</a>
-</div>
-
-
-
-<!-- Bootstrap Modal -->
-<div id="lightbox" class="lightbox" onclick="closeImage()">
-	<img id="lightbox-img" class="lightbox-img" src="" alt="Büyütülmüş Fotoğraf">
-</div>
-
-<style>
-	/* Küçük resimlerin görünümü */
 	.thumbnail-img {
-		width: 150px !important;
-		height: 150px !important;
+		width: 100px !important; /* Smaller thumbnails */
+		height: 100px !important;
 		object-fit: cover;
 		cursor: pointer;
-		border-radius: 10px;
-		transition: transform 0.3s ease;
+		border-radius: 13% !important; /* Rounded corners for images */
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+		border: 2px solid #e9ecef;
 	}
 
 		.thumbnail-img:hover {
 			transform: scale(1.05);
+			box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 		}
 
-	/* Lightbox için tam ekran efekti */
+	/* Lightbox styles remain the same, but ensure they work with the new table */
 	.lightbox {
 		position: fixed;
 		top: 0;
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background: rgba(0, 0, 0, 0.8);
+		background: rgba(0, 0, 0, 0.85); /* Slightly darker lightbox background */
 		display: none;
 		justify-content: center;
 		align-items: center;
-		z-index: 9999;
+		z-index: 10000; /* Ensure it's on top */
 		animation: fadeIn 0.3s ease;
 	}
 
 	.lightbox-img {
 		max-width: 90%;
 		max-height: 90%;
-		border-radius: 10px;
-		box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
+		border-radius: 8px;
+		box-shadow: 0px 0px 25px rgba(255, 255, 255, 0.3);
 		animation: zoomIn 0.3s ease;
 	}
 
-	/* Açılma animasyonu */
 	@@keyframes zoomIn {
 		from {
-			transform: scale(0.5);
+			transform: scale(0.7);
 			opacity: 0;
 		}
 
@@ -181,6 +119,88 @@
 		}
 	}
 </style>
+
+<div class="card-header border-0">
+	<h3 class="mb-0">İş Raporu Detayları</h3>
+</div>
+<br />
+
+<div class="table-container">
+	<div class="table-responsive">
+		<table class="table table-bordered">
+			<tbody>
+				<tr>
+					<th scope="row">ID</th>
+					<td>@Model.workInfo.id</td>
+				</tr>
+				<tr>
+					<th scope="row">İş Emri ID</th>
+					<td>@Model.workInfo.workOrderId</td>
+				</tr>
+				<tr>
+					<th scope="row">Makine</th>
+					<td>@(Model.workInfo?.machine?.name ?? "Makine bilgisi yok.") </td>
+				</tr>
+				<tr>
+					<th scope="row">Makine Parçası</th>
+					<td>@(Model.workInfo?.machinePart?.name ?? "Makine parçası bilgisi yok.")</td>
+				</tr>
+				<tr>
+					<th scope="row">İşi Alan</th>
+					<td>@(Model.workInfo.userI?.UserName ?? "İşi alan kaydı silindi")</td>
+				</tr>
+				<tr>
+					<th scope="row">Rapor Başlığı</th>
+					<td>@Model.workInfo.title</td>
+				</tr>
+				<tr>
+					<th scope="row"> Rapor Açıklama</th>
+					<td class="aciklama-hucresi">@Model.workInfo.desc</td>
+				</tr>
+				<tr>
+					<th scope="row">İş emri başlangıç tarihi</th>
+					<td>@(Model.workInfo?.workOrderStartDate?.ToString("dd-MM-yyyy HH:mm:ss") ?? "Başlangıç tarihi bilgisi yok.")</td>
+				</tr>
+				<tr>
+					<th scope="row">İş emri tamamlama tarihi</th>
+					<td>@(Model.workInfo?.workOrderEndDate?.ToString("dd-MM-yyyy HH:mm:ss") ?? "Tamamlama tarihi bilgisi yok.")</td>
+				</tr>
+
+				<tr>
+					<th scope="row">Çekilen Resimler</th>
+					<td>
+						@if (Model.collection != null && Model.collection.Count > 0)
+						{
+							<h5>İş Fotoğrafları</h5>
+							@foreach (var i in Model.collection)
+							{
+								<a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="changeModalImage('@i')">
+									<img src="@i" alt="Arıza Fotoğrafı" class="thumbnail-img m-2" onclick="openImage('@i')" />
+								</a>
+							}
+						}
+
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="d-flex justify-content-center mt-3 mb-3">
+	@* <a href="/Work/EditWork/@Model.workInfo.id" class="btn btn-outline-warning mx-2">Düzenle</a> *@
+	<a href="/Work/DeleteWork/@Model.workInfo.id" class="btn btn-outline-danger mx-2">Sil</a>
+	<a href="/Report/WorkReportss" class="btn btn-outline-danger">
+		<i class="mdi mdi-keyboard-backspace"></i> Geri Dön
+	</a>
+</div>
+
+
+
+<!-- Bootstrap Modal -->
+<div id="lightbox" class="lightbox" onclick="closeImage()">
+	<img id="lightbox-img" class="lightbox-img" src="" alt="Büyütülmüş Fotoğraf">
+</div>
 
 <script>
 	function openImage(imageSrc) {

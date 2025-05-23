@@ -254,6 +254,28 @@
 								</a>
 							</th>
 							<th scope="col" class="sort" data-sort="name">
+								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,userId = ViewBag.SelectedUserId,sortBy="userId",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "userId" ? "desc" : "asc"})" style="color:#ffffff !important">
+									Personel
+									@if (Context.Request.Query["sortBy"] == "userId")
+									{
+										@if (Context.Request.Query["sortOrder"] == "asc")
+										{
+											<i class="mdi mdi-arrow-up"></i>
+										}
+										else
+										{
+											<i class="mdi mdi-arrow-down"></i>
+										}
+									}
+									else
+									{
+										<i class="mdi mdi-color-helper"></i>
+									}
+								</a>
+
+
+							</th>
+							<th scope="col" class="sort" data-sort="name">
 								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,userId = ViewBag.SelectedUserId,sortBy="isClosed",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "isClosed" ? "desc" : "asc"})" style="color:#ffffff !important">
 									İş emri sonlandı mı
 									@if (Context.Request.Query["sortBy"] == "isClosed")
@@ -274,10 +296,11 @@
 								</a>
 								
 								
-								</th>
+							</th>
+							
 							<!--<th scope="col">İş Emri Raporu</th>-->
-							<th scope="col">Düzenle</th>
-							<th scope="col">Sil</th>
+							<th scope="col">İşlemler</th>
+							
 						</tr>
 					</thead>
 					@* *** DEĞİŞİKLİK: tbody'ye ID ekleyebilir veya class'ı kullanabiliriz. Class'ı kullanalım. *** *@
@@ -321,14 +344,25 @@
 										</div>
 									</div>
 								</td>
+								<td scope="row">
+									<div class="media align-items-center">
+										<div class="media-body">
+											<span class="name mb-0 text-sm">
+												@(item.userI?.UserName?? "Personel belirtilmedi" )
+											</span>
+										</div>
+									</div>
+								</td>
 								<th scope="row" style="text-align: center; vertical-align: middle;">
 									<span class="badge @((item.isClosed) ? "bg-success" : "bg-danger")">
-										@((item.isClosed) ? "Evet" : "Hayır")
+										@((item.isClosed) ? "Tamamlandı" : "Tamamlanmadı")
 									</span>
 								</th>
 								<!--	<td><a href="/Work/WorkReports/@item.id" class="btn btn-outline-primary">İş Emri Raporları</a></td>-->
-								<td><a href="/Work/EditWorkOrder/@item.id" class="btn btn-outline-success">Düzenle</a></td>
-								<td><a href="/Work/RemoveWorkOrder/@item.id" class="btn btn-outline-warning">Sil</a></td>
+								<td><a href="/Work/EditWorkOrder/@item.id" class="btn btn-outline-success">Düzenle</a>
+									<a href="/Work/RemoveWorkOrder/@item.id" class="btn btn-outline-warning">Sil</a>
+								</td>
+								
 							</tr>
 						}
 					</tbody>

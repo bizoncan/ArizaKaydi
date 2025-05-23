@@ -29,12 +29,23 @@ namespace ArizaKaydi.Controllers
             MachinePartViewModel model = new MachinePartViewModel();
             model.machines = machineManager.TGetList();
             model.selectedMachineId = selectedMachineId;
+            List<int> workCount = new List<int>();
 			if (model.selectedMachineId != null)
             {
-                model.machineParts  = _context.MachineParts.Where(x => x.machineId == model.selectedMachineId)
+                var machinePartList  = _context.MachineParts.Where(x => x.machineId == model.selectedMachineId)
 					.ToList();
+                foreach(machinePart m in machinePartList)
+				{
+                    workCount.Add(_context.Works.Where(e => e.machinePartId == m.Id).Count());
+				}
+                model.machineParts = machinePartList.Select((x, index) => new MachinePartWorkCountViewModel
+				{
+					machinePart = machinePartList[index],
+					workCount = workCount[index]
+				}).ToList();
 			}
-            return View(model);
+            
+			return View(model);
         }
         [HttpGet]
         public IActionResult AddMachine()

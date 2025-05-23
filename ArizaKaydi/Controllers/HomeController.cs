@@ -23,7 +23,7 @@ namespace ArizaKaydi.Controllers
         {
             ViewBag.WorkOrderCount = _context.WorkOrders.Where(e=> e.isClosed != true).Count();
             ViewBag.UserCount = _context.mobileUsers.Count();
-            ViewBag.ReportCount = _context.WorkOrders.Count();
+            ViewBag.ReportCount = _context.Works.Count();
             var worksF = _context.WorkOrders.Where(e=>e.isClosed==true).ToList();
             double totalTime = 0.0;
 			foreach (var item in worksF)
@@ -33,7 +33,7 @@ namespace ArizaKaydi.Controllers
 
 			}
 
-            ViewBag.MeanFinish = totalTime / worksF.Count();
+            ViewBag.MeanFinish = Math.Round(totalTime / worksF.Count(), 1);
 			/*var totalPairTime = 0.0;
             foreach(var item in _context.Errors.ToList())
             {
@@ -43,7 +43,13 @@ namespace ArizaKaydi.Controllers
 				}
 			}
             ViewBag.MTTR = totalPairTime / _context.Errors.Count();*/
-			var m = _context.WorkOrders.Include(x=>x.machine).Include(x=>x.machinePart).Include(x=> x.userI).ToList();
+			var m = _context.WorkOrders
+	.Include(x => x.machine)
+	.Include(x => x.machinePart)
+	.Include(x => x.userI)
+	.OrderByDescending(x => x.workOrderStartDate)
+    .Take(8)
+	.ToList();
 			return View(m);
         }
 

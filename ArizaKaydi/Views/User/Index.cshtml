@@ -1,5 +1,5 @@
 ﻿@using EntityLayer.Concrete
-@model List<user>
+@model List<MobileUserViewModel>
 @{
 
 	Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,24 +16,33 @@
 						<tr>
 							<th scope="col" class="sort">#</th>
 							<th scope="col" class="sort" data-sort="name">Kullanıcı Adı</th>
-							<th scope="col">Düzenle</th>
-							<th scope="col">Sil</th>
+							<th scope="col">Tamamlanan İş Emri</th>
+							<th scope="col">İşlemler</th>
 						</tr>
 					</thead>
 					<tbody class="list">
 						@foreach (var item in Model)
 						{
 							<tr>
-								<td>@item.Id</td>
+								<td>@item.mobileUser.Id</td>
 								<td scope="row">
 									<div class="media align-items-center">
 										<div class="media-body">
-											<span class="name mb-0 text-sm">@item.UserName</span>
+											<span class="name mb-0 text-sm">@item.mobileUser.UserName</span>
 										</div>
 									</div>
 								</td>
-								<td><a href="/User/EditUser/@item.Id" class="btn btn-outline-success">Düzenle</a></td>
-								<td><a href="/User/RemoveUser/@item.Id" class="btn btn-outline-warning">Sil</a></td>
+								<td>
+									<div class="media align-items-center">
+										<div class="media-body">
+											<span class="name mb-0 text-sm">@item.workCount</span>
+										</div>
+									</div>
+								</td>
+								<td>
+									<a href="/User/EditUser/@item.mobileUser.Id" class="btn btn-outline-success">Düzenle</a>
+									<a href="/User/RemoveUser/@item.mobileUser.Id" class="btn btn-outline-warning">Sil</a>
+								</td>
 							</tr>
 						}
 					</tbody>

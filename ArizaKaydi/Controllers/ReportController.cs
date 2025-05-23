@@ -33,7 +33,7 @@ namespace ArizaKaydi.Controllers
 		}
 		public IActionResult WorkReportss(DateTime? startDate = null, DateTime? endDate = null, int? machineId = null, int? machinePartId = null, string? sortBy=null, string? sortOrder=null, int? userId=null)
 		{
-			var values = _context.Works.Include(x => x.machine).ToList();
+			var values = _context.Works.Include(x => x.machine).Include(x=>x.userI).ToList();
 			ViewBag.Machines = _context.Machines.ToList(); // Makine dropdown'ı için tüm makineler
 			List<machinePart> partsForViewBag = new List<machinePart>();
 			ViewBag.MobileUsers = _context.mobileUsers.ToList();
@@ -125,7 +125,9 @@ namespace ArizaKaydi.Controllers
 				case "isClosed":
 					values = sortOrder == "desc" ? values.OrderByDescending(x => x.isClosed).ToList() : values.OrderBy(x => x.isClosed).ToList();
 					break;
-
+				case "userId":
+					values = sortOrder == "desc" ? values.OrderByDescending(x => x.userId).ToList() : values.OrderBy(x => x.userId).ToList();
+					break;
 			}
 			return View(values);
 		}

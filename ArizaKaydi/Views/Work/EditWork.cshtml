@@ -1,40 +1,51 @@
-﻿@model EntityLayer.Concrete.workOrder
+﻿@model EntityLayer.Concrete.work
+@using System.Text.Json
+
 @{
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<style>
-	.description-textarea {
-		min-height: 150px;
-		resize: vertical;
-		font-size: 14px;
-		line-height: 1.5;
-		padding: 10px;
-		width: 100%;
-		color: #333 !important;
-		border: 1px solid #dc3545;
-		border-radius: 0.75rem;
-	}
-
-		.description-textarea:focus {
-			border-color: #dc3545;
-			box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.25);
-			outline: none;
+<head>
+	<style>
+		.form-check-input ms-2 {
+			accent-color: red; /* Checkbox rengini kırmızı yapar */
 		}
-</style>
 
+		.description-textarea {
+			min-height: 150px;
+			resize: vertical;
+			font-size: 14px;
+			line-height: 1.5;
+			padding: 10px;
+			width: 100%;
+			color: #333 !important;
+			border: 1px solid #dc3545;
+			border-radius: 0.75rem;
+		}
+
+			.description-textarea:focus {
+				border-color: #dc3545;
+				box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.25);
+				outline: none;
+			}
+	</style>
+</head>
 <div class="card-header border-0">
-	<h3 class="mb-0">İş Emri Ekle</h3>
+	<h3 class="mb-0">İş Emri Düzenleme</h3>
 </div>
 <br />
-@using (Html.BeginForm("AddWorkOrder", "Work", FormMethod.Post))
+@using (Html.BeginForm("EditWork", "Work", FormMethod.Post))
 {
 	@Html.AntiForgeryToken()
 	<div class="col-12 grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
-				<h4 class="card-title">İş Emri Ekleme</h4>
+				<h4 class="card-title">İş Emri Düzenleme</h4>
 				<p class="card-description"></p>
+				<div class="form-group">
+					<label class="custom-label">ID</label>
+					<p class="form-control-static">@Model.id</p>
+					@Html.HiddenFor(x => x.id)
+				</div>
 
 				@Html.Label("machineId", "Makine ID", htmlAttributes: new { @class = "custom-label" })
 				@Html.DropDownListFor(x => x.machineId, ViewBag.MachineList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg select2", id = "machineDropdown" })
@@ -46,31 +57,31 @@
 				<br />
 				@Html.Label("userId", "Atanacak Kullanıcı Seç", htmlAttributes: new { @class = "custom-label" })
 				@Html.DropDownListFor(x => x.userId, ViewBag.UserList as List<SelectListItem>, "Seçiniz", new { @class = "form-control custom-input-bg select2", id = "userDropdown" })
-				@Html.ValidationMessageFor(x => x.userId, "", new { @class = "text-danger" })
 				<br />
-				@Html.Label("title", "İş başlığı", htmlAttributes: new { @class = "custom-label" })
+				@Html.Label("title", "Rapor Başlık", htmlAttributes: new { @class = "custom-label" })
 				@Html.TextBoxFor(x => x.title, new { @class = "form-control custom-input-bg" })
-				@Html.ValidationMessageFor(x => x.title, "", new { @class = "text-danger" })
 				<br />
-				@Html.Label("desc", "İş açıklama", htmlAttributes: new { @class = "custom-label" })
+
+				@Html.Label("desc", "Rapor Açıklama", htmlAttributes: new { @class = "custom-label" })
 				@Html.TextAreaFor(x => x.desc, new { @class = "form-control description-textarea", rows = "5", style = "width: 100%;" })
-				@Html.ValidationMessageFor(x => x.desc, "", new { @class = "text-danger" })
+				
 				<br />
 				<br />
-				<div class="from-group">
-					<button class="btn btn-success"> <i class="mdi mdi-content-save"></i>Ekle</button>
+				<div class="form-group">
+					<button class="btn btn btn-success"> <i class="mdi mdi-content-save"></i>Güncelle</button>
 					<a href="/Work/Index" class="btn btn-outline-danger">
 						<i class="mdi mdi-close"></i> İptal
 					</a>
 				</div>
+
 			</div>
 		</div>
 	</div>
 }
 @section Scripts {
 	<script>
+
 		$(document).ready(function () {
-			console.log("aaaaaaaaaaaaa");
 			$('.select2').select2({
 				theme: 'bootstrap4',
 				width: '100%',
@@ -84,14 +95,14 @@
 					}
 				}
 			});
+			// AJAX ile parça verisi alma
 			$('#machineDropdown').on('change', function () {
-				console.log("Dropdown changed to: " + $(this).val());
 				var machineId = $(this).val();
 				$('#partDropdown').empty().append('<option value="">Yükleniyor...</option>');
 
 				if (machineId) {
 					$.ajax({
-						url: '@Url.Action("GetMachineParts", "Work")',
+						url: '/Work/GetMachineParts',
 						type: 'GET',
 						data: { machineId: machineId },
 						success: function (data) {
@@ -100,8 +111,7 @@
 								$('#partDropdown').append('<option value="' + item.value + '">' + item.text + '</option>');
 							});
 						},
-						error: function (xhr, status, error) {
-							console.error("AJAX Hatası: " + error);
+						error: function () {
 							$('#partDropdown').empty().append('<option value="">Parça listesi yüklenemedi.</option>');
 						}
 					});
@@ -109,13 +119,38 @@
 					$('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
 				}
 			});
+
+			// Mevcut makine ve parça bilgilerini yükle
+			var selectedMachineId = $('#machineDropdown').val();
+			var selectedPartId = @Json.Serialize(Model.machinePartId);
+
+			if (selectedMachineId) {
+				$.ajax({
+					url: '/Work/GetMachineParts',
+					type: 'GET',
+					data: { machineId: selectedMachineId },
+					success: function (data) {
+						$('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+						$.each(data, function (i, item) {
+							var selected = (item.value == selectedPartId) ? 'selected' : '';
+							$('#partDropdown').append('<option value="' + item.value + '" ' + selected + '>' + item.text + '</option>');
+						});
+					},
+					error: function () {
+						$('#partDropdown').empty().append('<option value="">Parça listesi yüklenemedi.</option>');
+					}
+				});
+			} else {
+				$('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
+			}
+
+			// Güncelle butonuna tıklandığında kontrol
+			$('form').on('submit', function (e) {
+				if ($('#userDropdown').val() == '' && $('#isOpenedCheckbox').is(':checked')) {
+					alert('İş bir kullanıcıya atanmadan iş alındı şeklinde işaretlenemez..');
+					e.preventDefault();
+				}
+			});
 		});
 	</script>
 }
-
-
-
-
-
-
-

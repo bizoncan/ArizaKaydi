@@ -23,7 +23,7 @@
 	<link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/css/style.css">
 	<!-- End layout styles -->
 	<link rel="shortcut icon" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/favicon.png" />
-	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+	<link href="~/css/select2.min.css" rel="stylesheet" />
 
 	
 	<style>
@@ -713,12 +713,12 @@
 
 					<ul class="navbar-nav navbar-nav-right">
 						<li class="nav-item dropdown border-left">
-							<a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+							<a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown" data-target="#notificationDropdownMenu">
 								<i class="mdi mdi-bell"></i>
 								<span class="count bg-danger"></span>
 							</a>
-							<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-								<h6 class="p-3 mb-0">Notifications</h6>
+							<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" id="notificationDropdownMenu" aria-labelledby="notificationDropdown">
+								<h6 class="p-3 mb-0">Bildirimler</h6>
 								<div class="dropdown-divider"></div>
 								@await Component.InvokeAsync("NotificationList")
 
@@ -769,8 +769,8 @@
 	<!-- endinject -->
 	<!-- Custom js for this page -->
 	<script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/dashboard.js"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@* 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
+	<script src="~/js/select2.min.js"></script>
 	<!-- End custom js for this page -->
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {

@@ -94,6 +94,15 @@ namespace ArizaKayitApi.Controllers
             _machineManager.TRemove(machine);
             return NoContent();
         }
+        [HttpGet("GetMachineWithParts")]
+        public IActionResult GetMachineWithParts()
+        {
+			var machines = _context.Machines.ToList();
+            var machineParts = _context.MachineParts.ToList();
+
+
+			return Ok(new { machineModels = machines, machinePartModels= machineParts });
+        }
     }
 }
 
