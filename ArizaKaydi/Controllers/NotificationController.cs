@@ -2,12 +2,14 @@
 using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArizaKaydi.Controllers
 {
+	[Authorize(Policy = "BasicModeratorViewPermission")]
 	public class NotificationController : Controller
 	{
 		context _context;

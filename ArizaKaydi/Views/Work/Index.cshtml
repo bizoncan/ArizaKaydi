@@ -62,7 +62,7 @@
 										{
 											<option value="@part.id" selected>@part.name</option>
 										}
-										
+
 										else
 										{
 											<option value="@part.id">@part.name</option>
@@ -76,7 +76,7 @@
 								<label for="machinePartId">Makine Parçası</label>
 								<select id="machinePartId" name="machinePartId" class="form-control select2" @(!isMachineSelectedInitially ? "disabled" : "")>
 									<option value="">Tümü</option>
-									
+
 									@if (ViewBag.SelectedMachinePartId == 0)
 									{
 										<option value="0" selected>Makine Parçası Bilgisi Yok</option>
@@ -107,18 +107,18 @@
 								<label for="userId">Personel</label>
 								<select id="userId" name="userId" class="form-control select2" )>
 									<option value="">Tümü</option>
-									
-										@foreach (var user in (List<user>)ViewBag.MobileUsers)
-										{
+
+									@foreach (var user in (List<user>)ViewBag.MobileUsers)
+									{
 										if (ViewBag.SelectedUserId != null && (int)ViewBag.SelectedUserId == user.Id)
-											{
+										{
 											<option value="@user.Id" selected>@user.UserName</option>
-											}
-											else
-											{
+										}
+										else
+										{
 											<option value="@user.Id">@user.UserName</option>
-											}
-										
+										}
+
 									}
 								</select>
 							</div>
@@ -172,7 +172,7 @@
 					<thead class="thead-dark">
 						<tr>
 							@* Başlıklar (değişiklik yok) *@
-							<th scope="col" class="sort">
+							@* <th scope="col" class="sort">
 								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,userId = ViewBag.SelectedUserId,sortBy="id",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "id" ? "desc" : "asc"} )" style="color:#ffffff !important">
 									#
 									@if (Context.Request.Query["sortBy"] == "id")
@@ -191,7 +191,7 @@
 										<i class="mdi mdi-color-helper"></i>
 									}
 								</a>
-							</th>
+							</th> *@
 							<th scope="col" class="sort" data-sort="name">İş Emri</th>
 							<th scope="col" class="sort" data-sort="name">
 								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,userId = ViewBag.SelectedUserId,sortBy="start",sortOrder= Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "start" ? "desc" : "asc"})" style="color:#ffffff !important">
@@ -294,13 +294,13 @@
 										<i class="mdi mdi-color-helper"></i>
 									}
 								</a>
-								
-								
+
+
 							</th>
-							
+
 							<!--<th scope="col">İş Emri Raporu</th>-->
 							<th scope="col">İşlemler</th>
-							
+
 						</tr>
 					</thead>
 					@* *** DEĞİŞİKLİK: tbody'ye ID ekleyebilir veya class'ı kullanabiliriz. Class'ı kullanalım. *** *@
@@ -309,7 +309,7 @@
 						{
 							@* *** DEĞİŞİKLİK: Her satıra data-id attribute'u ekliyoruz *** *@
 							<tr data-id="@item.id">
-								<td>@item.id</td>
+								@*<td>@item.id</td>*@
 								<td scope="row">
 									<div class="media align-items-center">
 										<div class="media-body">
@@ -348,7 +348,7 @@
 									<div class="media align-items-center">
 										<div class="media-body">
 											<span class="name mb-0 text-sm">
-												@(item.userI?.UserName?? "Personel belirtilmedi" )
+												@(item.userI?.UserName ?? "Personel belirtilmedi")
 											</span>
 										</div>
 									</div>
@@ -359,14 +359,17 @@
 									</span>
 								</th>
 								<!--	<td><a href="/Work/WorkReports/@item.id" class="btn btn-outline-primary">İş Emri Raporları</a></td>-->
-								<td><a href="/Work/EditWorkOrder/@item.id" class="btn btn-outline-success">Düzenle</a>
+								<td>
+									<a href="/Work/EditWorkOrder/@item.id" class="btn btn-outline-success">Düzenle</a>
 									<a href="/Work/RemoveWorkOrder/@item.id" class="btn btn-outline-warning">Sil</a>
 								</td>
-								
+
 							</tr>
 						}
 					</tbody>
 				</table>
+			</div>
+			<div class="card-footer">
 			</div>
 		</div>
 	</div>

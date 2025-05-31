@@ -8,9 +8,11 @@ using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using ArizaKaydi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 namespace ArizaKaydi.Controllers
 {
-    public class ErrorsController : Controller
+	[Authorize(Policy = "BasicModeratorViewPermission")]
+	public class ErrorsController : Controller
     {
         ErrorManager errorManager;
         ImageCollectionManager imageCollectionManager;

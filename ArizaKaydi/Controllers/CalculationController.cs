@@ -2,10 +2,12 @@
 using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArizaKaydi.Controllers
 {
+	[Authorize(Policy = "BasicModeratorViewPermission")]
 	public class CalculationController : Controller
 	{
 		context _context;

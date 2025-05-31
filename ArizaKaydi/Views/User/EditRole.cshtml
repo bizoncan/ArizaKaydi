@@ -1,0 +1,117 @@
+﻿@using System.Web
+@model ArizaKaydi.Models.ClaimsViewModel
+@{
+	ViewData["Title"] = "Rol Özelliklerini Düzenle";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card-header border-0">
+	<h3 class="mb-0">'@Model.UserRole' Rolünün Özelliklerini Düzenle</h3>
+</div>
+<br />
+<div class="row">
+	<div class="col-12">
+		<div class="card" style="box-shadow: 0 0.5rem 1rem 5px rgba(220,53,69,0.15) !important;">
+			<div class="card-header">
+				<h3 class="mb-0">Yeni İzin Ekle</h3>
+			</div>
+			<div class="card-body">
+				<form id="editRole" method="post" asp-action="EditRole">
+					<div class="mb-3">
+						<input type="hidden" name="id" value="@Model.UserRole.Id" />
+						<label class="custom-label">Rol Adı</label>
+						<input type="text" name="roleName" value="@Model.UserRole.Name" class="form-control custom-input-bg" />
+						@Html.Label("per", "Eklencek İzni Seçiniz", htmlAttributes: new { @class = "custom-label" })
+						<select name="per" id="per" class="form-control custom-input-bg select2" style="border: 1px solid #dc3545 !important;">
+							<option value=" " selected> - </option>
+							<option value="CanEditPanelUserManagement"> Panel Kullanıcı Yönetimi Düzenleme İzni </option>
+							<option value="CanViewPanelUserManagement">Panel Kullanıcı Yönetimi Görüntüleme İzni</option>
+							<option value="CanEditMobileUserManagement"> Mobil Kullanıcı Yönetimi Düzenleme İzni </option>
+							<option value="CanViewMobileUserManagement"> Mobil Kullanıcı Yönetimi Görüntüleme İzni </option>
+							<option value="BasicModeratorViewPermission"> Admin Paneli Görüntüleme </option>
+							<option value="BasicModeratorEditPermission"> Admin Paneli Düzenleme </option>
+
+						</select>
+						<br />
+
+					</div>
+					<button type="submit" class="btn btn-primary" onclick="return confirm('Yaptığınız değişiklikler sonucu tekrar giriş yapmanız gerekebilir.');">Değişiklikleri Kaydet</button>
+					<a href="/User/AddNewRole" class="btn btn-outline-danger">
+						<i class="mdi mdi-keyboard-backspace"></i> Geri
+					</a>
+					<br />
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<br />
+<div class="row">
+	<div class="col">
+		<div class="card bg-default shadow">
+			<div class="card-header bg-transparent border-0">
+				<h3 class="text-white mb-0">Tüm İzinler</h3>
+			</div>
+			<div class="table-responsive">
+				<table class="table align-items-center table-dark table-flush">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col" class="sort">İzin Adı</th>
+							<th scope="col">İzni Kaldır</th>
+						</tr>
+					</thead>
+					<tbody class="list">
+						@for (int i = 0; i < Model.ClaimType.Count; i++)
+						{
+							<tr>
+								<td scope="row">
+									<div class="media align-items-center">
+										<div class="media-body">
+											<span class="name mb-0 text-sm">@Model.ClaimDisplayName[i]</span>
+										</div>
+									</div>
+								</td>
+								<td>
+									<form asp-action="RemoveClaim"
+										  asp-controller="User"
+										  method="post"
+										  style="display:inline;">
+										<input type="hidden" name="id" value="@Model.UserRole.Id" />
+										<input type="hidden" name="claimValue" value="@Model.ClaimValue[i]" />
+										<button type="submit" class="btn btn-outline-warning" onclick="return confirm('Yaptığınız değişiklikler sonucu tekrar giriş yapmanız gerekebilir.');">İzni Kaldır</button>
+									</form>
+								</td>
+
+							</tr>
+						}
+					</tbody>
+				</table>
+				<div class="card-footer">
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			console.log("aaaaaaaaaaaaa");
+			$('.select2').select2({
+				theme: 'bootstrap4',
+				width: '100%',
+				dropdownParent: $('#editRole'),
+				placeholder: 'Seçiniz...',
+				allowClear: true,
+				minimumResultsForSearch: Infinity,
+				language: {
+					noResults: function() {
+						return "Sonuç bulunamadı";
+					}
+				}
+			});
+		});
+	</script>
+}

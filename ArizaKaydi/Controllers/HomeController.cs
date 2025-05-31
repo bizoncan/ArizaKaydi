@@ -47,6 +47,7 @@ namespace ArizaKaydi.Controllers
 	.Include(x => x.machine)
 	.Include(x => x.machinePart)
 	.Include(x => x.userI)
+    .Where(x => x.workOrderStartDate != null && x.workOrderStartDate >= DateTime.Now.AddDays(-7))
 	.OrderByDescending(x => x.workOrderStartDate)
     .Take(8)
 	.ToList();

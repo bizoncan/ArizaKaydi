@@ -1,3 +1,4 @@
+using ArizaKaydi;
 using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using DataAccessLayer.Abstract;
@@ -61,6 +62,31 @@ builder.Services.ConfigureApplicationCookie(options =>
 	options.LogoutPath = "/Login/Logout";
 	options.AccessDeniedPath = "/ErrorPage/AccessDenied";
 	options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+	options.Events.OnValidatePrincipal = SecurityStampValidator.ValidatePrincipalAsync;
+});
+builder.Services.AddAuthorization(options =>
+{
+	// Sadece "UserManagement.View" Claim'ine sahip olanlarýn eriþebileceði bir politika
+	options.AddPolicy("CanEditMobileUserManagement", policy =>
+		policy.RequireClaim("Permission", "MobileUserManagement.Edit"));
+	options.AddPolicy("CanViewMobileUserManagement", policy =>
+		policy.RequireClaim("Permission", "MobileUserManagement.View"));
+	// Hem "UserManagement.View" hem de "UserManagement.Edit" Claim'lerine sahip olanlar
+	options.AddPolicy("CanEditPanelUserManagement", policy =>
+		policy.RequireClaim("Permission", "PanelUserManagement.Edit"));
+	options.AddPolicy("CanViewPanelUserManagement", policy =>
+		policy.RequireClaim("Permission", "PanelUserManagement.View"));
+	options.AddPolicy("BasicModeratorEditPermission", policy =>
+		policy.RequireClaim("Permission", "BasicModerator.Edit"));
+	options.AddPolicy("BasicModeratorViewPermission", policy =>
+		policy.RequireClaim("Permission", "BasicModerator.View"));
+
+
+});
+builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+{
+	// This will check the security stamp every 30 seconds
+	options.ValidationInterval = TimeSpan.FromMinutes(10);
 });
 
 
@@ -84,6 +110,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseAuthentication();
+app.UseMiddleware<DynamicClaimsMiddleware>();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -4,12 +4,14 @@ using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using DocumentFormat.OpenXml.Spreadsheet;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArizaKaydi.Controllers
 {
+	[Authorize(Policy = "BasicModeratorViewPermission")]
 	public class ReportController : Controller
 	{
 		WorkManager workManager;

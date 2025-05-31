@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ArizaKaydi.Controllers
 {
+	[Authorize(Policy = "BasicModeratorViewPermission")]
 	public class WorkController : Controller
 	{
 		WorkManager workManager;
@@ -152,6 +154,7 @@ namespace ArizaKaydi.Controllers
 			}
 			return View(values); // Filtrelenmiş iş emirlerini View'a gönder
 		}
+		[Authorize(Policy = "BasicModeratorEditPermission")]
 		public IActionResult RemoveWorkOrder(int id)
 		{
 			var workOrder = workOrderManager.TGetById(id);
@@ -162,6 +165,7 @@ namespace ArizaKaydi.Controllers
 			}
 			return NotFound();
 		}
+		[Authorize(Policy = "BasicModeratorEditPermission")]
 		public IActionResult DeleteWork(int id)
 		{
 			var workk = workManager.TGetById(id);
@@ -176,6 +180,7 @@ namespace ArizaKaydi.Controllers
 			}
 			return NotFound();
 		}
+		[Authorize(Policy = "BasicModeratorEditPermission")]
 		[HttpGet]
 		public IActionResult AddWorkOrder()
 		{
@@ -193,6 +198,7 @@ namespace ArizaKaydi.Controllers
 			ViewBag.UserList = users;
 			return View();
 		}
+		[Authorize(Policy = "BasicModeratorEditPermission")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public IActionResult AddWorkOrder(workOrder p)
@@ -264,6 +270,7 @@ namespace ArizaKaydi.Controllers
 
 			return Json(parts); // ← Tarayıcıya JSON veri gönder
 		}
+		[Authorize(Policy = "BasicModeratorEditPermission")]
 		public IActionResult EditWorkOrder(int id)
 		{
 
@@ -283,6 +290,7 @@ namespace ArizaKaydi.Controllers
 			var value = workOrderManager.TGetById(id);
 			return View(value);
 		}
+		[Authorize(Policy = "BasicModeratorEditPermission")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public IActionResult EditWorkOrder(workOrder p)
@@ -471,6 +479,7 @@ namespace ArizaKaydi.Controllers
 				return Problem("Excel dosyası oluşturulurken bir hata oluştu. Detaylar için sunucu loglarını kontrol edin.", statusCode: 500);
 			}
 		}
+		[Authorize(Policy = "BasicModeratorEditPermission")]
 		[HttpGet]
 		public IActionResult EditWork(int id)
 		{
@@ -490,6 +499,7 @@ namespace ArizaKaydi.Controllers
 			var value = workManager.TGetById(id);
 			return View(value);
 		}
+		[Authorize(Policy = "BasicModeratorEditPermission")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public IActionResult EditWork(work p)

@@ -96,31 +96,36 @@
 				<h4 class="card-title" style="color:#dc3545 !important">İş emirleri</h4>
 				<div class="table-responsive">
 					<table class="table">
-						<thead style="background-color:#c82333 !important">
+						<thead style="background-color:#DA291C  !important">
 							<tr >
-								<th style ="color:#ffffff"> Kullanıcı adı </th>
-								<th style="color:#ffffff"> İş emri ID </th>
 								<th style="color:#ffffff"> İş emri başlık </th>
+								
+								@* <th style="color:#ffffff"> İş emri ID </th> *@
+								
 								<th style="color:#ffffff"> Makine </th>
 								<th style="color:#ffffff"> Makine Parçası </th>
 								<th style="color:#ffffff"> İş emri başlangıç tarihi</th>
+								<th style="color:#ffffff"> Kullanıcı adı </th>
 								<th style="color:#ffffff"> İş emri durumu </th>
+								
 							</tr>
 						</thead>
 						<tbody>
 							@foreach(var i in Model)
 								{
 							<tr>
-								
+
+									<td style="color:#c82333"> @i.title </td>
+									
+									@* <td style="color:#c82333"> @i.id </td> *@
+									
+									<td style="color:#c82333"> @(i.machine?.name ?? "Makine bilgisi yok") </td>
+									<td style="color:#c82333"> @(i.machinePart?.name ?? "Makine parçası bilgisi yok") </td>
+									<td style="color:#c82333"> @i.workOrderStartDate </td>
 									<td>
 										<!--<img src="assets/images/faces/face1.jpg" alt="image" />-->
 										<span class="pl-2" style="color:#c82333">@(i.userI?.UserName ?? "Kullanıcı bulunamadı")</span>
 									</td>
-									<td style="color:#c82333"> @i.id </td>
-									<td style="color:#c82333"> @i.title </td>
-									<td style="color:#c82333"> @(i.machine?.name ?? "Makine bilgisi yok") </td>
-									<td style="color:#c82333"> @(i.machinePart?.name ?? "Makine parçası bilgisi yok") </td>
-									<td style="color:#c82333"> @i.workOrderStartDate </td>
 									<td>
 										@if (i.isClosed)
 										{
@@ -131,7 +136,7 @@
 											<div class="badge badge-outline-danger">Tamamlanmadı</div>
 										}
 									</td>
-						
+									
 								
                             </tr>
 							}

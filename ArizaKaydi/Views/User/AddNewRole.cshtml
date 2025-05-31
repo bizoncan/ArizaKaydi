@@ -1,0 +1,110 @@
+﻿@using EntityLayer.Concrete;
+@model List<panelUserRole>
+@{
+	ViewData["Title"] = "Yeni Rol Ekle";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card-header border-0">
+	<h3 class="mb-0">Rol İşlemleri</h3>
+</div>
+<br />
+<div class="row">
+	<div class="col-12">
+		<div class="card" style="box-shadow: 0 0.5rem 1rem 5px rgba(220,53,69,0.15) !important;">
+			<div class="card-header">
+				<h3 class="mb-0">Yeni Rol Ekle</h3>
+			</div>
+			
+			<div class="card-body">
+			<form asp-action="AddNewRole" method="post">
+				<div class="form-group">
+					<label for="roleName" class="custom-label">Rol Adı:</label>
+					<input type="text" class="form-control" id="roleName" name="roleName" required />
+				</div>
+				<button type="submit" class="btn btn-primary mt-2">Rol Ekle</button>
+			</form>
+			</div>
+           
+		</div>
+	</div>
+</div>
+<br />
+
+@if (!ViewData.ModelState.IsValid)
+{
+	<div class="alert alert-danger mt-3" role="alert">
+		<h4 class="alert-heading">Hata!</h4>
+		<p>Lütfen aşağıdaki hataları düzeltin:</p>
+		<hr>
+		<ul>
+			@foreach (var modelState in ViewData.ModelState.Values)
+			{
+				foreach (var error in modelState.Errors)
+				{
+					<li>@error.ErrorMessage</li>
+				}
+			}
+		</ul>
+	</div>
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+	<div class="row">
+		<div class="col">
+			<div class="card bg-default shadow">
+				<div class="card-header bg-transparent border-0">
+					<h3 class="text-white mb-0">Tüm Roller</h3>
+				</div>
+				<div class="table-responsive">
+					<table class="table align-items-center table-dark table-flush">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col" class="sort">Rol Adı</th>
+
+								<th scope="col">Rol Sil</th>
+								<th scope="col">Rol Özellikleri</th>
+							</tr>
+						</thead>
+						<tbody class="list">
+							@foreach (var role in Model)
+							{
+								<tr>
+									<td scope="row">
+										<div class="media align-items-center">
+											<div class="media-body">
+												<span class="name mb-0 text-sm">@role.Name</span>
+											</div>
+										</div>
+									</td>
+
+									<td>
+										<form asp-action="DeleteRole" method="post" asp-route-roleName="@role.Name" onsubmit="return confirm('Bu rolü silmek istediğinizden emin misiniz?');">
+											<button type="submit" class="btn btn-outline-warning">Sil</button>
+										</form>
+									</td>
+									<td>
+										<a class="btn btn-outline-success" asp-action="EditRole" asp-route-id="@role.Id">Düzenle</a>
+									</td>
+
+								</tr>
+							}
+						</tbody>
+					</table>
+					<div class="card-footer"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+}
+
+else
+{
+	<p>Sistemde kayıtlı rol bulunmamaktadır.</p>
+}
+<a href="/User/ChoseUserType" class="btn btn-outline-danger">
+	<i class="mdi mdi-keyboard-backspace"></i> Geri
+</a>

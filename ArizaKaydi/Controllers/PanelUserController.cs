@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IO; // Dosya işlemleri için
 using System.Threading.Tasks; // Task için
-using Microsoft.AspNetCore.Hosting; // IWebHostEnvironment için (opsiyonel, dosya yolu için)
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization; // IWebHostEnvironment için (opsiyonel, dosya yolu için)
 
 namespace ArizaKaydi.Controllers
 {
+	[Authorize(Policy = "BasicModeratorViewPermission")]
 	public class PanelUserController : Controller
 	{
 		private readonly UserManager<panelUser> _userManager;

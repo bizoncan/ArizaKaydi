@@ -9,7 +9,7 @@ using System.Reflection.PortableExecutable;
 
 namespace ArizaKaydi.Controllers
 {
-	
+	[Authorize(Policy = "BasicModeratorViewPermission")]
 	public class DefaultController : Controller
     {
         MachineManager machineManager;
@@ -47,12 +47,14 @@ namespace ArizaKaydi.Controllers
             
 			return View(model);
         }
-        [HttpGet]
+		[Authorize(Policy = "BasicModeratorEditPermission")]
+		[HttpGet]
         public IActionResult AddMachine()
         {
             return View();
         }
-        [HttpPost]
+		[Authorize(Policy = "BasicModeratorEditPermission")]
+		[HttpPost]
         public IActionResult AddMachine(machine p)
         {
             machineManager.TAdd(p);
@@ -64,42 +66,49 @@ namespace ArizaKaydi.Controllers
             machineManager.TRemove(value);
             return RedirectToAction("Index");
         }
-        [HttpGet]
+		[Authorize(Policy = "BasicModeratorEditPermission")]
+		[HttpGet]
         public IActionResult EditMachine(int id) 
         {
         var values= machineManager.TGetById(id);    
         return View(values);    
         }
-        [HttpPost]
+		[Authorize(Policy = "BasicModeratorEditPermission")]
+		[HttpPost]
         public IActionResult EditMachine(machine p)
         {
             machineManager.TUpdate(p);
             return RedirectToAction("Index");
         }
-        [HttpGet]
+		[Authorize(Policy = "BasicModeratorEditPermission")]
+		[HttpGet]
         public IActionResult AddMachinePart(int id)
 		{
 			ViewBag.MachineId = id;
 			return View();
 		}
-        [HttpPost]
+		[Authorize(Policy = "BasicModeratorEditPermission")]
+		[HttpPost]
 		public IActionResult AddMachinePart(machinePart p)
         {
 			machinePartManager.TAdd(p);
 			return RedirectToAction("Index", new { selectedMachineId = p.machineId});
 		}
-        public IActionResult RemoveMachinePart(int id)
+		[Authorize(Policy = "BasicModeratorEditPermission")]
+		public IActionResult RemoveMachinePart(int id)
 		{
 			var value = machinePartManager.TGetById(id);
 			machinePartManager.TRemove(value);
 			return RedirectToAction("Index" ,new { selectedMachineId = value.machineId});
 		}
+		[Authorize(Policy = "BasicModeratorEditPermission")]
 		[HttpGet]
 		public IActionResult EditMachinePart(int id)
 		{
 			var values = machinePartManager.TGetById(id);
 			return View(values);
 		}
+		[Authorize(Policy = "BasicModeratorEditPermission")]
 		[HttpPost]
 		public IActionResult EditMachinePart(machinePart p)
 		{

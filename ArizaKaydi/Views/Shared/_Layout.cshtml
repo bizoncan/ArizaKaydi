@@ -181,6 +181,11 @@
 				margin: 0;
 			}
 
+		.card-footer {
+			background: #fff !important; /* card ve card-body ile aynı arka plan */
+			color: #333 !important; /* card-body'deki metin rengiyle uyumlu */
+			border-radius: 0 0 12px 12px !important; /* Sadece alt köşeleri yuvarlat, card'ın genel border-radius'u ile uyumlu */
+		}
 		/* Tablo stilleri */
 		.table-dark { /* Sadece .table-dark için stiller */
 			background-color: #fff !important; /* Orijinal birleşik kuraldan */
@@ -309,7 +314,7 @@
 
 			.btn-outline-warning:hover { /* Tercih edilen sarı tonları */
 				background: #ffc107 !important;
-				color: #212529 !important;
+				color: #fff !important;
 				box-shadow: 0 4px 8px rgba(255, 193, 7, 0.2);
 				transform: translateY(-1px);
 			}
@@ -672,11 +677,11 @@
 					</a>
 					</li>-->
 				<li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("User", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
-					<a class="nav-link" asp-controller="User" asp-action="Index">
+					<a class="nav-link" asp-controller="User" asp-action="ChoseUserType">
 						<span class="menu-icon">
 							<i class="mdi mdi-account"></i>
 						</span>
-						<span class="menu-title">Yeni Kullanıcı Tanımla</span>
+						<span class="menu-title">Kullanıcı İşlemleri</span>
 					</a>
 				</li>
 				<li class="nav-item menu-items @(ViewContext.RouteData.Values["Controller"]?.ToString().Equals("Calculation", StringComparison.OrdinalIgnoreCase) == true ? "active" : "")">
