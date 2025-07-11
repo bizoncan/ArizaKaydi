@@ -62,24 +62,20 @@ namespace ArizaKaydi.Controllers
 		[HttpPost]
 		public IActionResult EditUser(user u)
 		{
-			// Email geçerlilik kontrolü  
 			if (!IsValidEmail(u.Email))
 			{
 				ModelState.AddModelError("Email", "Geçerli bir email adresi giriniz.");
 				return View(u);
 			}
 
-			// Kullanıcıyı veritabanından al  
 			var existingUser = _userManager.TGetById(u.Id);
 
-			// Eğer kullanıcı bulunamazsa hata döndür  
 			if (existingUser == null)
 			{
 				ModelState.AddModelError("", "Kullanıcı bulunamadı.");
 				return View(u);
 			}
 
-			// Kullanıcı adı veya email başka bir kullanıcıya ait mi?  
 			var duplicateUser = _userManager.TGetList()
 										.FirstOrDefault(x => (x.UserName == u.UserName || x.Email == u.Email) && x.Id != u.Id);
 
@@ -94,7 +90,6 @@ namespace ArizaKaydi.Controllers
 				return View(u);
 			}
 
-			// Mevcut kullanıcı bilgilerini güncelle  
 			existingUser.UserName = u.UserName;
 			existingUser.Email = u.Email;
 			existingUser.PasswordHash = existingUser.PasswordHash;
@@ -111,14 +106,12 @@ namespace ArizaKaydi.Controllers
 		[HttpPost]
 		public IActionResult AddUser(user u)
 		{
-			// Email geçerlilik kontrolü
 			if (!IsValidEmail(u.Email))
 			{
 				ModelState.AddModelError("Email", "Geçerli bir email adresi giriniz.");
 				return View(u);
 			}
 
-			// Username veya email veritabanında var mı?
 			var existingUser = _userManager.TGetList()
 				.FirstOrDefault(x => x.UserName == u.UserName || x.Email == u.Email);
 
@@ -133,11 +126,9 @@ namespace ArizaKaydi.Controllers
 				return View(u);
 			}
 
-			// Şifreyi hashle
 			var passwordHasher = new PasswordHasher<user>();
 			u.PasswordHash = passwordHasher.HashPassword(u, u.PasswordHash);
 
-			// Kullanıcıyı kaydet
 			_userManager.TAdd(u);
 			return RedirectToAction("Index");
 		}
@@ -167,7 +158,6 @@ namespace ArizaKaydi.Controllers
 			return View(userRolesViewModelList);
 		}
 		[Authorize(Policy = "CanEditPanelUserManagement")]
-		// POST: User/AssignRole
 		[HttpPost]
 		public async Task<IActionResult> AssignRole(string userId, string roleName)
 		{
@@ -212,31 +202,22 @@ namespace ArizaKaydi.Controllers
 				}
 			}
 
-			// Rolün var olup olmadığını kontrol et
 			if (!await roleManager.RoleExistsAsync(roleName))
 			{
-				// Rol yoksa oluşturabilirsiniz veya hata mesajı dönebilirsiniz.
-				// Şimdilik sadece bir log yazıp devam ediyorum.
 				Console.WriteLine($"Rol bulunamadı: {roleName}");
-				//ModelState.AddModelError("", $"Rol bulunamadı: {roleName}");
-				//return RedirectToAction(nameof(AssignRole)); 
-				// VEYA: await _roleManager.CreateAsync(new panelUserRole { Name = roleName });
+
 			}
 			user = await panelUserManager.FindByIdAsync(userId);
 			var userRoles = await panelUserManager.GetRolesAsync(user);
 			System.Diagnostics.Debug.WriteLine(string.Join(",", userRoles));
-			// Kullanıcının mevcut rollerini kaldır
 			var removeResult = await panelUserManager.RemoveFromRolesAsync(user, userRoles);
 			if (!removeResult.Succeeded)
 			{
-				// Hata yönetimi
 				ModelState.AddModelError("", "Kullanıcının mevcut rolleri kaldırılamadı.");
-				// Hataları loglayabilir veya kullanıcıya gösterebilirsiniz.
 				foreach (var error in removeResult.Errors)
 				{
 					ModelState.AddModelError("", error.Description);
 				}
-				// Kullanıcı listesini ve rolleri tekrar yükleyip view'ı döndür
 				var users = await panelUserManager.Users.ToListAsync();
 				var userRolesViewModelList = new List<UserRolesViewModel>();
 				foreach (panelUser u in users)
@@ -254,17 +235,14 @@ namespace ArizaKaydi.Controllers
 				return View("AssignRole", userRolesViewModelList);
 			}
 
-			// Yeni rolü ekle
 			var addResult = await panelUserManager.AddToRoleAsync(user, roleName);
 			if (!addResult.Succeeded)
 			{
-				// Hata yönetimi
 				ModelState.AddModelError("", "Yeni rol atanamadı.");
 				foreach (var error in addResult.Errors)
 				{
 					ModelState.AddModelError("", error.Description);
 				}
-				// Hata durumunda view'ı tekrar yükle
 				var users = await panelUserManager.Users.ToListAsync();
 				var userRolesViewModelList = new List<UserRolesViewModel>();
 				foreach (panelUser u in users)
@@ -286,13 +264,11 @@ namespace ArizaKaydi.Controllers
 			var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 			if (currentUserId == userId)
 			{
-				// If updating current user, refresh their authentication immediately
 				await signInManager.RefreshSignInAsync(user);
 			}
 			return RedirectToAction(nameof(AssignRole));
 		}
 
-		// GET: User/AddNewRole
 		[Authorize(Policy = "CanViewPanelUserManagement")]
 		public async Task<IActionResult> AddNewRole()
 		{
@@ -304,28 +280,26 @@ namespace ArizaKaydi.Controllers
 
 		}
 		[Authorize(Policy = "CanEditPanelUserManagement")]
-		// POST: User/AddNewRole
 		[HttpPost]
 		public async Task<IActionResult> AddNewRole(string roleName)
 		{
 			if (string.IsNullOrWhiteSpace(roleName))
 			{
 				ModelState.AddModelError("", "Rol adı boş olamaz.");
-				return View((object)roleName); // View'a string model gönderiyoruz
+				return View((object)roleName);
 			}
 
 			var roleExist = await roleManager.RoleExistsAsync(roleName);
 			if (roleExist)
 			{
 				ModelState.AddModelError("", "Bu rol zaten mevcut.");
-				return View((object)roleName); // View'a string model gönderiyoruz
+				return View((object)roleName); 
 			}
 
 			var result = await roleManager.CreateAsync(new panelUserRole { Name = roleName });
 
 			if (result.Succeeded)
 			{
-				// Başarılı olursa kullanıcıları ve rolleri listeleyen sayfaya yönlendir
 				return RedirectToAction(nameof(AddNewRole));
 			}
 
@@ -340,7 +314,6 @@ namespace ArizaKaydi.Controllers
 		{
 			if (string.IsNullOrWhiteSpace(roleName))
 			{
-				// Hata mesajı TempData veya ViewBag ile AddNewRole view'ına taşınabilir.
 				TempData["ErrorMessage"] = "Silinecek rol adı belirtilmedi.";
 				return RedirectToAction(nameof(AddNewRole));
 			}
@@ -352,7 +325,6 @@ namespace ArizaKaydi.Controllers
 				return RedirectToAction(nameof(AddNewRole));
 			}
 
-			// Role bağlı kullanıcı olup olmadığını kontrol et
 			var usersInRole = await panelUserManager.GetUsersInRoleAsync(roleName);
 			if (usersInRole.Any())
 			{
@@ -371,7 +343,6 @@ namespace ArizaKaydi.Controllers
 			var result = await roleManager.DeleteAsync(role);
 			if (!result.Succeeded)
 			{
-				// Hata mesajları TempData veya ViewBag ile AddNewRole view'ına taşınabilir.
 				string errors = string.Join(", ", result.Errors.Select(e => e.Description));
 				TempData["ErrorMessage"] = $"Rol silinirken hata oluştu: {errors}";
 			}
@@ -387,7 +358,6 @@ namespace ArizaKaydi.Controllers
 				DynamicClaimsMiddleware.MarkUserForRefresh(u.Id.ToString());
 				if (currentUserId == u.Id.ToString())
 				{
-					// Eğer silinen rol, güncellenen kullanıcının rolüyse, oturumunu yenile
 					await signInManager.RefreshSignInAsync(u);
 				}
 			}
@@ -400,7 +370,6 @@ namespace ArizaKaydi.Controllers
 			ClaimsViewModel claimsViewModel = new ClaimsViewModel();
 			if (id == null)
 			{
-				// Hata mesajı TempData veya ViewBag ile AddNewRole view'ına taşınabilir.
 				TempData["ErrorMessage"] = "Silinecek rol adı belirtilmedi.";
 				return RedirectToAction(nameof(AddNewRole));
 			}
@@ -451,7 +420,6 @@ namespace ArizaKaydi.Controllers
 		{
 			if (string.IsNullOrWhiteSpace(roleName))
 			{
-				// Hata mesajı TempData veya ViewBag ile AddNewRole view'ına taşınabilir.
 				TempData["ErrorMessage"] = "Rol adı boş olamaz.";
 				return RedirectToAction("Index", "Home");
 			}
@@ -578,7 +546,6 @@ namespace ArizaKaydi.Controllers
 		{
 			return new List<string>(await panelUserManager.GetRolesAsync(user));
 		}
-		// Email geçerlilik kontrolü yapan yardımcı metot
 		private bool IsValidEmail(string email)
 		{
 			try
@@ -621,7 +588,6 @@ namespace ArizaKaydi.Controllers
 				await panelUserManager.UpdateSecurityStampAsync(user);
 				if (currentUserId == user.Id.ToString())
 				{
-					// Eğer güncellenen rol, oturum açmış kullanıcının rolüyse, oturumunu yenile
 					await signInManager.RefreshSignInAsync(user);
 				}
 			}

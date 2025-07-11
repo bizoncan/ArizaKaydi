@@ -91,7 +91,7 @@ namespace ArizaKaydi.Controllers
                 Value = m.id.ToString(),
                 Text = m.name.ToString()
             }).ToList();
-            ViewBag.MachineList = machines; // Use the same name as in AddError for consistency
+            ViewBag.MachineList = machines;
 
 
             var value = errorManager.TGetById(id);
@@ -143,7 +143,7 @@ namespace ArizaKaydi.Controllers
 					Text = p.name
 				}).ToList();
 
-			return Json(parts); // ← Tarayıcıya JSON veri gönder
+			return Json(parts); 
 		}
 	}
 }

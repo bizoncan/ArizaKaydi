@@ -7,7 +7,7 @@
 <head>
 	<style>
 		.form-check-input ms-2 {
-			accent-color: red; /* Checkbox rengini kırmızı yapar */
+			accent-color: red; 
 		}
 
 		.description-textarea {
@@ -85,7 +85,6 @@
 			$('.select2').select2({
 				theme: 'bootstrap4',
 				width: '100%',
-				//dropdownParent: $('#filterForm'),
 				placeholder: 'Seçiniz...',
 				allowClear: true,
 				minimumResultsForSearch: Infinity,
@@ -95,7 +94,6 @@
 					}
 				}
 			});
-			// AJAX ile parça verisi alma
 			$('#machineDropdown').on('change', function () {
 				var machineId = $(this).val();
 				$('#partDropdown').empty().append('<option value="">Yükleniyor...</option>');
@@ -120,7 +118,6 @@
 				}
 			});
 
-			// Mevcut makine ve parça bilgilerini yükle
 			var selectedMachineId = $('#machineDropdown').val();
 			var selectedPartId = @Json.Serialize(Model.machinePartId);
 

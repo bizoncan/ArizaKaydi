@@ -101,7 +101,6 @@
 			$('.select2').select2({
 				theme: 'bootstrap4',
 				width: '100%',
-				//dropdownParent: $('#filterForm'),
 				placeholder: 'Seçiniz...',
 				allowClear: true,
 				minimumResultsForSearch: Infinity,
@@ -111,7 +110,6 @@
 					}
 				}
 			});
-			// AJAX ile parça verisi alma
 			$('#machineDropdown').on('change', function () {
 				var machineId = $(this).val();
 				$('#partDropdown').empty().append('<option value="">Yükleniyor...</option>');
@@ -136,7 +134,6 @@
 				}
 			});
 
-			// Mevcut makine ve parça bilgilerini yükle
 			var selectedMachineId = $('#machineDropdown').val();
 			var selectedPartId = @Json.Serialize(Model.machinePartId);
 
@@ -159,8 +156,6 @@
 			} else {
 				$('#partDropdown').empty().append('<option value="">Parça Seçiniz</option>');
 			}
-
-			// İş tamamlandı mı checkbox'ı kapatıldığında diğer checkbox'ı kapatma
 			$('#isClosedCheckbox').on('change', function () {
 				if ($(this).is(':checked') && !$('#isOpenedCheckbox').is(':checked')) {
 					alert('İş biri tarafından alınmadan iş tamamlandı olarak işaretlenemez.');
@@ -177,8 +172,6 @@
 					$('#userDropdown').val('');
 				}
 			});
-
-			// Güncelle butonuna tıklandığında kontrol
 			$('form').on('submit', function (e) {
 				if ($('#userDropdown').val() == '' && $('#isOpenedCheckbox').is(':checked')) {
 					alert('İş bir kullanıcıya atanmadan iş alındı şeklinde işaretlenemez..');

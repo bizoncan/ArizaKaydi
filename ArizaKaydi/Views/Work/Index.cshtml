@@ -7,15 +7,11 @@
 
 }
 
-@* CSRF token'ının sayfada render edildiğinden emin olun (genellikle _Layout.cshtml içinde veya bir formda bulunur) *@
-@* Gerekliyse ve başka yerde yoksa: @Html.AntiForgeryToken() *@
 
 <a href="/Work/AddWorkOrder/" class="btn btn-info"> Yeni İş Emri Ekle</a>
 <button id="excelAktarBtn" class="btn btn-excel">Excel'e Aktar</button>
-@* Excel'e aktarma sırasında gösterilecek loading indicator *@
 <div id="loadingIndicator" style="display: none; margin-top: 10px;">
 	<span class="text-info">Excel dosyası oluşturuluyor, lütfen bekleyin...</span>
-	@* İsterseniz buraya bir spinner ikonu ekleyebilirsiniz, örn: <i class="fa fa-spinner fa-spin"></i> *@
 </div>
 
 <br />
@@ -29,7 +25,6 @@
 			<div class="card-body">
 				<form id="filterForm" method="get" action="@Url.Action("Index", "Work")">
 					@Html.AntiForgeryToken()
-					@* Filtre form içeriği (değişiklik yok) *@
 					<div class="row">
 						<div class="col-md-3">
 							<div class="form-group">
@@ -171,7 +166,6 @@
 				<table id="isEmirleriTablosu" class="table align-items-center table-dark table-flush">
 					<thead class="thead-dark">
 						<tr>
-							@* Başlıklar (değişiklik yok) *@
 							@* <th scope="col" class="sort">
 								<a href="@Url.Action("Index","Work",new{startDate = ViewBag.StartDate,endDate=ViewBag.EndDate,machineId=ViewBag.SelectedMachineId,machinePartId= ViewBag.SelectedMachinePartId, isClosed = ViewBag.IsClosed,userId = ViewBag.SelectedUserId,sortBy="id",sortOrder=Context.Request.Query["sortOrder"] == "asc" && Context.Request.Query["sortBy"] == "id" ? "desc" : "asc"} )" style="color:#ffffff !important">
 									#
@@ -303,11 +297,9 @@
 
 						</tr>
 					</thead>
-					@* *** DEĞİŞİKLİK: tbody'ye ID ekleyebilir veya class'ı kullanabiliriz. Class'ı kullanalım. *** *@
 					<tbody class="list">
 						@foreach (var item in Model)
 						{
-							@* *** DEĞİŞİKLİK: Her satıra data-id attribute'u ekliyoruz *** *@
 							<tr data-id="@item.id">
 								@*<td>@item.id</td>*@
 								<td scope="row">
@@ -400,9 +392,8 @@
 		</script>
 	}
 
-	@* Mevcut JavaScript Kodlarınız (değişiklik yok) *@
 	<script>
-		// Tarih fonksiyonu
+		
 		function updateEndDateMin() {
 			var startDate = document.getElementById("startDate").value;
 			document.getElementById("endDate").min = startDate;
@@ -412,9 +403,7 @@
 			}
 		}
 
-		// jQuery Document Ready
 		$(document).ready(function() {
-			// Select2'yi initialize et
 			$('.select2').select2({
 				theme: 'bootstrap4',
 				width: '100%',
@@ -429,7 +418,6 @@
 				}
 			});
 
-			// Makine seçildiğinde parça listesini güncelle
 			$('#machineId').on('change', function() {
 				var selectedMachineId = $(this).val();
 				var machinePartDropdown = $('#machinePartId');
@@ -472,34 +460,28 @@
 				}
 			});
 
-			// Sayfa yüklendiğinde makine parçası dropdown'ını güncelle
 			if ($('#machineId').val()) {
 				$('#machineId').trigger('change');
 			}
 		});
 	</script>
 
-	@* *** YENİ: Excel'e Aktarma JavaScript Kodu *** *@
 	<script>
 		document.getElementById('excelAktarBtn').addEventListener('click', function() {
-			// *** DEĞİŞİKLİK: Selector'ü güncelledik (tbody class'ı "list") ***
 			const veriSatirlari = document.querySelectorAll('tbody.list tr');
 			const siraliIdler = [];
 
 			veriSatirlari.forEach(satir => {
-				// data-id attribute'undan ID'yi al
 				const id = satir.getAttribute('data-id');
 				if (id) {
-					// ID'nin geçerli bir sayı olup olmadığını kontrol etmek isteyebilirsiniz
-					// if(!isNaN(parseInt(id))) { siraliIdler.push(id); }
-					siraliIdler.push(id); // Sırayla diziye ekle
+					siraliIdler.push(id);
 				} else {
 					console.warn("data-id attribute'u olmayan bir satır bulundu:", satir);
 				}
 			});
 
 			if (siraliIdler.length === 0) {
-				Swal.fire({ // SweetAlert ile daha şık bir uyarı
+				Swal.fire({ 
 					icon: 'warning',
 					title: 'Uyarı',
 					text: 'Aktarılacak veri bulunamadı.',
@@ -507,38 +489,34 @@
 				return;
 			}
 
-			// Butonu devre dışı bırak ve loading göstergesini aç
 			this.disabled = true;
-			document.getElementById('loadingIndicator').style.display = 'inline'; // veya 'block'
+			document.getElementById('loadingIndicator').style.display = 'inline'; 
 
-			// AntiForgery Token'ı bul (eğer varsa)
+			
 			const tokenInput = document.querySelector('input[name="__RequestVerificationToken"]');
 			const token = tokenInput ? tokenInput.value : null;
 
 			const headers = {
 				'Content-Type': 'application/json'
 			};
-			// Token varsa header'a ekle
+			
 			if (token) {
 				headers['RequestVerificationToken'] = token;
 			}
 
-			// *** DEĞİŞİKLİK: fetch URL'sini projenize göre güncelleyin (Controller: Work, Action: ExportToExcel varsayıldı) ***
 			fetch('/Work/ExportToExcel', {
 				method: 'POST',
 				headers: headers,
-				body: JSON.stringify(siraliIdler) // ID listesini JSON formatında gönder
+				body: JSON.stringify(siraliIdler) 
 			})
 			.then(response => {
 				if (!response.ok) {
-					// Hata durumunda response'dan metin okumayı dene (daha fazla bilgi için)
 					return response.text().then(text => {
 						throw new Error(`HTTP hatası! Durum: ${response.status} - ${text}`);
 					});
 				}
-				// Dosya adını Content-Disposition header'ından almayı deneyelim
 				const disposition = response.headers.get('content-disposition');
-				let filename = 'is-emirleri.xlsx'; // Varsayılan dosya adı
+				let filename = 'is-emirleri.xlsx'; 
 				if (disposition && disposition.indexOf('attachment') !== -1) {
 					const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
 					const matches = filenameRegex.exec(disposition);
@@ -546,31 +524,28 @@
 						filename = matches[1].replace(/['"]/g, '');
 					}
 				}
-				// Yanıt başarılıysa, dosya indirme işlemini tetikle
-				return response.blob().then(blob => ({ blob, filename })); // Blob ve dosya adını birlikte döndür
+				return response.blob().then(blob => ({ blob, filename })); 
 			})
 			.then(({ blob, filename }) => {
-				// Blob'dan bir URL oluştur ve indirme linki yarat
 				const url = window.URL.createObjectURL(blob);
 				const a = document.createElement('a');
 				a.style.display = 'none';
 				a.href = url;
-				a.download = filename; // Sunucudan gelen veya varsayılan dosya adı
+				a.download = filename; 
 				document.body.appendChild(a);
-				a.click(); // İndirmeyi tetikle
-				window.URL.revokeObjectURL(url); // Oluşturulan URL'yi temizle
-				a.remove(); // Linki kaldır
+				a.click(); 
+				window.URL.revokeObjectURL(url); 
+				a.remove(); 
 			})
 			.catch(error => {
 				console.error('Excel dışa aktarma hatası:', error);
-				Swal.fire({ // Hata durumunda SweetAlert ile uyarı
+				Swal.fire({ 
 					icon: 'error',
 					title: 'Hata',
 					text: 'Excel dosyası oluşturulurken bir hata oluştu: ' + error.message,
 				});
 			})
 			.finally(() => {
-				// İşlem bitince butonu tekrar aktif et ve loading göstergesini kapat
 				this.disabled = false;
 				document.getElementById('loadingIndicator').style.display = 'none';
 			});

@@ -52,14 +52,13 @@ namespace ArizaKaydi.Controllers
 			{
 				ModelState.AddModelError("machineId", "Lütfen bir makine seçiniz.");
 
-				// ViewBag'leri tekrar doldurmalısın yoksa dropdown boş kalır
 				ViewBag.MachineList = _context.Machines.Select(m => new SelectListItem
 				{
 					Value = m.id.ToString(),
 					Text = m.name
 				}).ToList();
 
-				return View(machineNotifications); // Aynı sayfaya geri dön
+				return View(machineNotifications); 
 			}
 
 			machineNotificationsManager.TAdd(machineNotifications);
@@ -95,7 +94,7 @@ namespace ArizaKaydi.Controllers
 					Text = p.name
 				}).ToList();
 
-			return Json(parts); // ← Tarayıcıya JSON veri gönder
+			return Json(parts); 
 		}
 	}
 }

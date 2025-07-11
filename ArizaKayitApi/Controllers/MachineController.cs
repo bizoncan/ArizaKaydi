@@ -26,7 +26,6 @@ namespace ArizaKayitApi.Controllers
             return Ok(machines);
         }
 
-        // GET: api/Machine/5
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
@@ -38,7 +37,6 @@ namespace ArizaKayitApi.Controllers
             return Ok(machine);
         }
 
-        // POST: api/Machine
         [HttpPost]
         public IActionResult Add([FromBody] machine machine)
         {
@@ -51,7 +49,6 @@ namespace ArizaKayitApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = machine.id }, machine);
         }
 
-        // PUT: api/Machine/5
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] machine machine)
         {
@@ -81,7 +78,6 @@ namespace ArizaKayitApi.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Machine/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

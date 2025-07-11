@@ -28,30 +28,25 @@ namespace ArizaKaydi.Controllers
 			this.workOrderManager = new WorkOrderManager(new EFWorkOrderDal(_context));
 			imageCollectionManager = new ImageCollectionManager(new EFImageCollectionDal(_context));
 		}
-		//[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Index(DateTime? startDate = null, DateTime? endDate = null, int? machineId = null, int? machinePartId = null, string? sortBy=null, string? sortOrder=null, Boolean? isClosed=null,int? userId=null)
 		{
-			var values = _context.WorkOrders.Include(x => x.machine).Include(x=> x.userI).ToList(); // Başlangıçta tüm iş emirlerini al
+			var values = _context.WorkOrders.Include(x => x.machine).Include(x=> x.userI).ToList();
 
-			ViewBag.Machines = _context.Machines.ToList(); // Makine dropdown'ı için tüm makineler
+			ViewBag.Machines = _context.Machines.ToList(); 
 
-			ViewBag.MobileUsers = _context.mobileUsers.ToList(); // Kullanıcı dropdown'ı için tüm kullanıcılar
+			ViewBag.MobileUsers = _context.mobileUsers.ToList();
 
-			// Makine Parçaları için boş bir liste oluştur, sonra dolduracağız
 			List<machinePart> partsForViewBag = new List<machinePart>();
 
-			// Başlangıç Tarihi Filtresi
 			if (startDate.HasValue)
 			{
 				values = values.Where(e => e.workOrderStartDate >= startDate.Value).ToList();
 				ViewBag.StartDate = startDate.Value.ToString("yyyy-MM-dd");
 			}
 
-			// Bitiş Tarihi Filtresi (Tüm günü kapsayacak şekilde)
 			if (endDate.HasValue)
 			{
 				var endOfDay = endDate.Value.Date.AddDays(1).AddSeconds(-1);
-				// Bitiş tarihi olan ve belirtilen aralıkta olanları filtrele
 				values = values.Where(e => e.workOrderStartDate <= endOfDay).ToList();
 				ViewBag.EndDate = endDate.Value.ToString("yyyy-MM-dd");
 			}
@@ -63,7 +58,7 @@ namespace ArizaKaydi.Controllers
 			}
 			else
 			{
-				ViewBag.SelectedUserId = null; // Seçili kullanıcı yoksa null yap
+				ViewBag.SelectedUserId = null; 
 			}
 
 			// Makine Filtresi
@@ -72,15 +67,12 @@ namespace ArizaKaydi.Controllers
 				values = values.Where(e => e.machineId == machineId.Value).ToList();
 				ViewBag.SelectedMachineId = machineId.Value;
 
-				// *** DÜZELTME: Sadece seçili makineye ait parçaları ViewBag'e ata ***
 				partsForViewBag = _context.MachineParts
 									  .Where(mp => mp.machineId == machineId.Value)
 									  .ToList();
 
-				// Makine Parçası Filtresi (Makine seçiliyse burada yapılır)
 				if (machinePartId.HasValue && machinePartId.Value > 0)
 				{
-					// Güvenlik kontrolü: Seçilen parça gerçekten seçilen makineye mi ait?
 					if (partsForViewBag.Any(p => p.Id == machinePartId.Value))
 					{
 						values = values.Where(e => e.machinePartId == machinePartId.Value).ToList();
@@ -89,34 +81,29 @@ namespace ArizaKaydi.Controllers
 				
 					else
 					{
-						// Eğer parça o makineye ait değilse, parça filtresini temizle (opsiyonel)
 						ViewBag.SelectedMachinePartId = null;
 					}
 				}
 				else if (machinePartId == 0)
 				{
 					values = values.Where(e => e.machinePartId == null).ToList();
-					ViewBag.SelectedMachinePartId = 0; // Seçili parça yoksa null yap
+					ViewBag.SelectedMachinePartId = 0; 
 				}
 			}
-			if ( machineId == 0) // Makine seçilmemişse
+			if ( machineId == 0) 
 			{
-				// Makine seçilmediğinde tüm parçaları göster
 				values = values.Where(e => e.machineId == null).ToList();
-				ViewBag.SelectedMachineId = 0; // Seçili makine yoksa null yap
+				ViewBag.SelectedMachineId = 0; 
 			}
-			else // Makine seçilmemişse ("Tümü")
+			else
 			{
-				// Makine seçilmeden parça seçilmişse (JavaScript bunu engellemeli ama yine de kontrol edilebilir)
 				if (machinePartId.HasValue && machinePartId.Value > 0)
 				{
 					values = values.Where(e => e.machinePartId == machinePartId.Value).ToList();
 					ViewBag.SelectedMachinePartId = machinePartId.Value;
-					// partsForViewBag boş kalır, bu doğru.
 				}
 			}
 
-			// Filtrelenmiş (veya boş) parça listesini ViewBag'e ata
 			ViewBag.MachineParts = partsForViewBag;
 
 
@@ -152,7 +139,7 @@ namespace ArizaKaydi.Controllers
 						values = sortOrder == "desc" ? values.OrderByDescending(x => x.userId).ToList() : values.OrderBy(x => x.userId).ToList();
 						break;
 			}
-			return View(values); // Filtrelenmiş iş emirlerini View'a gönder
+			return View(values); 
 		}
 		[Authorize(Policy = "BasicModeratorEditPermission")]
 		public IActionResult RemoveWorkOrder(int id)
@@ -268,7 +255,7 @@ namespace ArizaKaydi.Controllers
 					Text = p.name
 				}).ToList();
 
-			return Json(parts); // ← Tarayıcıya JSON veri gönder
+			return Json(parts); 
 		}
 		[Authorize(Policy = "BasicModeratorEditPermission")]
 		public IActionResult EditWorkOrder(int id)
@@ -279,7 +266,7 @@ namespace ArizaKaydi.Controllers
 				Value = m.id.ToString(),
 				Text = m.name.ToString()
 			}).ToList();
-			ViewBag.MachineList = machines; // Use the same name as in AddError for consistency
+			ViewBag.MachineList = machines; 
 			var users = _context.mobileUsers.Select(m => new SelectListItem
 			{
 				Value = m.Id.ToString(),
@@ -300,12 +287,11 @@ namespace ArizaKaydi.Controllers
 				ModelState.AddModelError("", "Lütfen gerekli alanları doldurunuz.");
 				return View(p);
 			}
-			var existing = workOrderManager.TGetById(p.id); // Bu DbContext tarafından takip ediliyor
+			var existing = workOrderManager.TGetById(p.id); 
 
 			if (existing == null)
 				return NotFound();
 
-			// Sadece değişen alanları elle set et
 			existing.machineId = p.machineId;
 			existing.machinePartId = p.machinePartId;
 			existing.title = p.title;
@@ -348,7 +334,6 @@ namespace ArizaKaydi.Controllers
 			}
 			if (workReports.Count != 0)
 			{
-				//var works = workManager.TGetWorkByWorkOrderList(id);
 				return View(workReports);
 			}
 			else
@@ -387,8 +372,8 @@ namespace ArizaKaydi.Controllers
 			return View(workOrderManager.TGetById(id));
 		}
 		[HttpPost]
-		[ValidateAntiForgeryToken] // CSRF koruması için (eğer token gönderdiyseniz)
-		public async Task<IActionResult> ExportToExcel([FromBody] List<string> workOrderIds) // Gelen ID listesi (tipi int ise List<int> yapın)
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> ExportToExcel([FromBody] List<string> workOrderIds)
 		{
 			if (workOrderIds.Count > 1000)
 			{
@@ -401,28 +386,22 @@ namespace ArizaKaydi.Controllers
 
 			try
 			{
-				// ID'leri int'e çevirme (eğer veritabanı ID'leriniz int ise)
 				var idListesiInt = workOrderIds.Select(int.Parse).ToList();
 
-				// 1. Veritabanından verileri çekme (Örnek - Entity Framework Core ile)
-				// Not: Tüm veriyi çekip sonra sıralamak yerine, veritabanında WHERE IN ile filtrelemek daha performanslıdır.
-				var veriler = await _context.WorkOrders // Kendi DbContext ve DbSet adınızı kullanın
+				var veriler = await _context.WorkOrders 
 										 .Where(x => idListesiInt.Contains(x.id))
 										 .Include(x => x.machine)
 										 .Include(x=> x.machinePart)
 										 .ToListAsync();
 
-				// 2. Verileri istemciden gelen sıraya göre SIRALAMA (Çok Önemli!)
 				var siraliVeriler = veriler
-									.OrderBy(v => idListesiInt.IndexOf(v.id)) // Gelen listedeki index'e göre sırala
+									.OrderBy(v => idListesiInt.IndexOf(v.id)) 
 									.ToList();
 
-				// 3. Excel Dosyası Oluşturma (ClosedXML ile)
 				using (var workbook = new XLWorkbook())
 				{
-					var worksheet = workbook.Worksheets.Add("Veriler"); // Sayfa adı
+					var worksheet = workbook.Worksheets.Add("Veriler"); 
 
-					// Başlık Satırını Ekleme (Örnek)
 					worksheet.Cell(1, 1).Value = "ID";
 					worksheet.Cell(1, 2).Value = "Başlık";
 					worksheet.Cell(1, 3).Value = "Açıklama";
@@ -432,13 +411,11 @@ namespace ArizaKaydi.Controllers
 					worksheet.Cell(1, 7).Value = "Makine";
 					worksheet.Cell(1, 8).Value = "Makine Parçası";
 
-					// Başlık satırını biçimlendirme (Opsiyonel)
-					var headerRange = worksheet.Range("A1:H1"); // Başlıkların olduğu aralık
+					var headerRange = worksheet.Range("A1:H1"); 
 					headerRange.Style.Font.Bold = true;
 					headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
 
-					// Veri Satırlarını Ekleme
-					int currentRow = 2; // Başlıktan sonraki satır
+					int currentRow = 2; 
 					foreach (var veri in siraliVeriler)
 					{
 						worksheet.Cell(currentRow, 1).Value = veri.id;
@@ -450,14 +427,11 @@ namespace ArizaKaydi.Controllers
 						worksheet.Cell(currentRow, 7).Value = veri.machine?.name?? "Makine bilgisi yok.";
 						worksheet.Cell(currentRow, 8).Value = veri.machinePart?.name?? "Makine parçası bilgisi yok.";
 
-						// ... Diğer özellikler
 						currentRow++;
 					}
 
-					// Sütun genişliklerini ayarlama (Opsiyonel)
 					worksheet.Columns().AdjustToContents();
 
-					// 4. Excel Dosyasını MemoryStream'e Kaydetme
 					using (var stream = new MemoryStream())
 					{
 						workbook.SaveAs(stream);
@@ -465,17 +439,12 @@ namespace ArizaKaydi.Controllers
 						var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 						var fileName = $"veriler_{DateTime.Now:yyyy.MM.dd-HH:mm:ss}.xlsx"; // Dinamik dosya adı
 
-						// 5. Dosyayı İstemciye Gönderme
 						return File(content, contentType, fileName);
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				// Hata loglama mekanizmanızı burada kullanın
-				// Log.Error(ex, "Excel dışa aktarma sırasında hata oluştu.");
-				// İstemciye genel bir hata mesajı dönebilirsiniz
-				// return StatusCode(500, "Excel dosyası oluşturulurken sunucu tarafında bir hata oluştu.");
 				return Problem("Excel dosyası oluşturulurken bir hata oluştu. Detaylar için sunucu loglarını kontrol edin.", statusCode: 500);
 			}
 		}
@@ -488,7 +457,7 @@ namespace ArizaKaydi.Controllers
 				Value = m.id.ToString(),
 				Text = m.name.ToString()
 			}).ToList();
-			ViewBag.MachineList = machines; // Use the same name as in AddError for consistency
+			ViewBag.MachineList = machines; 
 			var users = _context.mobileUsers.Select(m => new SelectListItem
 			{
 				Value = m.Id.ToString(),

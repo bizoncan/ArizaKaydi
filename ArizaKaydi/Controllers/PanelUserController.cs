@@ -2,10 +2,10 @@
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.IO; // Dosya işlemleri için
-using System.Threading.Tasks; // Task için
+using System.IO; 
+using System.Threading.Tasks; 
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Authorization; // IWebHostEnvironment için (opsiyonel, dosya yolu için)
+using Microsoft.AspNetCore.Authorization; 
 
 namespace ArizaKaydi.Controllers
 {
@@ -13,7 +13,7 @@ namespace ArizaKaydi.Controllers
 	public class PanelUserController : Controller
 	{
 		private readonly UserManager<panelUser> _userManager;
-		private readonly IWebHostEnvironment _webHostEnvironment; // Resim kaydetme yolu için
+		private readonly IWebHostEnvironment _webHostEnvironment; 
 		private readonly SignInManager<panelUser> _signInManager;
 		public PanelUserController(UserManager<panelUser> userManager, IWebHostEnvironment webHostEnvironment, SignInManager<panelUser> signInManager)
 		{
@@ -33,7 +33,6 @@ namespace ArizaKaydi.Controllers
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
 			if (user == null)
 			{
-				// Kullanıcı bulunamazsa bir hata sayfasına yönlendirebilirsiniz
 				TempData["ErrorMessage"] = "Kullanıcı bulunamadı.";
 				return RedirectToAction("Index", "Home");
 			}
@@ -42,7 +41,7 @@ namespace ArizaKaydi.Controllers
 			{
 				Name = user.Name,
 				Surname = user.Surname,
-				ImageURL = user.ImageURL, // Mevcut resmi göstermek için
+				ImageURL = user.ImageURL,
 				UserName = user.UserName,
 			};
 			return View(panelUserViewModel);
@@ -56,7 +55,6 @@ namespace ArizaKaydi.Controllers
 			bool isPasswordC = false;
 			if (!ModelState.IsValid)
 			{
-				// ViewModel geçerli değilse, hatalarla birlikte formu tekrar göster
 				return View(panelUserViewModel);
 			}
 
@@ -68,9 +66,8 @@ namespace ArizaKaydi.Controllers
 				return RedirectToAction("Index", "Home");
 			}
 
-			// Şifre Güncelleme Mantığı
-			bool passwordChangedSuccessfully = true; // Şifre değiştirme işlemi yapılmadıysa veya başarılıysa true kalır
-			if (!string.IsNullOrEmpty(panelUserViewModel.Password)) // Yeni şifre girilmişse
+			bool passwordChangedSuccessfully = true;
+			if (!string.IsNullOrEmpty(panelUserViewModel.Password))
 			{
 				if (string.IsNullOrEmpty(panelUserViewModel.passwordNow))
 				{
@@ -84,7 +81,7 @@ namespace ArizaKaydi.Controllers
 				}
 				else
 				{
-					// Mevcut şifreyi kontrol et ve yeni şifreyi ayarla
+					
 					var changePasswordResult = await _userManager.ChangePasswordAsync(user, panelUserViewModel.passwordNow, panelUserViewModel.Password);
 					if (changePasswordResult.Succeeded)
 					{
@@ -94,8 +91,7 @@ namespace ArizaKaydi.Controllers
 					{
 						foreach (var error in changePasswordResult.Errors)
 						{
-							// Genel bir hata veya mevcut şifre hatası olabilir.
-							// Identity genellikle "Incorrect password." gibi bir mesaj döner.
+					
 							ModelState.AddModelError(string.Empty, error.Description);
 						}
 						passwordChangedSuccessfully = false;
@@ -103,30 +99,30 @@ namespace ArizaKaydi.Controllers
 				}
 			}
 
-			if (!passwordChangedSuccessfully) // Şifre ile ilgili bir hata varsa formu tekrar göster
+			if (!passwordChangedSuccessfully)
 			{
 				return View(panelUserViewModel);
 			}
 			if (panelUserViewModel.ImageFile != null && panelUserViewModel.ImageFile.Length > 0)
 			{
-				if (panelUserViewModel.ImageFile.Length > 2 * 1024 * 1024) // Örnek: 2MB limit
+				if (panelUserViewModel.ImageFile.Length > 2 * 1024 * 1024) 
 				{
 					ModelState.AddModelError("ImageFile", "Dosya boyutu 2MB'den büyük olamaz.");
 					if (!string.IsNullOrEmpty(user.ImageURL))
-					{ // Mevcut resmi koru
+					{ 
 						panelUserViewModel.ImageURL = user.ImageURL;
 					}
 					return View(panelUserViewModel);
 				}
 
-				// Desteklenen dosya türlerini kontrol et
+			
 				var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
 				var extension = Path.GetExtension(panelUserViewModel.ImageFile.FileName).ToLowerInvariant();
 				if (string.IsNullOrEmpty(extension) || !allowedExtensions.Contains(extension))
 				{
 					ModelState.AddModelError("ImageFile", "Geçersiz dosya türü. Sadece JPG, JPEG, PNG, GIF kabul edilir.");
 					if (!string.IsNullOrEmpty(user.ImageURL))
-					{ // Mevcut resmi koru
+					{ 
 						panelUserViewModel.ImageURL = user.ImageURL;
 					}
 					return View(panelUserViewModel);
@@ -138,7 +134,6 @@ namespace ArizaKaydi.Controllers
 					await panelUserViewModel.ImageFile.CopyToAsync(memoryStream);
 					byte[] imageBytes = memoryStream.ToArray();
 					string base64String = Convert.ToBase64String(imageBytes);
-					// Data URI scheme: data:[<MIME-type>][;charset=<encoding>][;base64],<data>
 					user.ImageURL = $"data:{panelUserViewModel.ImageFile.ContentType};base64,{base64String}";
 				}
 			}
@@ -156,27 +151,23 @@ namespace ArizaKaydi.Controllers
 			if (result.Succeeded)
 			{
 				TempData["SuccessMessage"] = "Bilgileriniz başarıyla güncellendi.";
-				// Kullanıcı bilgilerini (özellikle adı) güncelledikten sonra oturumu yenilemek gerekebilir.
 				if(isUserC || isPasswordC)
 				{
-					await _signInManager.RefreshSignInAsync(user); // Eğer SignInManager enjekte edilmişse
+					await _signInManager.RefreshSignInAsync(user); 
 					return RedirectToAction("Index", "Login");
 				}
 				else
 				{
 					return RedirectToAction("PanelUserSetting");
 				}
-				// Aynı sayfada kalıp mesajı göstermek için	
-				// veya return RedirectToAction("Index", "Home");
+			
 			}
 
 			foreach (var error in result.Errors)
 			{
 				ModelState.AddModelError(string.Empty, error.Description);
 			}
-			// Güncelleme başarısızsa mevcut ImageURL'i viewmodel'e geri yükle
 			panelUserViewModel.ImageURL = user.ImageURL;
-			// TempData["ErrorMessage"] = "Bilgiler güncellenirken bir hata oluştu."; // ModelState hataları daha spesifik olacaktır.
 			return View(panelUserViewModel);
 		}
 	}

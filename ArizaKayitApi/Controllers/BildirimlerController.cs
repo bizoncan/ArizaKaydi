@@ -40,31 +40,7 @@ namespace ArizaKayitApi.Controllers
                 notificationList = not,
             };
 			return Ok(result);
-            //List<machineNotifications> notifications = new List<machineNotifications>();
-            //using (SqlConnection conn = new SqlConnection(connectionString))
-            //{
-            //  conn.Open();
-            //using SqlCommand cmd = new SqlCommand("SELECT * FROM MachineNotifications", conn);
-            //using SqlDataReader reader = cmd.ExecuteReader();
-            //{
-            //  while (reader.Read())
-            //{
-            //  notifications.Add(new machineNotifications
-            //{
-            //  id = reader.GetInt32(0),
-            //machineId = reader.GetInt32(1),
-            //title = reader.GetString(2),
-            //description = reader.GetString(3),
-
-            //});
-
-            // }
-
-
-            //}
-            //}
-
-
+    
         }
         [HttpPost]
         public IActionResult AddNotification([FromBody] machineNotifications p)
@@ -81,18 +57,6 @@ namespace ArizaKayitApi.Controllers
 
             return Created("", p);
 
-            // string query = "INSERT INTO MachineNotifications (machineId, title,description) VALUES (@machineId, @title,@description)";
-
-            //using (SqlConnection conn = new SqlConnection(connectionString))
-            //{
-            //  conn.Open();
-            //SqlCommand cmd = new SqlCommand(query, conn);
-            //cmd.Parameters.AddWithValue("@machineId", p.machineId);
-            //cmd.Parameters.AddWithValue("@title", p.title);
-            //cmd.Parameters.AddWithValue("@description", p.description);
-            //cmd.ExecuteNonQuery();
-            //}
-            //return Ok(new { message = "Kullanıcı eklendi!" });
 
         }
         [HttpDelete("{id}")]

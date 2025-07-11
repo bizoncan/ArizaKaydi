@@ -66,12 +66,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 builder.Services.AddAuthorization(options =>
 {
-	// Sadece "UserManagement.View" Claim'ine sahip olanlarýn eriþebileceði bir politika
 	options.AddPolicy("CanEditMobileUserManagement", policy =>
 		policy.RequireClaim("Permission", "MobileUserManagement.Edit"));
 	options.AddPolicy("CanViewMobileUserManagement", policy =>
 		policy.RequireClaim("Permission", "MobileUserManagement.View"));
-	// Hem "UserManagement.View" hem de "UserManagement.Edit" Claim'lerine sahip olanlar
 	options.AddPolicy("CanEditPanelUserManagement", policy =>
 		policy.RequireClaim("Permission", "PanelUserManagement.Edit"));
 	options.AddPolicy("CanViewPanelUserManagement", policy =>
@@ -85,7 +83,6 @@ builder.Services.AddAuthorization(options =>
 });
 builder.Services.Configure<SecurityStampValidatorOptions>(options =>
 {
-	// This will check the security stamp every 30 seconds
 	options.ValidationInterval = TimeSpan.FromMinutes(10);
 });
 
@@ -93,12 +90,10 @@ builder.Services.Configure<SecurityStampValidatorOptions>(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-// Program.cs (ASP.NET Core 6+)
 if (!app.Environment.IsDevelopment())
 {
 	app.UseExceptionHandler("/ErrorPage/TheErrorView");
-	app.UseHsts(); // HTTPS için
+	app.UseHsts(); 
 }
 else
 {

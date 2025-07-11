@@ -43,12 +43,10 @@ namespace ArizaKayitApi.Controllers
                     image.errorId = veri;
                     try
                     {
-                        // Convert Base64 string to byte array
                         image.imageDataByte = Convert.FromBase64String(i);
                     }
                     catch (FormatException ex)
                     {
-                        // Handle invalid Base64 string format
                         return BadRequest("Invalid image format.");
                     }
                     _context.ImageCollection.Add(image); 
@@ -60,16 +58,6 @@ namespace ArizaKayitApi.Controllers
 		[HttpPost("addImageDataWork")]
 		public IActionResult addImageDataWork([FromBody] WorkImagePostModel workImagePostModel)
 		{
-			//int veri = 1;
-			//SqlConnection con = new SqlConnection("server=10.10.82.69,1433;database=ArizaKayit;User Id=sa ;Password=A/f-mrf_12 ;TrustServerCertificate=True");
-			//con.Open();
-			//string query = "select top 1 * from dbo.Works order by id desc";
-			//SqlCommand cmd = new SqlCommand(query, con);
-			//SqlDataReader reader = cmd.ExecuteReader();
-			//if (reader.Read())
-			//{
-			//	veri = reader.GetInt32(0);
-			//}
             List<String> img_data = workImagePostModel.imageCollectionModel;
 			int veri = workImagePostModel.workId;
 

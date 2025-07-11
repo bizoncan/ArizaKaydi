@@ -2,148 +2,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Corona Admin</title>
-    <!-- plugins:css -->
     <link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
     <link rel="stylesheet" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/css/style.css">
-    <!-- End layout styles -->
     <link rel="shortcut icon" href="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/images/favicon.png" />
 
-	<style>
+    <style>
 
-     
-        /* Mevcut body stiliniz iyi, arka plan resmini ayarlıyor */
+
         body {
             background-image: url('https://www.erdemir.com.tr/cache/image/large/2024/10/c7ecb177778f04bcedb4a9c7349b8a7d.jpg');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            background-attachment: fixed; /* Sayfa kayarken sabit kalsın */
-            position: relative; /* Overlay için gerekli */
+            background-attachment: fixed;
+            position: relative;
         }
 
-        /* İsteğe Bağlı: Arka plan resminin üzerine yarı saydam bir katman ekleyerek
-               beyaz giriş panelinin daha belirgin olmasını sağlar. */
-        body::before {
-            content: "";
-            position: fixed; /* Tüm ekranı kaplaması için */
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.35); /* Siyah renkli %35 opaklıkta bir katman.
-                                                   Rengi ve opaklığı (0.0 ile 1.0 arası) değiştirebilirsiniz.
-                                                   Örneğin, daha koyu için rgba(0, 0, 0, 0.5) */
-            z-index: -1; /* Bu katmanın body içeriğinin arkasında,
-                                ama body'nin kendi arka plan resminin üzerinde olmasını sağlar. */
-        }
 
-        /* Giriş panelini içeren sarmalayıcının (wrapper) en az ekran yüksekliği kadar olmasını sağlar,
-               bu da d-flex align-items-center ile dikey ortalamanın doğru çalışmasına yardımcı olur.
-               Corona şablonundaki full-page-wrapper sınıfları bunu zaten yapıyor olabilir
-               ama eklemekte fayda var. */
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.35);
+                z-index: -1;
+            }
+
         .content-wrapper.auth.login-bg {
             min-height: 100vh;
-            /* display: flex; ve align-items: center; HTML'de zaten var */
         }
 
-        /* Giriş kartının stilleri */
-        .card.mx-auto { /* Bootstrap kolon sınıfını (örn: col-lg-5) HTML'de değiştirdiyseniz,
-                               burada daha genel bir seçici kullanmak daha iyi olabilir
-                               ya da .card.col-lg-5.mx-auto gibi spesifik seçicinizi güncelleyebilirsiniz. */
+        .card.mx-auto {
             background-color: #ffffff !important;
             border: 1px solid #dee2e6;
             box-shadow: 0 0.5rem 1rem rgba(220, 53, 69, 0.15) !important;
-            /* margin-top: 5rem !important; /* Bu, kartı dikey merkezden biraz aşağı iter.
-                                                   Tam dikey ortalama isterseniz bu satırı kaldırabilir
-                                                   veya değerini azaltabilirsiniz. */
-            /* İsteğe Bağlı: Kartın çok geniş olmasını engellemek için maksimum genişlik.
-                   Eğer yukarıdaki col-*-* sınıfları çok büyük ekranlarda fazla genişliyorsa: */
-            /* max-width: 600px; */ /* Örnek değer, ihtiyaca göre ayarlayın */
-            /* İsteğe Bağlı: Kart içeriği azsa minimum yükseklik verebilirsiniz.
-                   Ancak px-5 py-5 padding'leri genelde yeterli olur. */
-            /* min-height: 450px; */ /* Örnek değer */
         }
 
-        /* Mevcut diğer stilleriniz (.card-body h3.card-title, .form-group label vs.)
-               olduğu gibi kalabilir, onlar panel içi elemanları biçimlendiriyor. */
 
-        /* Başlığın ortalanması ve rengi için mevcut stiliniz: */
         .card-body h3.card-title {
             color: #dc3545 !important;
-            text-align: center !important; /* Başlığın ortalanmasını sağlar */
+            text-align: center !important;
             font-weight: bold;
-            margin-bottom: 1.5rem; /* Başlık ile form arasına biraz boşluk ekleyebilir */
+            margin-bottom: 1.5rem;
         }
 
-        /* Diğer mevcut stilleriniz (form elemanları, buton vs.) olduğu gibi kalmalı */
-        /* ... (sizin diğer .form-group label, .form-control.p_input stilleriniz) ... */
 
-   
 
-		
-		
+        .card.col-lg-4.mx-auto {
+            background-color: #ffffff !important;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 0.5rem 1rem rgba(220,53,69,0.15) !important;
+            margin-top: 5rem !important;
+        }
 
-		<!-- .auth.login-bg {
-			/* Varsayılan koyu arka planı kaldır */
-			background: none;
-		}
-		-->
 
-		.card.col-lg-4.mx-auto {
-			/* Beyaz kart arka planı, ince kenarlık ve hafif kırmızımsı gölge */
-			background-color: #ffffff !important;
-			border: 1px solid #dee2e6;
-			box-shadow: 0 0.5rem 1rem rgba(220,53,69,0.15) !important;
-			;
-			margin-top: 5rem !important; /* Kartı biraz aşağı alalım */
-		}
 
-	
+        .form-group label {
+            color: #495057 !important;
+            font-weight: 500;
+        }
 
-		.form-group label {
-			/* Standart etiket rengi */
-			color: #495057 !important;
-			font-weight: 500;
-		}
+        .form-control.p_input {
+            background-color: #ffffff !important;
+            color: #495057 !important;
+            border: 1px solid #ced4da !important;
+        }
 
-		.form-control.p_input {
-			/* Standart input stilleri */
-			background-color: #ffffff !important;
-			color: #495057 !important;
-			border: 1px solid #ced4da !important;
-		}
+            .form-control.p_input::placeholder {
+                color: #6c757d;
+            }
 
-			.form-control.p_input::placeholder {
-				color: #6c757d;
-			}
+            .form-control.p_input:focus {
+                border-color: #dc3545 !important;
+                box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+                outline: none;
+            }
 
-			.form-control.p_input:focus {
-				/* Odaklanınca kırmızı kenarlık ve gölge */
-				border-color: #dc3545 !important;
-				box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
-				outline: none;
-			}
-
-		.btn.btn-primary.btn-block.enter-btn {
-			/* Kırmızı buton, beyaz yazı */
-			background-color: #dc3545 !important;
-			border-color: #dc3545 !important;
-			color: #ffffff !important;
-			padding: 10px;
-			font-size: 1rem;
-			font-weight: 600;
-		}
+        .btn.btn-primary.btn-block.enter-btn {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+            color: #ffffff !important;
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
 
             .btn.btn-primary.btn-block.enter-btn:active {
                 background: #70141d !important;
@@ -152,93 +100,86 @@
                 transform: translateY(-1px) !important;
             }
 
-			.btn.btn-primary.btn-block.enter-btn:hover {
-				/* Buton üzerine gelince daha koyu kırmızı */
-				background-color: #c82333 !important;
-				border-color: #bd2130 !important;
-			}
+            .btn.btn-primary.btn-block.enter-btn:hover {
+                background-color: #c82333 !important;
+                border-color: #bd2130 !important;
+            }
 
-		.text-danger {
-			/* Hata mesajları için standart kırmızı */
-			color: #dc3545 !important;
-		}
+        .text-danger {
+            color: #dc3545 !important;
+        }
 
-		.sign-up a {
-			/* Giriş yap linki kırmızı */
-			color: #dc3545 !important;
-			font-weight: bold;
-		}
+        .sign-up a {
+            color: #dc3545 !important;
+            font-weight: bold;
+        }
 
-			.sign-up a:hover {
-				text-decoration: underline;
-			}
-	</style>
+            .sign-up a:hover {
+                text-decoration: underline;
+            }
+    </style>
 </head>
 <body>
     <div class="container-scroller">
         <div class="container-fluid page-body-wrapper full-page-wrapper">
-			
+
             <div class="row w-100 m-0">
                 <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
-					<div class="card col-sm-10 col-md-8 col-lg-6 mx-auto">
-					
+                    <div class="card col-sm-10 col-md-8 col-lg-6 mx-auto">
+
                         <div class="card-body px-5 py-5">
-							
+
                             <h3 class="card-title text-left mb-3">Giriş Yap</h3>
                             <form asp-action="Index" asp-controller="Login" method="Post">
                                 <div class="form-group">
                                     <label>Kullanıcı adı *</label>
-									<span asp-validation-for="UserName" class="text-danger"></span>
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
                                     <input type="text" class="form-control p_input" asp-for="UserName">
                                 </div>
                                 <div class="form-group">
                                     <label>Şifre *</label>
-									<span asp-validation-for="Password" class="text-danger"></span>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
                                     <input type="password" class="form-control p_input" asp-for="Password">
                                 </div>
-								@if (!ViewData.ModelState.IsValid)
-								{
-									<div class="text-danger">
-										@foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-										{
-											if (error.ErrorMessage != "Kullanıcı adı zorunludur." && error.ErrorMessage != "Şifre zorunludur.")
-											{
-												<div>@error.ErrorMessage</div>
-											}
-										}
-									</div>
-								}
+                                @if (!ViewData.ModelState.IsValid)
+                                {
+                                    <div class="text-danger">
+                                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                        {
+                                            if (error.ErrorMessage != "Kullanıcı adı zorunludur." && error.ErrorMessage != "Şifre zorunludur.")
+                                            {
+                                                <div>@error.ErrorMessage</div>
+                                            }
+                                        }
+                                    </div>
+                                }
                                 <div class="form-group d-flex align-items-center justify-content-between">
 
-									<a href="#" class="forgot-pass" style="color:#dc3545">Şifreyi Unuttum</a>
+                                    <a href="#" class="forgot-pass" style="color:#dc3545">Şifreyi Unuttum</a>
                                 </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary btn-block enter-btn">Giriş yap</button>
                                 </div>
-								
+
                                 <p class="sign-up" style="color:black">Hesabın yok mu?<a href="/Register/Index"> Hesap Oluştur</a></p>
                             </form>
                         </div>
                     </div>
                 </div>
-                <!-- content-wrapper ends -->
+
             </div>
-            <!-- row ends -->
+
         </div>
-        <!-- page-body-wrapper ends -->
+
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
+
     <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
+
     <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/off-canvas.js"></script>
     <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/hoverable-collapse.js"></script>
     <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/misc.js"></script>
     <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/settings.js"></script>
     <script src="~/corona-free-dark-bootstrap-admin-template-1.0.0/template/assets/js/todolist.js"></script>
-    <!-- endinject -->
+
 </body>
 </html>

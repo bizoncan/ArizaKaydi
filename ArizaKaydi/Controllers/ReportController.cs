@@ -36,7 +36,7 @@ namespace ArizaKaydi.Controllers
 		public IActionResult WorkReportss(DateTime? startDate = null, DateTime? endDate = null, int? machineId = null, int? machinePartId = null, string? sortBy=null, string? sortOrder=null, int? userId=null)
 		{
 			var values = _context.Works.Include(x => x.machine).Include(x=>x.userI).ToList();
-			ViewBag.Machines = _context.Machines.ToList(); // Makine dropdown'ı için tüm makineler
+			ViewBag.Machines = _context.Machines.ToList(); 
 			List<machinePart> partsForViewBag = new List<machinePart>();
 			ViewBag.MobileUsers = _context.mobileUsers.ToList();
 			if (startDate.HasValue)
@@ -58,24 +58,22 @@ namespace ArizaKaydi.Controllers
 			}
 			else
 			{
-				ViewBag.SelectedUserId = null; // Seçili kullanıcı yoksa null yap
+				ViewBag.SelectedUserId = null; 
 			}
 
-			// Makine Filtresi
+			
 			if (machineId.HasValue && machineId.Value > 0)
 			{
 				values = values.Where(e => e.machineId == machineId.Value).ToList();
 				ViewBag.SelectedMachineId = machineId.Value;
 
-				// *** DÜZELTME: Sadece seçili makineye ait parçaları ViewBag'e ata ***
+				
 				partsForViewBag = _context.MachineParts
 									  .Where(mp => mp.machineId == machineId.Value)
 									  .ToList();
-
-				// Makine Parçası Filtresi (Makine seçiliyse burada yapılır)
+	
 				if (machinePartId.HasValue && machinePartId.Value > 0)
 				{
-					// Güvenlik kontrolü: Seçilen parça gerçekten seçilen makineye mi ait?
 					if (partsForViewBag.Any(p => p.Id == machinePartId.Value))
 					{
 						values = values.Where(e => e.machinePartId == machinePartId.Value).ToList();
@@ -83,30 +81,26 @@ namespace ArizaKaydi.Controllers
 					}
 					else
 					{
-						// Eğer parça o makineye ait değilse, parça filtresini temizle (opsiyonel)
 						ViewBag.SelectedMachinePartId = null;
 					}
 				}
 				else if (machinePartId == 0)
 				{
 					values = values.Where(e => e.machinePartId == null).ToList();
-					ViewBag.SelectedMachinePartId = 0; // Seçili parça yoksa null yap
+					ViewBag.SelectedMachinePartId = 0; 
 				}
 			}
-			if (machineId == 0) // Makine seçilmemişse
+			if (machineId == 0) 
 			{
-				// Makine seçilmediğinde tüm parçaları göster
 				values = values.Where(e => e.machineId == null).ToList();
-				ViewBag.SelectedMachineId = 0; // Seçili makine yoksa null yap
+				ViewBag.SelectedMachineId = 0; 
 			}
-			else // Makine seçilmemişse ("Tümü")
+			else 
 			{
-				// Makine seçilmeden parça seçilmişse (JavaScript bunu engellemeli ama yine de kontrol edilebilir)
 				if (machinePartId.HasValue && machinePartId.Value > 0)
 				{
 					values = values.Where(e => e.machinePartId == machinePartId.Value).ToList();
 					ViewBag.SelectedMachinePartId = machinePartId.Value;
-					// partsForViewBag boş kalır, bu doğru.
 				}
 			}
 			ViewBag.MachineParts = partsForViewBag;
@@ -143,11 +137,11 @@ namespace ArizaKaydi.Controllers
 					Text = p.name
 				}).ToList();
 
-			return Json(parts); // ← Tarayıcıya JSON veri gönder
+			return Json(parts);
 		}
 		[HttpPost]
-		[ValidateAntiForgeryToken] // CSRF koruması için (eğer token gönderdiyseniz)
-		public async Task<IActionResult> ExportToExcel([FromBody] List<string> reportIds) // Gelen ID listesi (tipi int ise List<int> yapın)
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> ExportToExcel([FromBody] List<string> reportIds)
 		{
 			if (reportIds == null || !reportIds.Any())
 			{
@@ -156,29 +150,23 @@ namespace ArizaKaydi.Controllers
 
 			try
 			{
-				// ID'leri int'e çevirme (eğer veritabanı ID'leriniz int ise)
 				var idListesiInt = reportIds.Select(int.Parse).ToList();
 
-				// 1. Veritabanından verileri çekme (Örnek - Entity Framework Core ile)
-				// Not: Tüm veriyi çekip sonra sıralamak yerine, veritabanında WHERE IN ile filtrelemek daha performanslıdır.
-				var veriler = await _context.Works // Kendi DbContext ve DbSet adınızı kullanın
+				var veriler = await _context.Works 
 										 .Where(x => idListesiInt.Contains(x.id))
 										 .Include(x => x.machine)
 										 .Include(x => x.machinePart)
 										 .Include(x => x.userI)
 										 .ToListAsync();
 
-				// 2. Verileri istemciden gelen sıraya göre SIRALAMA (Çok Önemli!)
 				var siraliVeriler = veriler
-									.OrderBy(v => idListesiInt.IndexOf(v.id)) // Gelen listedeki index'e göre sırala
+									.OrderBy(v => idListesiInt.IndexOf(v.id)) 
 									.ToList();
 
-				// 3. Excel Dosyası Oluşturma (ClosedXML ile)
 				using (var workbook = new XLWorkbook())
 				{
-					var worksheet = workbook.Worksheets.Add("Veriler"); // Sayfa adı
+					var worksheet = workbook.Worksheets.Add("Veriler"); 
 
-					// Başlık Satırını Ekleme (Örnek)
 					worksheet.Cell(1, 1).Value = "ID";
 					worksheet.Cell(1, 2).Value = "Başlık";
 					worksheet.Cell(1, 3).Value = "Açıklama";
@@ -192,13 +180,11 @@ namespace ArizaKaydi.Controllers
 					worksheet.Cell(1, 10).Value = "Geçmiş Rapor mu";
 
 
-					// Başlık satırını biçimlendirme (Opsiyonel)
-					var headerRange = worksheet.Range("A1:J1"); // Başlıkların olduğu aralık
+					var headerRange = worksheet.Range("A1:J1"); 
 					headerRange.Style.Font.Bold = true;
 					headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
 
-					// Veri Satırlarını Ekleme
-					int currentRow = 2; // Başlıktan sonraki satır
+					int currentRow = 2; 
 					foreach (var veri in siraliVeriler)
 					{
 						worksheet.Cell(currentRow, 1).Value = veri.id;
@@ -212,32 +198,24 @@ namespace ArizaKaydi.Controllers
 						worksheet.Cell(currentRow, 9).Value = veri.workOrderId;
 						worksheet.Cell(currentRow, 10).Value = veri.isPastWork == true  ? "Evet":"Hayır";
 
-						// ... Diğer özellikler
 						currentRow++;
 					}
 
-					// Sütun genişliklerini ayarlama (Opsiyonel)
 					worksheet.Columns().AdjustToContents();
 
-					// 4. Excel Dosyasını MemoryStream'e Kaydetme
 					using (var stream = new MemoryStream())
 					{
 						workbook.SaveAs(stream);
 						var content = stream.ToArray();
 						var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-						var fileName = $"raporlar_{DateTime.Now:yyyy.MM.dd-HH:mm:ss}.xlsx"; // Dinamik dosya adı
+						var fileName = $"raporlar_{DateTime.Now:yyyy.MM.dd-HH:mm:ss}.xlsx"; 
 
-						// 5. Dosyayı İstemciye Gönderme
 						return File(content, contentType, fileName);
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				// Hata loglama mekanizmanızı burada kullanın
-				// Log.Error(ex, "Excel dışa aktarma sırasında hata oluştu.");
-				// İstemciye genel bir hata mesajı dönebilirsiniz
-				// return StatusCode(500, "Excel dosyası oluşturulurken sunucu tarafında bir hata oluştu.");
 				return Problem("Excel dosyası oluşturulurken bir hata oluştu. Detaylar için sunucu loglarını kontrol edin.", statusCode: 500);
 			}
 		}

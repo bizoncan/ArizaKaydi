@@ -7,64 +7,64 @@
 
 <style>
 	.table-container {
-		padding: 1rem; /* Add some padding around the table */
-		border-radius: 8px; /* Rounded corners for the container */
-		box-shadow: 0 0.5rem 1rem rgba(220,53,69,0.15) !important; /* Subtle shadow for depth */
-		background-color: #fff; /* Ensure background is white if not already */
+		padding: 1rem; 
+		border-radius: 8px; 
+		box-shadow: 0 0.5rem 1rem rgba(220,53,69,0.15) !important; 
+		background-color: #fff; 
 	}
 
 	.table th,
 	.table td {
-		padding: 1rem; /* Increased padding for better spacing */
+		padding: 1rem; 
 		vertical-align: middle;
-		border: 1px solid #e9ecef; /* Lighter border color */
-		font-size: 0.9rem; /* Slightly smaller font size for a cleaner look */
+		border: 1px solid #e9ecef; 
+		font-size: 0.9rem; 
 	}
 
 	.table th {
-		background-color: #dc3545 !important; /* Light grey background for headers */
-		color: #fff !important; /* Darker text color for headers */
-		border-bottom-width: 2px; /* Thicker bottom border for headers */
-		border-top: none; /* Remove top border from header if it's the first row of the table */
+		background-color: #dc3545 !important; 
+		color: #fff !important; 
+		border-bottom-width: 2px; 
+		border-top: none; 
 		text-align: left;
 		font-weight: 600;
-		white-space: nowrap; /* Prevent header text from wrapping */
+		white-space: nowrap; 
 	}
 
 	.table tbody tr:nth-child(even) {
-		background-color: #fdfdfe; /* Very subtle alternating row color */
+		background-color: #fdfdfe; 
 	}
 
 	.table tbody tr:hover {
-		background-color: #f1f3f5; /* Slightly darker hover effect */
+		background-color: #f1f3f5; 
 	}
 
 	.table td {
-		color: #dc3545; /* Standard dark text color for cells */
+		color: #dc3545; 
 		white-space: normal;
 	}
 
-	/* Specific style for the first column (headers like ID, İş Emri ID) */
+	
 	.table tbody th[scope="row"] {
-		background-color: #f8f9fa; /* Match header background */
-		color: #495057; /* Match header text color */
+		background-color: #f8f9fa; 
+		color: #495057; 
 		font-weight: 600;
-		border-right: 1px solid #dee2e6; /* Distinct border for these row headers */
+		border-right: 1px solid #dee2e6; 
 	}
 
 	.aciklama-hucresi {
 		overflow-wrap: break-word;
 		white-space: normal;
 		word-break: break-all;
-		min-width: 300px; /* Ensure description cell has some minimum width */
+		min-width: 300px; 
 	}
 
 	.thumbnail-img {
-		width: 100px !important; /* Smaller thumbnails */
+		width: 100px !important; 
 		height: 100px !important;
 		object-fit: cover;
 		cursor: pointer;
-		border-radius: 13% !important; /* Rounded corners for images */
+		border-radius: 13% !important; 
 		transition: transform 0.2s ease, box-shadow 0.2s ease;
 		border: 2px solid #e9ecef;
 	}
@@ -74,18 +74,17 @@
 			box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 		}
 
-	/* Lightbox styles remain the same, but ensure they work with the new table */
 	.lightbox {
 		position: fixed;
 		top: 0;
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background: rgba(0, 0, 0, 0.85); /* Slightly darker lightbox background */
+		background: rgba(0, 0, 0, 0.85); 
 		display: none;
 		justify-content: center;
 		align-items: center;
-		z-index: 10000; /* Ensure it's on top */
+		z-index: 10000; 
 		animation: fadeIn 0.3s ease;
 	}
 

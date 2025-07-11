@@ -5,10 +5,8 @@
 	bool isMachineSelectedInitially = ViewBag.SelectedMachineId != null && (int)ViewBag.SelectedMachineId > 0;
 }
 <button id="excelAktarBtn" class="btn btn-excel">Excel'e Aktar</button>
-@* Excel'e aktarma sırasında gösterilecek loading indicator *@
 <div id="loadingIndicator" style="display: none; margin-top: 10px;">
 	<span class="text-info">Excel dosyası oluşturuluyor, lütfen bekleyin...</span>
-	@* İsterseniz buraya bir spinner ikonu ekleyebilirsiniz, örn: <i class="fa fa-spinner fa-spin"></i> *@
 </div>
 <br />
 <br />
@@ -320,11 +318,9 @@
 <br />
 @section Scripts{
 	<script>
-		// Tarih fonksiyonu (varsa)
 		function updateEndDateMin() {
 			var startDate = document.getElementById("startDate").value;
 			document.getElementById("endDate").min = startDate;
-			 // Eğer bitiş tarihi başlangıçtan önceyse, bitişi başlangıçla aynı yap
 			var endDateInput = document.getElementById("endDate");
 			if (endDateInput.value && startDate && endDateInput.value < startDate) {
 				endDateInput.value = startDate;
@@ -350,7 +346,6 @@
 				var machinePartDropdown = $('#machinePartId');
 
 				if (selectedMachineId) {
-					// Opsiyonel: AJAX isteği başlarken kullanıcıya geri bildirim ver
 					machinePartDropdown.prop('disabled', true).empty().append($('<option>', { value: '', text: 'Yükleniyor...' }));
 
 					$.ajax({
@@ -358,30 +353,28 @@
 						type: 'GET',
 						dataType: 'json',
 						data: { machineId: selectedMachineId },
-						success: function(parts) { // parts = [{ Value:"1", Text:"Ad1"}, ...]
-							machinePartDropdown.prop('disabled', false); // Başarılı olunca etkinleştir
+						success: function(parts) { 
+							machinePartDropdown.prop('disabled', false); 
 							machinePartDropdown.empty();
 							machinePartDropdown.append($('<option>', { value: '', text: 'Tümü' }));
 							machinePartDropdown.append($('<option>', { value: '0', text: 'Makine Parçası Bilgisi Yok' }));
 							$.each(parts, function(index, part) {
 								machinePartDropdown.append($('<option>', {
-									// *** DÜZELTME: part.value ve part.text KULLAN ***
 									value: part.value,
 									text: part.text
 								}));
 							});
-							machinePartDropdown.val(''); // "Tümü" seçili kalsın
+							machinePartDropdown.val(''); 
 						},
 						error: function(xhr, status, error) {
 							console.error("Makine parçaları alınamadı:", status, error);
-							// Hata durumunda dropdown'ı sıfırla ve devre dışı bırak
 							machinePartDropdown.prop('disabled', true);
 							machinePartDropdown.empty();
 							machinePartDropdown.append($('<option>', { value: '', text: 'Hata - Tümü' }));
 							machinePartDropdown.val('');
 						}
 					});
-				} else { // Makine "Tümü" seçildi
+				} else {
 					machinePartDropdown.empty();
 					machinePartDropdown.append($('<option>', { value: '', text: 'Tümü' }));
 					machinePartDropdown.prop('disabled', true);
@@ -389,39 +382,29 @@
 				}
 			});
 
-			 // Sayfa yüklendiğinde tarih ayarını yap
 			 if (typeof updateEndDateMin === "function" && $('#startDate').val()) {
 				 updateEndDateMin();
 			 }
 
-			 // ÖNEMLİ: Sayfa yüklendiğinde makine zaten seçiliyse (filtrelemeden sonra),
-			 // parça listesinin doğru görünmesi için Index action'ındaki ViewBag.MachineParts
-			 // atamasının doğru yapılması yeterlidir. JavaScript'in tekrar AJAX yapmasına gerek yok.
-			 // Bu yüzden sayfa yüklenirken change event'ini tetiklemeye GEREK YOKTUR.
-			 // (Eğer Index action'daki ViewBag ataması düzgün çalışıyorsa)
 
 		});
 	</script>
 	<script>
 		document.getElementById('excelAktarBtn').addEventListener('click', function() {
-			// *** DEĞİŞİKLİK: Selector'ü güncelledik (tbody class'ı "list") ***
 			const veriSatirlari = document.querySelectorAll('tbody.list tr');
 			const siraliIdler = [];
 
 			veriSatirlari.forEach(satir => {
-				// data-id attribute'undan ID'yi al
 				const id = satir.getAttribute('data-id');
 				if (id) {
-					// ID'nin geçerli bir sayı olup olmadığını kontrol etmek isteyebilirsiniz
-					// if(!isNaN(parseInt(id))) { siraliIdler.push(id); }
-					siraliIdler.push(id); // Sırayla diziye ekle
+					siraliIdler.push(id); 
 				} else {
 					console.warn("data-id attribute'u olmayan bir satır bulundu:", satir);
 				}
 			});
 
 			if (siraliIdler.length === 0) {
-				Swal.fire({ // SweetAlert ile daha şık bir uyarı
+				Swal.fire({ 
 					icon: 'warning',
 					title: 'Uyarı',
 					text: 'Aktarılacak veri bulunamadı.',
@@ -429,36 +412,30 @@
 				return;
 			}
 
-			// Butonu devre dışı bırak ve loading göstergesini aç
 			this.disabled = true;
-			document.getElementById('loadingIndicator').style.display = 'inline'; // veya 'block'
+			document.getElementById('loadingIndicator').style.display = 'inline'; 
 
-			// AntiForgery Token'ı bul (eğer varsa)
 			const tokenInput = document.querySelector('input[name="__RequestVerificationToken"]');
 			const token = tokenInput ? tokenInput.value : null;
 
 			const headers = {
 				'Content-Type': 'application/json'
 			};
-			// Token varsa header'a ekle
 			if (token) {
 				headers['RequestVerificationToken'] = token;
 			}
 
-			// *** DEĞİŞİKLİK: fetch URL'sini projenize göre güncelleyin (Controller: Work, Action: ExportToExcel varsayıldı) ***
 			fetch('/Report/ExportToExcel', {
 				method: 'POST',
 				headers: headers,
-				body: JSON.stringify(siraliIdler) // ID listesini JSON formatında gönder
+				body: JSON.stringify(siraliIdler) 
 			})
 			.then(response => {
 				if (!response.ok) {
-					// Hata durumunda response'dan metin okumayı dene (daha fazla bilgi için)
 					return response.text().then(text => {
 						throw new Error(`HTTP hatası! Durum: ${response.status} - ${text}`);
 					});
 				}
-				// Dosya adını Content-Disposition header'ından almayı deneyelim
 				const disposition = response.headers.get('content-disposition');
 				let filename = 'is-emirleri.xlsx'; // Varsayılan dosya adı
 				if (disposition && disposition.indexOf('attachment') !== -1) {
@@ -468,31 +445,28 @@
 						filename = matches[1].replace(/['"]/g, '');
 					}
 				}
-				// Yanıt başarılıysa, dosya indirme işlemini tetikle
-				return response.blob().then(blob => ({ blob, filename })); // Blob ve dosya adını birlikte döndür
+				return response.blob().then(blob => ({ blob, filename })); 
 			})
 			.then(({ blob, filename }) => {
-				// Blob'dan bir URL oluştur ve indirme linki yarat
 				const url = window.URL.createObjectURL(blob);
 				const a = document.createElement('a');
 				a.style.display = 'none';
 				a.href = url;
-				a.download = filename; // Sunucudan gelen veya varsayılan dosya adı
+				a.download = filename; 
 				document.body.appendChild(a);
-				a.click(); // İndirmeyi tetikle
-				window.URL.revokeObjectURL(url); // Oluşturulan URL'yi temizle
-				a.remove(); // Linki kaldır
+				a.click(); 
+				window.URL.revokeObjectURL(url); 
+				a.remove(); 
 			})
 			.catch(error => {
 				console.error('Excel dışa aktarma hatası:', error);
-				Swal.fire({ // Hata durumunda SweetAlert ile uyarı
+				Swal.fire({
 					icon: 'error',
 					title: 'Hata',
 					text: 'Excel dosyası oluşturulurken bir hata oluştu: ' + error.message,
 				});
 			})
 			.finally(() => {
-				// İşlem bitince butonu tekrar aktif et ve loading göstergesini kapat
 				this.disabled = false;
 				document.getElementById('loadingIndicator').style.display = 'none';
 			});

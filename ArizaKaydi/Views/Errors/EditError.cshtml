@@ -48,11 +48,11 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var now = new Date();
-        var localDatetime = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM formatına getirir
+        var localDatetime = now.toISOString().slice(0, 16);
         document.getElementById("datetimepicker").value = localDatetime;
 
         // AJAX ile parça verisi alma
-        $('#machineDropdown').on('change', function () { // machineDropdown ile bağla
+        $('#machineDropdown').on('change', function () { 
             var machineId = $(this).val();
             $('#partDropdown').empty().append('<option value="">Yükleniyor...</option>');
 
@@ -77,7 +77,6 @@
             }
         });
 
-        // Mevcut parçayı formda seçili yapmak için AJAX kullanıldıktan sonra
         var selectedMachineId = $('#machineDropdown').val();
         if (selectedMachineId) {
             $.ajax({

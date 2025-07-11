@@ -46,7 +46,6 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // AJAX ile parça verisi alma
             $('#machineDropdown').on('change', function () {
                 var machineId = $(this).val();
                 $('#partDropdown').empty().append('<option value="">Yükleniyor...</option>');
@@ -71,9 +70,8 @@
                 }
             });
 
-            // Mevcut makine ve parça bilgilerini yükle
             var selectedMachineId = $('#machineDropdown').val();
-            var selectedPartId = @Json.Serialize(Model.machinePartId); // Düzeltme burada
+            var selectedPartId = @Json.Serialize(Model.machinePartId);
 
             if (selectedMachineId) {
                 $.ajax({

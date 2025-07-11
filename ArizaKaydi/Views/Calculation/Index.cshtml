@@ -2,13 +2,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
-    /* Calculation sayfası için özel stiller */
     .main-panel {
         margin-top: 0;
         padding-top: 0;
     }
 
-    /* Calculation kartı */
+
     .calculation-card {
         background: #fff !important;
         border-radius: 1.5rem;
@@ -22,7 +21,6 @@
         border: 1px solid rgba(220, 53, 69, 0.1);
     }
 
-    /* Başlık */
     .calculation-title {
         color: #dc3545;
         font-weight: 700;
@@ -31,7 +29,6 @@
         width: 100%;
     }
 
-    /* Form elemanları */
     .calculation-card label {
         color: #c82333;
         font-weight: 500;
@@ -50,7 +47,6 @@
             box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
         }
 
-    /* Modern butonlar */
     .modern-btn {
         min-width: 180px;
         min-height: 64px;
@@ -76,7 +72,6 @@
             font-size: 1.6rem;
         }
 
-        /* MTTR butonu - kırmızı degrade */
         .modern-btn.mttr {
             background: linear-gradient(90deg, #dc3545 0%, #ff7eb3 100%);
             color: #fff;
@@ -87,7 +82,6 @@
                 background: linear-gradient(90deg, #c82333 0%, #ff758c 100%);
             }
 
-        /* MTBF butonu - kırmızı ve beyaz degrade */
         .modern-btn.mtbf {
             background: linear-gradient(135deg, #fff 0%, #dc3545 60%, #c82333 100%);
             color: #fff;
@@ -113,7 +107,6 @@
                 color: #fff;
             }
 
-    /* Responsive */
     @@media (max-width: 600px) {
         .modern-btn
 
@@ -170,7 +163,6 @@
     </div>
 
     <script>
-        // Başlangıç tarihi seçilmeden bitiş tarihi ve saat aktif olmasın
         const startInput = document.getElementById('start-date');
         const endInput = document.getElementById('end-date');
         const startTimeInput = document.getElementById('start-time');
@@ -187,7 +179,6 @@
           if (startInput.value) {
             endInput.disabled = false;
             endInput.min = startInput.value;
-            // Eğer bitiş tarihi, başlangıçtan önceyse sıfırla
             if (endInput.value && endInput.value < startInput.value) {
               endInput.value = '';
               endTimeInput.value = '';
@@ -210,7 +201,6 @@
             endTimeInput.value = '';
           }
         });
-        // Saat ve dakika validasyonu (tarih aynıysa)
         function validateDateTime() {
           if (
             startInput.value && endInput.value &&

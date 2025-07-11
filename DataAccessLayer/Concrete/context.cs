@@ -15,7 +15,7 @@ namespace DataAccessLayer.Concrete
 	{
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseSqlServer("server=10.10.82.69,1433;database=ArizaKayit;User Id=sa ;Password=A/f-mrf_12 ;TrustServerCertificate=True;", options =>
+			optionsBuilder.UseSqlServer("server=DESKTOP-8OU0GKQ\\SQLEXPRESS;database=ArizaKayit;integrated security=true;TrustServerCertificate=True ;", options =>
 			{
 				options.CommandTimeout(3000);
 			});
